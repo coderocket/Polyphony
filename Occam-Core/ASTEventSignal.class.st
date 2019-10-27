@@ -3,7 +3,7 @@ Class {
 	#superclass : #ASTProcess,
 	#instVars : [
 		'event',
-		'bangBangToken'
+		'bangeolToken'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -14,13 +14,13 @@ ASTEventSignal >> acceptVisitor: aRootVisitor [
 ]
 
 { #category : #generated }
-ASTEventSignal >> bangBangToken [
-	^ bangBangToken
+ASTEventSignal >> bangeolToken [
+	^ bangeolToken
 ]
 
 { #category : #generated }
-ASTEventSignal >> bangBangToken: aSmaCCToken [
-	bangBangToken := aSmaCCToken
+ASTEventSignal >> bangeolToken: aSmaCCToken [
+	bangeolToken := aSmaCCToken
 ]
 
 { #category : #generated }
@@ -44,5 +44,5 @@ ASTEventSignal >> nodeVariables [
 
 { #category : #generated }
 ASTEventSignal >> tokenVariables [
-	^ #(#bangBangToken)
+	^ #(#bangeolToken)
 ]

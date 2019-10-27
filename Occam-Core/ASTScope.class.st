@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'doc',
-		'periodToken'
+		'periodToken',
+		'announcer'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -16,8 +17,8 @@ ASTScope >> acceptVisitor: aRootVisitor [
 
 { #category : #adding }
 ASTScope >> addDependency: anASTLibrary [
-	self imports add: anASTLibrary
-
+	self imports add: anASTLibrary. 
+	self check.
 ]
 
 { #category : #scope }
@@ -25,10 +26,25 @@ ASTScope >> allAbstractions [
 	^self subclassResponsibility 
 ]
 
+{ #category : #generated }
+ASTScope >> announcer [
+	^ announcer
+]
+
+{ #category : #generated }
+ASTScope >> announcer: anObject [
+	announcer := anObject
+]
+
 { #category : #scope }
 ASTScope >> callsProcedureNamed: aString [
 	^false
 
+]
+
+{ #category : #checking }
+ASTScope >> check [ 
+	^self subclassResponsibility 
 ]
 
 { #category : #generated }
@@ -68,6 +84,11 @@ ASTScope >> documentation: aString [
 ASTScope >> imports [
 	^self attributeNamed:#imports ifAbsent:[OrderedCollection new]
 
+]
+
+{ #category : #initialization }
+ASTScope >> initialize [
+	announcer := GLMAnnouncer new
 ]
 
 { #category : #scope }
@@ -194,7 +215,8 @@ ASTScope >> periodToken: aSmaCCToken [
 
 { #category : #adding }
 ASTScope >> removeDependency: anASTLibrary [
-	self imports remove: anASTLibrary
+	self imports remove: anASTLibrary.
+	self check.
 
 ]
 

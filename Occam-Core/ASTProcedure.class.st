@@ -78,6 +78,12 @@ ASTProcedure >> callsProcedureNamed: aString [
 	^ (body callsProcedureNamed: aString) or:[(locals select:[:each | each isKindOf: ASTProcedure ]) anySatisfy: [ :p | p callsProcedureNamed: aString ] ]
 ]
 
+{ #category : #checking }
+ASTProcedure >> check [ 
+	TypeChecker check: self body inContext: self.
+	announcer announce: GLMItemChanged.
+]
+
 { #category : #compiling }
 ASTProcedure >> compileOn: aWriteStream [ 
 
@@ -119,6 +125,11 @@ ASTProcedure >> diagramDepth [
 	].
 
 	^diagramDepth
+]
+
+{ #category : #generated }
+ASTProcedure >> diagramDepth: anObject [
+	diagramDepth := anObject
 ]
 
 { #category : #'process graph' }

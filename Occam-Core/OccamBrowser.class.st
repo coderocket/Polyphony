@@ -234,9 +234,9 @@ constructor fastList
 	when: [ :proc | proc class canUnderstand: #uses  ];
 	title: 'Imports';
 	display:[ :proc | proc attributeNamed: #imports ifAbsentPut:[OrderedCollection new]  ]; 
-	format: [ :aLibrary | aLibrary name value ] ;
-	selectionAct:[:list :proc | 
-		proc removeDependency: list selection. browser update] entitled: 'Remove';
+	format: [ :proc | proc name value ] ;
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
+	selectionAct:[:list :proc | proc removeDependency: list selection] entitled: 'Remove';
 	allowDropOnItem: [:draggedObject :targetItem :list | draggedObject isKindOf: ASTLibrary ];
 	dropOnItem: [:draggedObject :targetItem :list | 
 		list entity addDependency: draggedObject. list update. true ]
@@ -251,21 +251,22 @@ constructor tree
 	display:[:libraries | libraries ] ; 
 	children:[ :root :library | root children select:[:each | each isKindOf: ASTLibrary ] ]; 
 	format:[:library | library name value ] ;
-	selectionAct:[ :tree :path |
-		self fileInto: tree selection. browser update ] entitled: 'File in...' ;
-	selectionAct:[:tree :path | 
-		self addLibraryInto: tree selection. browser update] entitled: 'Add Library...' ;
-	selectionAct:[:tree :path | 
-		self addProcedureTo: tree selection. browser update] entitled: 'Add Procedure...' ;
-	selectionAct:[:tree :path | 
-		self addFunctionTo: tree selection. browser update] entitled: 'Add Function...' ;
-	selectionAct:[:tree :path |
-		self removeScope: tree selection from: path last. browser update] entitled: 'Remove';
+	updateOn: GLMItemChanged from: [ :libraries | libraries first announcer ] ;
+	selectionAct:[ :tree |
+		self fileInto: tree selection ] entitled: 'File in...' ;
+	selectionAct:[:tree | 
+		self addLibraryInto: tree selection ] entitled: 'Add Library...' ;
+	selectionAct:[:tree | 
+		self addProcedureTo: tree selection ] entitled: 'Add Procedure...' ;
+	selectionAct:[:tree | 
+		self addFunctionTo: tree selection ] entitled: 'Add Function...' ;
+	selectionAct:[:tree |
+		self removeScope: tree selection ] entitled: 'Remove';
 	allowItemDrag: [:item :tree | true ];
 	transformDraggedItem: [:item :tree | OrderedCollection with: item ] ;
 	allowDropOnItem: [:draggedObject :targetItem :list | draggedObject isKindOf: ASTAbstraction ] ;
 	dropOnItem: [:draggedObject :targetItem :list | 
-		targetItem addExistingAbstraction: draggedObject. browser update ]
+		targetItem addExistingAbstraction: draggedObject ]
 
 
 
@@ -277,13 +278,14 @@ constructor tree
 OccamBrowser >> localAbbrevsIn: constructor [
 
 constructor table 
-	when:[ :proc | proc class canUnderstand: #locals ] ;
 	title: 'Abbreviations' ;
-	display:[ :proc | proc locals select: [:each | each isKindOf: ASTAbbreviation ]]; 
+	display:[ :proc | proc localAbbrevs ]; 
 	column: 'name' evaluated: [ :each | each name value ] width:80 ;	
 	column: 'value' evaluated: [ :each | each expr localSource ] ; 
-	act:[:table :proc | 
-		self addLocalAbbrevTo: proc. browser update] entitled: 'Add' 
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
+	act:[:table :proc | self addLocalAbbrevTo: proc ] entitled: 'Add' ;
+	selectionAct:[:tab :proc | proc removeLocal: tab selection] entitled: 'Remove' 
+
 
 
 ]
@@ -292,20 +294,18 @@ constructor table
 OccamBrowser >> localVariablesIn: constructor [
 
 constructor table 
-	when:[ :proc | proc class canUnderstand: #locals ] ;
 	title: 'Variables';
-	display:[ :proc | proc locals select: [:each | each isKindOf: ASTDataType ]]; 
+	display:[ :proc | proc localVariables ]; 
 	column: 'type' evaluated: [ :each | each type localSource ] width:80 ;	
 	column: 'name' evaluated: [ :each | each name value ] ; 
-	act:[:table :proc | 
-		self addLocalVariableTo: proc. browser update] entitled: 'Add' ;
-	selectionAct:[:tab :proc | proc removeLocal: tab selection. browser update
-		] entitled: 'Remove'; 
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
+	act:[:table :proc | self addLocalVariableTo: proc] entitled: 'Add' ;
+	selectionAct:[:tab :proc | proc removeLocal: tab selection ] entitled: 'Remove'; 
 	allowItemDrag: [:item :table | true ];
 	transformDraggedItem: [:item :table | item ] ;
 	allowDropOnItem: [:draggedObject :targetItem :table | true];
 	dropOnItem: [:draggedObject :targetItem :table | 
-		table entity moveLocal: draggedObject after: targetItem. table update. true ]
+		table entity moveLocal: draggedObject after: targetItem. true ]
 
 
 ]
@@ -325,17 +325,16 @@ constructor fastTable
 	display:[ :proc | proc params ]; 
 	column: 'type' evaluated: [ :each | each type localSource ] width:60; 
 	column: 'name' evaluated: [ :each | each name value ] modified: [ :newValue :item :presentation | item renameTo: newValue. ] width:80; 
-	column: 'direction' evaluated: [ : each | each direction title ] width:60 ;
+	column: 'direction' evaluated: [ : each | each direction ifNil:[''] ifNotNil:[ :x | x title ] ] modified: [ :newValue :item :presentation | item changeDirectionTo: newValue ] width:60 ;
 	column: 'style' evaluated: [ :each | each style ] ;
-	act:[:tab :proc | self addParameterTo: proc. browser update] entitled: 'Add' ;
-	selectionAct:[:tab :proc | proc removeParameter: tab selection. browser update] entitled: 'Remove';
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
+	act:[:tab :proc | self addParameterTo: proc ] entitled: 'Add' ;
+	selectionAct:[:tab :proc | proc removeParameter: tab selection ] entitled: 'Remove';
 	allowItemDrag: [:item :table | true ];
 	transformDraggedItem: [:item :table | item ] ;
 	allowDropOnItem: [:draggedObject :targetItem :table | true];
 	dropOnItem: [:draggedObject :targetItem :table | 
-		table entity moveParam: draggedObject after: targetItem.   
-		table update. 
-		true ]
+		table entity moveParam: draggedObject after: targetItem. true ]
 	
 	
 ]
@@ -345,17 +344,18 @@ OccamBrowser >> proceduresIn: constructor [
 
 constructor tree 
 	title:'Abstractions' ;
-	display:[: library | library allAbstractions ] ; 
+	display:[ :library | library allAbstractions ] ; 
 	children:[ :root :proc | root children select:[:each | each isKindOf: ASTAbstraction ] ]; 
 	format:[:proc | proc name value ] ;	
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	selectionAct:[:tree | 
-		self addProcedureTo: tree selection. browser update] entitled: 'Add Procedure ...' ;
+		self addProcedureTo: tree selection] entitled: 'Add Procedure ...' ;
 	selectionAct:[:tree | 
-		self addFunctionTo: tree selection. browser update] entitled: 'Add Function ...' ;
+		self addFunctionTo: tree selection] entitled: 'Add Function ...' ;
 	selectionAct:[:tree :path |
-		self removeAbstraction: tree selection from: tree selection parent. browser update] entitled: 'Remove' ;
+		self removeAbstraction: tree selection from: tree selection parent] entitled: 'Remove' ;
 	selectionAct:[:tree |
-		self renameAbstraction: tree selection. browser update] entitled: 'Rename ...' ;
+		self renameAbstraction: tree selection] entitled: 'Rename ...' ;
 	selectionAct:[:tree |
 		tree selection inspect ] entitled: 'Inspect' ;
 	allowItemDrag: [:item :tree | item parent isKindOf: ASTLibrary ] ;
@@ -364,10 +364,9 @@ constructor tree
 constructor table 
    title: 'Abbreviations' ;
 	display:[ :library | library allExternalAbbrevs ];
+	updateOn: GLMItemChanged from: [ :library | library announcer ] ;
 	column: 'type' evaluated: [ :each | each type localSource ] width:80; 
 	column: 'name' evaluated: [ :each | each name value ]  
-
-	
 
 ]
 
@@ -375,16 +374,16 @@ constructor table
 OccamBrowser >> removeAbstraction: anAbstraction from: aScope [
 
 	(aScope callsProcedureNamed: anAbstraction name value)
-		ifTrue:[UIManager default alert:'Procedure is in use']
+		ifTrue:[UIManager default alert:'Abstraction is in use']
 		ifFalse:[	aScope removeAbstraction: anAbstraction]
 
 					
 ]
 
 { #category : #adding }
-OccamBrowser >> removeScope: aScope from: anAST [
+OccamBrowser >> removeScope: aScope [
 	
-	anAST ifNotNil:[anAST removeAbstraction: aScope ]
+	aScope parent ifNotNil:[aScope parent removeAbstraction: aScope ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -405,13 +404,12 @@ OccamBrowser >> sourceIn: constructor [
 	when:[ :proc | proc class canUnderstand: #body ] ;
 	display:[ :proc | proc body ] ; 
 	format:[ :ast | ast localSource, String cr ] ; 
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act: [:presentation :proc | 
 		[ proc parseBody: presentation text string ]
 		on: SmaCCParserError
 		do: [ :ex |
-			self displayError:ex messageText at:ex tag errorToken startPosition notifying: presentation ].
- 
-		TypeChecker check: proc body inContext: proc. browser update. ] on: $s entitled:'Accept' translated; 	title:'Source' translated.
+			self displayError:ex messageText at:ex tag errorToken startPosition notifying: presentation ]	 ] on: $s entitled:'Accept' translated; 	title:'Source' translated.
 
 ]
 
@@ -422,5 +420,6 @@ constructor list
 	when:[ :proc | proc class canUnderstand: #body ] ;
 	display: [ :proc | proc body violations ] ; 
 	format:[:violation | violation reason ]; 
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	title:'Violations' translated
 ]

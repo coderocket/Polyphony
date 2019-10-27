@@ -150,3 +150,8 @@ ASTReplicatedPar >> unrolled [
 	^unrolled
 	
 ]
+
+{ #category : #generated }
+ASTReplicatedPar >> unrolled: anObject [
+	unrolled := anObject
+]

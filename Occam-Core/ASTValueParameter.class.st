@@ -18,21 +18,6 @@ ASTValueParameter >> direction [
 
 ]
 
-{ #category : #generated }
-ASTValueParameter >> name [
-	^ name
-]
-
-{ #category : #generated }
-ASTValueParameter >> name: aSmaCCToken [
-	name := aSmaCCToken
-]
-
-{ #category : #generated }
-ASTValueParameter >> nodeVariables [
-	^ #(#type)
-]
-
 { #category : #accessing }
 ASTValueParameter >> style [
 	^'VAL'
@@ -41,20 +26,6 @@ ASTValueParameter >> style [
 { #category : #generated }
 ASTValueParameter >> tokenVariables [
 	^ #(#vALToken #name)
-]
-
-{ #category : #generated }
-ASTValueParameter >> type [
-	^ type
-]
-
-{ #category : #generated }
-ASTValueParameter >> type: anASTType [
-	self type notNil
-		ifTrue: [ self type parent: nil ].
-	type := anASTType.
-	self type notNil
-		ifTrue: [ self type parent: self ]
 ]
 
 { #category : #generated }

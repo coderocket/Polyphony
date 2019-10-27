@@ -3,7 +3,6 @@ Class {
 	#superclass : #ASTRoot,
 	#instVars : [
 		'name',
-		'direction',
 		'type'
 	],
 	#category : #'Occam-Core-AST'
@@ -12,20 +11,6 @@ Class {
 { #category : #generated }
 ASTParameter >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitParameter: self
-]
-
-{ #category : #generated }
-ASTParameter >> direction [
-	^ direction
-]
-
-{ #category : #generated }
-ASTParameter >> direction: anASTDirection [
-	self direction notNil
-		ifTrue: [ self direction parent: nil ].
-	direction := anASTDirection.
-	self direction notNil
-		ifTrue: [ self direction parent: self ]
 ]
 
 { #category : #generated }
@@ -40,7 +25,7 @@ ASTParameter >> name: aSmaCCToken [
 
 { #category : #generated }
 ASTParameter >> nodeVariables [
-	^ #(#type #direction)
+	^ #(#type)
 ]
 
 { #category : #operations }
@@ -64,10 +49,10 @@ ASTParameter >> type [
 ]
 
 { #category : #generated }
-ASTParameter >> type: anASTRoot [
+ASTParameter >> type: anASTType [
 	self type notNil
 		ifTrue: [ self type parent: nil ].
-	type := anASTRoot.
+	type := anASTType.
 	self type notNil
 		ifTrue: [ self type parent: self ]
 ]

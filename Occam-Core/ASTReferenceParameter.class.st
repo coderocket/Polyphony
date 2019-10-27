@@ -1,12 +1,28 @@
 Class {
 	#name : #ASTReferenceParameter,
 	#superclass : #ASTParameter,
+	#instVars : [
+		'direction'
+	],
 	#category : #'Occam-Core-AST'
 }
 
 { #category : #generated }
 ASTReferenceParameter >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitReferenceParameter: self
+]
+
+{ #category : #'as yet unclassified' }
+ASTReferenceParameter >> changeDirectionTo: aString [
+
+	self direction: ASTDirNone new.
+	
+	(aString = '?') ifTrue:[
+		self direction: ASTDirIn new ].
+	
+	(aString = '!') ifTrue:[
+		self direction: ASTDirOut new ].
+
 ]
 
 { #category : #generated }
@@ -24,43 +40,14 @@ ASTReferenceParameter >> direction: anASTDirection [
 ]
 
 { #category : #generated }
-ASTReferenceParameter >> name [
-	^ name
-]
-
-{ #category : #generated }
-ASTReferenceParameter >> name: aSmaCCToken [
-	name := aSmaCCToken
-]
-
-{ #category : #generated }
 ASTReferenceParameter >> nodeVariables [
-	^ #(#type #direction)
+	^ #(#direction #type)
 ]
 
 { #category : #accessing }
 ASTReferenceParameter >> style [ 
 	^''
 	
-]
-
-{ #category : #generated }
-ASTReferenceParameter >> tokenVariables [
-	^ #(#name)
-]
-
-{ #category : #generated }
-ASTReferenceParameter >> type [
-	^ type
-]
-
-{ #category : #generated }
-ASTReferenceParameter >> type: anASTType [
-	self type notNil
-		ifTrue: [ self type parent: nil ].
-	type := anASTType.
-	self type notNil
-		ifTrue: [ self type parent: self ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -30,10 +30,10 @@ ASTInputGuard >> input [
 ]
 
 { #category : #generated }
-ASTInputGuard >> input: anASTProcess [
+ASTInputGuard >> input: anASTInput [
 	self input notNil
 		ifTrue: [ self input parent: nil ].
-	input := anASTProcess.
+	input := anASTInput.
 	self input notNil
 		ifTrue: [ self input parent: self ]
 ]

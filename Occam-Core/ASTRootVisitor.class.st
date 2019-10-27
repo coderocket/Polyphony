@@ -255,6 +255,11 @@ ASTRootVisitor >> visitPar: aPar [
 ]
 
 { #category : #generated }
+ASTRootVisitor >> visitParameter: aParameter [
+	^ self visitRoot: aParameter
+]
+
+{ #category : #generated }
 ASTRootVisitor >> visitParenthesisExpression: aParenthesisExpression [
 	^ self visitRoot: aParenthesisExpression
 ]
@@ -276,7 +281,7 @@ ASTRootVisitor >> visitProcess: aProcess [
 
 { #category : #generated }
 ASTRootVisitor >> visitReferenceParameter: aReferenceParameter [
-	^ self visitRoot: aReferenceParameter
+	^ self visitParameter: aReferenceParameter
 ]
 
 { #category : #generated }
@@ -361,7 +366,7 @@ ASTRootVisitor >> visitUse: anUse [
 
 { #category : #generated }
 ASTRootVisitor >> visitValueParameter: aValueParameter [
-	^ self visitRoot: aValueParameter
+	^ self visitParameter: aValueParameter
 ]
 
 { #category : #generated }

@@ -60,6 +60,12 @@ ASTFunction >> body: anASTProcess [
 		ifTrue: [ self body parent: self ]
 ]
 
+{ #category : #checking }
+ASTFunction >> check [
+
+	TypeChecker check: self body inContext: self.
+]
+
 { #category : #generated }
 ASTFunction >> compositeNodeVariables [
 	^ #(#uses #locals #params)

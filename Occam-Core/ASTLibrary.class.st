@@ -25,6 +25,8 @@ ASTLibrary >> addExistingAbstraction: anASTAbstraction [
 	
 	anASTAbstraction parent: self.
 	
+	self check.
+	
 ]
 
 { #category : #adding }
@@ -35,7 +37,9 @@ ASTLibrary >> addFunctionNamed: aString [
 	aFunction := self makeFunctionNamed: aString.
 	self members add: aFunction.
 	
-	aFunction parent: self
+	aFunction parent: self.
+	
+	self check.
 ]
 
 { #category : #adding }
@@ -47,6 +51,9 @@ ASTLibrary >> addLibraryNamed: aString [
 	self members add: aLibrary.
 	
 	aLibrary parent: self.
+	
+	self check.
+	
 ]
 
 { #category : #adding }
@@ -59,6 +66,8 @@ ASTLibrary >> addProcedureNamed: aString [
 	self members add: aProcedure. 
 	
 	aProcedure parent: self.
+	
+	self check
 ]
 
 { #category : #scope }
@@ -83,6 +92,20 @@ ASTLibrary >> bEGINToken [
 { #category : #generated }
 ASTLibrary >> bEGINToken: aSmaCCToken [
 	bEGINToken := aSmaCCToken
+]
+
+{ #category : #checking }
+ASTLibrary >> check [
+
+ | p |
+
+	p := self.
+	
+	[p] whileNotNil: [ 
+		p announcer announce: GLMItemChanged. p := p parent 
+	]
+
+
 ]
 
 { #category : #generated }
@@ -170,7 +193,9 @@ ASTLibrary >> printOn: aStream [
 { #category : #removing }
 ASTLibrary >> removeAbstraction: anASTAbstraction [
 
-	members remove: anASTAbstraction
+	members remove: anASTAbstraction.
+		
+	self check
   
 ]
 

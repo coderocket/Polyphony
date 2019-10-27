@@ -10,6 +10,8 @@ Class {
 { #category : #'as yet unclassified' }
 TypeChecker class >> check: anASTNode inContext: aContext [
 
+	anASTNode clearViolations.
+	
 	^TypeChecker new context: aContext; acceptNode: anASTNode
 ]
 

@@ -3,7 +3,7 @@ Class {
 	#superclass : #ASTInput,
 	#instVars : [
 		'event',
-		'questionMarkQuestionMarkToken'
+		'queryeolToken'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -45,16 +45,16 @@ ASTEventWait >> nodeVariables [
 ]
 
 { #category : #generated }
-ASTEventWait >> questionMarkQuestionMarkToken [
-	^ questionMarkQuestionMarkToken
+ASTEventWait >> queryeolToken [
+	^ queryeolToken
 ]
 
 { #category : #generated }
-ASTEventWait >> questionMarkQuestionMarkToken: aSmaCCToken [
-	questionMarkQuestionMarkToken := aSmaCCToken
+ASTEventWait >> queryeolToken: aSmaCCToken [
+	queryeolToken := aSmaCCToken
 ]
 
 { #category : #generated }
 ASTEventWait >> tokenVariables [
-	^ #(#questionMarkQuestionMarkToken)
+	^ #(#queryeolToken)
 ]

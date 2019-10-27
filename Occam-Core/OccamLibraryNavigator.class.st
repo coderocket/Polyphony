@@ -77,6 +77,7 @@ constructor tree
 	display:[:libraries | libraries ] ; 
 	children:[ :root :library | root children select:[:each | each isKindOf: ASTLibrary ] ]; 
 	format:[:library | library name value ];
+	updateOn: GLMItemChanged from: [ :libraries | libraries first announcer ] ;
 	allowItemDrag: [:item :tree | true ];
 	transformDraggedItem: [:item :tree | OrderedCollection with: item ] .
 
@@ -100,6 +101,7 @@ constructor tree
 	display:[ :lib | self abstractionsInLibrary: lib ] ; 
 	children:[ :root :proc | self abstractionsInProcedure: root ]; 
 	format:[:proc | proc name value ] ;	
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	selectionAct:[:tree |
 		tree selection inspect ] entitled: 'Inspect'.
 	
@@ -107,6 +109,7 @@ constructor table
    title: 'Abbreviations' ;
 	when: [ :proc | showAbbreviations ] ;
 	display:[ :proc | proc allExternalAbbrevs ];
+	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	column: 'type' evaluated: [ :each | each type localSource ] width:80; 
 	column: 'name' evaluated: [ :each | each name value ]  
 

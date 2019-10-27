@@ -16,6 +16,15 @@ ASTRoot >> addViolation: aString [
 ]
 
 { #category : #'as yet unclassified' }
+ASTRoot >> clearViolations [
+
+	(self attributeNamed: #violations) removeAll.
+
+	self children do:[:each | each clearViolations ]
+
+]
+
+{ #category : #'as yet unclassified' }
 ASTRoot >> completeLocalSource [
 
 	^self attributeNamed: #localSource ifAbsent:[parent 

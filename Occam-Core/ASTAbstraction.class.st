@@ -93,13 +93,33 @@ ASTAbstraction >> leftParenToken: aSmaCCToken [
 	leftParenToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTAbstraction >> localAbbrevs [ 
+
+	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
+]
+
+{ #category : #'as yet unclassified' }
+ASTAbstraction >> localVariables [
+
+	^self locals select:[:each | each isKindOf: ASTDataType ]
+]
+
+{ #category : #generated }
+ASTAbstraction >> locals [
+	^self subclassResponsibility 
+	
+]
+
 { #category : #removing }
 ASTAbstraction >> moveLocal: anASTNode after: existingNode [ 
 
 	(anASTNode = existingNode) ifTrue:[^self].
 		
 	self locals remove: anASTNode.
-	self locals add: anASTNode after: existingNode
+	self locals add: anASTNode after: existingNode.
+	
+	self check.
 	
 
 	
@@ -111,7 +131,9 @@ ASTAbstraction >> moveParam: anASTNode after: existingNode [
 	(anASTNode = existingNode) ifTrue:[^self].
 		
 	self params remove: anASTNode.
-	self params add: anASTNode after: existingNode
+	self params add: anASTNode after: existingNode.
+	
+	self check.
 	
 
 	
@@ -152,6 +174,7 @@ ASTAbstraction >> parseBody: aString [
 	anAST attributeNamed: #localSource put: aString.
 	 
 	self body: anAST.
+	self check.
 ]
 
 { #category : #parsing }
@@ -184,10 +207,10 @@ ASTAbstraction >> parseLocalVariable: aString [
 	anAST := aParser parse.
 		
 	anAST attributeNamed: #localSource put: aString.
-
-	TypeChecker check: anAST inContext: self.
-	 
+ 
 	self locals add: anAST.
+	
+	self check.
 ]
 
 { #category : #parsing }
@@ -204,18 +227,23 @@ ASTAbstraction >> parseParameter: aString [
 	anAST attributeNamed: #localSource put: aString.
 	 
 	self params add: anAST.
+	
+	self check.
 ]
 
 { #category : #removing }
 ASTAbstraction >> removeLocal: anASTNode [
-	self locals remove: anASTNode
+	self locals remove: anASTNode.
+	
+	self check.
 	
 ]
 
 { #category : #removing }
 ASTAbstraction >> removeParameter: anASTNode [
-	self params remove: anASTNode
-	
+
+	self params remove: anASTNode.
+	self check.	
 ]
 
 { #category : #operations }
