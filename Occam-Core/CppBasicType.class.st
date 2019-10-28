@@ -21,6 +21,7 @@ CppBasicType class >> initialize [
 	  at:'BOOL'		put: 'bool'
 	; at:'BYTE' 		put: 'byte'
 	; at:'INT' 		put: 'int'
+	; at:'WORD' 		put: 'uint16_t'
 	; at:'INT16' 	put: 'int16_t'
 	; at:'INT32' 	put: 'int32_t'
 	; at:'INT64' 	put: 'int64_t'	
