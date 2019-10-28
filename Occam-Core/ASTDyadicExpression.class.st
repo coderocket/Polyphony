@@ -9,7 +9,8 @@ Class {
 	#classVars : [
 		'arithmeticOperators',
 		'bitOperators',
-		'booleanOperators'
+		'booleanOperators',
+		'relationalOperators'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -28,7 +29,11 @@ ASTDyadicExpression class >> initialize [
 	
 	booleanOperators := Set new.
 	
-	booleanOperators add:'AND' ; add:'OR' ; add:'='; add: '<>'; add: '<'; add: '>'; add:'>=' ; add:'<=' ; add: 'AFTER' 
+	booleanOperators add:'AND' ; add:'OR'.
+	
+	relationalOperators := Set new.
+	
+	relationalOperators add:'='; add: '<>'; add: '<'; add: '>'; add:'>=' ; add:'<=' ; add: 'AFTER' 
 
 ]
 
@@ -57,6 +62,12 @@ ASTDyadicExpression >> ifBitOperator: aBlock [
 { #category : #testing }
 ASTDyadicExpression >> ifBooleanOperator: aBlock [
 	(booleanOperators includes: operator value)
+		ifTrue: [ aBlock value ]
+]
+
+{ #category : #testing }
+ASTDyadicExpression >> ifRelationalOperator: aBlock [
+	(relationalOperators includes: operator value)
 		ifTrue: [ aBlock value ]
 ]
 

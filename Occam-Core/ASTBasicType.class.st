@@ -18,7 +18,7 @@ ASTBasicType class >> computeLeastUpperBound [
 
 	| basicTypeNames |
 	
-	basicTypeNames := { 'BYTE' . 'INT16' . 'INT' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-' }.
+	basicTypeNames := { 'BYTE' . 'INT16' . 'INT' . 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-' }.
 	
 	leastUpperBound := Dictionary new.
 
@@ -50,7 +50,7 @@ ASTBasicType class >> initialize [
 	
 	integerTypeNames := Set new.
 	
-	integerTypeNames add: 'BYTE' ; add:'INT'; add:'INT16' ; add:'INT32'; add:'INT64'; add:'TIME'.
+	integerTypeNames add: 'BYTE' ; add:'INT16' ; add:'INT'; add:'WORD' ;add:'INT32'; add:'INT64'; add:'TIME'.
 	
 	numericTypeNames := Set new.
 	
@@ -60,7 +60,7 @@ ASTBasicType class >> initialize [
 	
 	partialOrder := Set new.
 	
-	{ 'BYTE' . 'INT16' . 'INT' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
+	{ 'BYTE' . 'INT16' . 'INT' . 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
 	do:[:each | partialOrder add: 'BYTE' -> each ].
 	
 	{ 'INT16' . 'INT' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
@@ -68,6 +68,9 @@ ASTBasicType class >> initialize [
 
 	{ 'INT' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
 	do:[:each | partialOrder add: 'INT' -> each ].
+
+	{ 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
+	do:[:each | partialOrder add: 'WORD' -> each ].
 
 	{ 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
 	do:[:each | partialOrder add: 'INT32' -> each ].
@@ -139,6 +142,12 @@ ASTBasicType >> name [
 { #category : #generated }
 ASTBasicType >> name: aSmaCCToken [
 	name := aSmaCCToken
+]
+
+{ #category : #'as yet unclassified' }
+ASTBasicType >> subsumes: aType [
+
+	^self isBigEnoughToHold: aType
 ]
 
 { #category : #generated }

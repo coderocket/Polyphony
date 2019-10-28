@@ -156,6 +156,18 @@ TypeChecker >> visitDyadicExpression: aDyadicExpression [
 		^leastUpperBound		
 	].
 
+	aDyadicExpression ifRelationalOperator:[
+		
+		leftType isNumericType ifFalse:[^ASTBasicType errorType].
+		rightType isNumericType ifFalse:[^ASTBasicType errorType].
+		
+		leastUpperBound := leftType leastUpperBound: rightType.
+
+		leastUpperBound isTop ifTrue:[^ASTBasicType errorType].
+		
+		^ASTBasicType new name:(SmaCCToken value:'BOOL')		
+	].
+
 	aDyadicExpression ifBitOperator:[
 
 		leftType isIntegerType ifFalse:[^ASTBasicType errorType].
@@ -268,7 +280,17 @@ TypeChecker >> visitLiteralByte: aLiteralByteNode [
 { #category : #generated }
 TypeChecker >> visitLiteralHexInteger: aLiteralIntegerNode [
 
-	^ASTBasicType new name: (SmaCCToken value: 'INT').
+	| aNumber |
+	
+	aNumber := Integer readFrom: aLiteralIntegerNode integer value allButFirst base:16.
+	
+	(aNumber between: 0 and: 255) 
+		ifTrue: [^ASTBasicType new name: (SmaCCToken value: 'BYTE')].
+			
+	(aNumber between:0 and:65536) 
+		ifTrue: [^ASTBasicType new name: (SmaCCToken value: 'WORD')].
+	
+	^ASTBasicType new name: (SmaCCToken value: 'INT32').
 ]
 
 { #category : #generated }

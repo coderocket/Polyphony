@@ -189,10 +189,12 @@ ASTAbstraction >> parseLocalAbbrev: aString [
 	anAST := aParser parse.
 		
 	anAST attributeNamed: #localSource put: aString.
-	
+
 	TypeChecker check: anAST inContext: self.
 	
 	self locals add: anAST.
+	
+	self check
 ]
 
 { #category : #parsing }
