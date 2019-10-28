@@ -29,6 +29,12 @@ ASTType >> isArrayType [
 ]
 
 { #category : #testing }
+ASTType >> isBigEnoughToHold: aType [
+
+	^self = aType
+]
+
+{ #category : #testing }
 ASTType >> isBooleanType [
 	^false
 ]

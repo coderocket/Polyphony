@@ -88,7 +88,7 @@ TypeChecker >> visitAssign: anAssignNode [
 	
 	anExprType := self acceptNode: anAssignNode expr.
 		
-	(anLValueType = anExprType)
+	(anLValueType isBigEnoughToHold: anExprType)
 		ifFalse:[anAssignNode addViolation:'Type mismatch']
 ]
 
@@ -138,24 +138,37 @@ TypeChecker >> visitConversion: aConversionNode [
 { #category : #generated }
 TypeChecker >> visitDyadicExpression: aDyadicExpression [
 
-	| leftType rightType |
+	| leftType rightType leastUpperBound |
 	
 	leftType := self acceptNode: aDyadicExpression left.
 	
 	rightType := self acceptNode: aDyadicExpression right.
-	
-	(leftType = rightType)
-		ifFalse:[aDyadicExpression addViolation: 'Type mismatch'].
-	
+		
 	aDyadicExpression ifArithmeticOperator:[
-		(leftType isNumericType)
-			ifTrue:[^leftType]
-			ifFalse:[ASTBasicType errorType] ].
+		
+		leftType isNumericType ifFalse:[^ASTBasicType errorType].
+		rightType isNumericType ifFalse:[^ASTBasicType errorType].
+		
+		leastUpperBound := leftType leastUpperBound: rightType.
+
+		leastUpperBound isTop ifTrue:[^ASTBasicType errorType].
+		
+		^leastUpperBound		
+	].
 
 	aDyadicExpression ifBitOperator:[
-		(leftType isIntegerType)
-			ifTrue:[^leftType]
-			ifFalse:[ASTBasicType errorType] ].
+
+		leftType isIntegerType ifFalse:[^ASTBasicType errorType].
+		rightType isIntegerType ifFalse:[^ASTBasicType errorType].
+
+		leastUpperBound := leftType leastUpperBound: rightType.
+		leastUpperBound isTop ifTrue:[^ASTBasicType errorType].
+		
+		^leastUpperBound		
+	].
+
+	(leftType = rightType)
+		ifFalse:[aDyadicExpression addViolation: 'Type mismatch'].
 	
 	aDyadicExpression ifBooleanOperator:[^ASTBasicType new name:(SmaCCToken value:'BOOL')].
 	
@@ -261,7 +274,18 @@ TypeChecker >> visitLiteralHexInteger: aLiteralIntegerNode [
 { #category : #generated }
 TypeChecker >> visitLiteralInteger: aLiteralIntegerNode [
 
-	^ASTBasicType new name: (SmaCCToken value: 'INT').
+	| aNumber |
+	
+	aNumber := aLiteralIntegerNode integer value asInteger.
+	
+	(aNumber between: 0 and: 255) 
+		ifTrue: [^ASTBasicType new name: (SmaCCToken value: 'BYTE')].
+			
+	(aNumber between:-32768 and:32767) 
+		ifTrue: [^ASTBasicType new name: (SmaCCToken value: 'INT16')].
+	
+	^ASTBasicType new name: (SmaCCToken value: 'INT32').
+
 ]
 
 { #category : #generated }
