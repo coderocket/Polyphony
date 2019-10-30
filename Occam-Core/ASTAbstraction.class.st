@@ -72,6 +72,13 @@ ASTAbstraction >> isExternal [
 ]
 
 { #category : #testing }
+ASTAbstraction >> isSiblingOf: anASTAbstraction [
+
+	^self parent = anASTAbstraction parent
+	
+]
+
+{ #category : #testing }
 ASTAbstraction >> isUploadable [
 
 	^(self isClosed) and:[self isValid]

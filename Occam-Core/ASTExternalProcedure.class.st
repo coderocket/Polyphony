@@ -33,6 +33,11 @@ ASTExternalProcedure >> isLocked [
 ]
 
 { #category : #generated }
+ASTExternalProcedure >> locals [
+	^OrderedCollection new
+]
+
+{ #category : #generated }
 ASTExternalProcedure >> tokenVariables [
 	^ #(#eXTERNALToken #pROCToken #leftParenToken #rightParenToken #name #periodToken)
 ]

@@ -478,7 +478,9 @@ TypeChecker >> visitTable: aTableNode [
 	
 	elementType := self acceptNode: aTableNode exprs first.
 	
-	aTableNode exprs do: [ :e | ((self acceptNode: e) = elementType) ifFalse:[ e addViolation: 'Type mismatch' ] ].
+	elementType := aTableNode exprs allButFirst inject: elementType into:[:lub :each | lub leastUpperBound: (self acceptNode: each) ].
+	
+	(elementType isTop) ifTrue:[aTableNode addViolation: 'Type mismatch']. 
 
 	tableType := ASTArrayType new index: (ASTLiteralInteger new integer: (SmaCCToken value: aTableNode exprs size asString)) ; type: elementType.
 	

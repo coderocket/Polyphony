@@ -51,6 +51,13 @@ ASTSeq >> initialize [
 	processes := OrderedCollection new: 2.
 ]
 
+{ #category : #'as yet unclassified' }
+ASTSeq >> parallelComponents [
+
+	^ self processes inject: OrderedCollection new into: [ :acc :each | acc addAll: each parallelComponents . acc ]
+
+]
+
 { #category : #generated }
 ASTSeq >> processes [
 	^ processes

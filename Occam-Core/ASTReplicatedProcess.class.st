@@ -111,9 +111,25 @@ ASTReplicatedProcess >> index: aSmaCCToken [
 	index := aSmaCCToken
 ]
 
+{ #category : #accessing }
+ASTReplicatedProcess >> input [ 	
+	"when this replicated process holds the guard of a replicated alt"
+	^body input
+]
+
+{ #category : #'process graph' }
+ASTReplicatedProcess >> inputs: aContext [
+	^body inputs: aContext
+]
+
 { #category : #generated }
 ASTReplicatedProcess >> nodeVariables [
 	^ #(#base #count #body)
+]
+
+{ #category : #'process graph' }
+ASTReplicatedProcess >> outputs: aContext [
+	^body outputs: aContext
 ]
 
 { #category : #generated }

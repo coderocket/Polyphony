@@ -34,7 +34,9 @@ ASTProcedure >> addFunctionNamed: aString [
 	aFunction := self makeFunctionNamed: aString.
 	self locals add: aFunction. 
 	
-	aFunction parent: self
+	aFunction parent: self.
+	
+	self check
 ]
 
 { #category : #adding }
@@ -47,6 +49,8 @@ ASTProcedure >> addProcedureNamed: aString [
 	self locals add: aProcedure. 
 	
 	aProcedure parent: self.
+	
+	self check.
 ]
 
 { #category : #generated }
@@ -80,8 +84,19 @@ ASTProcedure >> callsProcedureNamed: aString [
 
 { #category : #checking }
 ASTProcedure >> check [ 
+	
+	| p |
+
 	TypeChecker check: self body inContext: self.
-	announcer announce: GLMItemChanged.
+
+	p := self.
+	
+	[p isKindOf: ASTLibrary] whileFalse: [ 
+		p announcer announce: GLMItemChanged. p := p parent.
+	].
+
+	p announcer announce: GLMItemChanged.
+
 ]
 
 { #category : #compiling }
@@ -259,7 +274,9 @@ ASTProcedure >> outputs [
 { #category : #scope }
 ASTProcedure >> removeAbstraction: anASTProcedure [
 
-	locals remove: anASTProcedure  
+	locals remove: anASTProcedure.
+	
+	self check
 ]
 
 { #category : #generated }

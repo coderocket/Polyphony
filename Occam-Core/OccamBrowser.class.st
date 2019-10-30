@@ -278,6 +278,7 @@ constructor tree
 OccamBrowser >> localAbbrevsIn: constructor [
 
 constructor table 
+	when:[ :proc | proc class canUnderstand: #localAbbrevs ] ;
 	title: 'Abbreviations' ;
 	display:[ :proc | proc localAbbrevs ]; 
 	column: 'name' evaluated: [ :each | each name value ] width:80 ;	
@@ -295,6 +296,7 @@ OccamBrowser >> localVariablesIn: constructor [
 
 constructor table 
 	title: 'Variables';
+	when:[ :proc | proc class canUnderstand: #localVariables ] ;
 	display:[ :proc | proc localVariables ]; 
 	column: 'type' evaluated: [ :each | each type localSource ] width:80 ;	
 	column: 'name' evaluated: [ :each | each name value ] ; 
@@ -358,8 +360,11 @@ constructor tree
 		self renameAbstraction: tree selection] entitled: 'Rename ...' ;
 	selectionAct:[:tree |
 		tree selection inspect ] entitled: 'Inspect' ;
-	allowItemDrag: [:item :tree | item parent isKindOf: ASTLibrary ] ;
-	transformDraggedItem: [:item :tree | item ].
+	allowItemDrag: [:item :tree | true ] ;
+	transformDraggedItem: [:item :tree | item ] ;
+	allowDropOnItem: [:draggedObject :targetItem | (draggedObject class canUnderstand: #isSiblingOf:) and:[  draggedObject isSiblingOf: targetItem ] ];
+	dropOnItem: [:draggedObject :targetItem |  
+		draggedObject parent moveLocal: draggedObject after: targetItem. true ].
 	
 constructor table 
    title: 'Abbreviations' ;

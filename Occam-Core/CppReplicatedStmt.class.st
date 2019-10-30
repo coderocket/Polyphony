@@ -64,6 +64,7 @@ CppReplicatedStmt >> streamOn: aWriteStream [
 	aWriteStream put:'; ++'; put: index; put:') '.
 	aWriteStream put:'{'; open.
 	body streamOn: aWriteStream.
+	aWriteStream put: ';'; newLine.
 	aWriteStream close; put:'}'.
 
 ]

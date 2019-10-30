@@ -39,6 +39,12 @@ ASTArrayType >> isArrayType [
 	^true
 ]
 
+{ #category : #testing }
+ASTArrayType >> isBigEnoughToHold: aType [
+
+	^aType isArrayType and:[ (index = aType index) and:[type isBigEnoughToHold: aType type] ]
+]
+
 { #category : #generated }
 ASTArrayType >> leftBracketToken [
 	^ leftBracketToken

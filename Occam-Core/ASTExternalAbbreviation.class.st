@@ -31,6 +31,25 @@ ASTExternalAbbreviation >> doc: anASTDoc [
 		ifTrue: [ self doc parent: self ]
 ]
 
+{ #category : #documentation }
+ASTExternalAbbreviation >> documentation [
+	self doc ifNil:[
+		self doc: (ASTDoc new text: (SmaCCToken value:'Nothing yet.'))
+	].
+	^self doc text value
+]
+
+{ #category : #documentation }
+ASTExternalAbbreviation >> documentation: aString [
+
+	self doc ifNil:[
+		self doc: (ASTDoc new text: (SmaCCToken value:'Nothing yet.'))
+	].
+
+	self doc text: (SmaCCToken value: aString)
+ 
+]
+
 { #category : #generated }
 ASTExternalAbbreviation >> eXTERNALToken [
 	^ eXTERNALToken

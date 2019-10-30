@@ -149,7 +149,8 @@ ASTRoot >> violations [
 	(aSet isEmpty)
 		ifFalse:[^aSet].
 		
-	aSet addAll: (self attributeNamed: #violations).
+
+	aSet addAll: (self attributeNamed: #violations ifAbsent:[Set new]).
 	
 	^aSet
 ]

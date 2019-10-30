@@ -33,6 +33,11 @@ ASTExternalFunction >> isLocked [
 ]
 
 { #category : #generated }
+ASTExternalFunction >> locals [
+	^OrderedCollection new
+]
+
+{ #category : #generated }
 ASTExternalFunction >> tokenVariables [
 	^ #(#eXTERNALToken #fUNCTIONToken #leftParenToken #rightParenToken #name #periodToken)
 ]

@@ -29,6 +29,14 @@ ASTDataType >> nodeVariables [
 	^ #(#type)
 ]
 
+{ #category : #'as yet unclassified' }
+ASTDataType >> parallelComponents [
+
+	"a data type definition is inserted by the compiler when it expands replicated par"
+	
+	^OrderedCollection new
+]
+
 { #category : #generated }
 ASTDataType >> periodToken [
 	^ periodToken

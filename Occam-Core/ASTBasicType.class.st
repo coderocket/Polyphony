@@ -97,8 +97,8 @@ ASTBasicType >> acceptVisitor: aRootVisitor [
 { #category : #testing }
 ASTBasicType >> isBigEnoughToHold: aType [
 
-	^(aType isKindOf: self class) and:
-	[partialOrder includes: aType name value -> name value]
+	^(aType representedType isKindOf: self class) and:
+	[partialOrder includes: aType representedType name value -> name value]
 	
 ]
 
