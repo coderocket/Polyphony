@@ -87,8 +87,8 @@ ASTRoot >> copyTree [
 					((self perform: selector)
 						collect: [ :each | each copyTree ]) ].
 					
-	self attributes
-		do: [ :each | copy attributeNamed: each put: (self attributeNamed: each) ].
+	self attributes associations
+		do: [ :each | copy attributeNamed: each key put: each value ].
 		
 	^ copy	
 ]
