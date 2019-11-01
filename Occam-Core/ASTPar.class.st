@@ -45,6 +45,11 @@ ASTPar >> eNDToken: aSmaCCToken [
 	eNDToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTPar >> flattenParallels [
+	^self subProcesses 
+]
+
 { #category : #'generated-initialize-release' }
 ASTPar >> initialize [
 	super initialize.

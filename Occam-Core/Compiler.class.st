@@ -13,9 +13,11 @@ Compiler class >> compile: anASTNode on: aWriteStream [
 	| aCompiler aCppProc |
 	
 	aCompiler := Compiler new.
+
+	ParFlattener new acceptNode: anASTNode.
 	
 	aCppProc := aCompiler acceptNode: anASTNode.
-
+	
 	aCppProc streamOn: aWriteStream.
 
 ]
@@ -805,8 +807,8 @@ Compiler >> visitReplicatedGuardedCommand: aReplicatedGuardedCommand [
 
 { #category : #'visiting - processes' }
 Compiler >> visitReplicatedPar: aReplicatedPar [
-
-	^self acceptNode:aReplicatedPar unroll
+	^self error: 'I should never see a replicated par!'
+	"^self acceptNode:aReplicatedPar unroll"
 
 ]
 

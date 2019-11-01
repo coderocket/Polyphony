@@ -124,7 +124,7 @@ ASTReplicatedPar >> unroll [
 	
 	self attributeNamed: #localSource ifPresent:[ :value |
 		anOrderedCollection do:[:each | each attributeNamed:#localSource put: value ] ].
-		
+	
 	^aPar
 
 ]

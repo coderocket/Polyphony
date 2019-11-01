@@ -14,32 +14,14 @@ ASTProcess >> callsProcedureNamed: aString [
 	^false
 ]
 
-{ #category : #'process graph' }
-ASTProcess >> inputs: aContext [
-	^self subProcesses inject: Set new into:[:acc :each | acc addAll: (each inputs:aContext). acc] 
+{ #category : #'as yet unclassified' }
+ASTProcess >> flattenParallels [
+	^OrderedCollection with: self
 ]
 
 { #category : #'process graph' }
-ASTProcess >> labelView: aView [
-"
-	| a label |
-	
-	aView edges
-		do: [ :edge | 
-			
-			label := RTLabel new elementOn: edge model name value.
-			aView add: label.
-			
-			a := RTAnchorConstraint new.
-			a
-				element: label;
-				edge: edge;
-				balance: 0.5;
-				minDistance: 3;
-				build ].
-	
-"	
-
+ASTProcess >> inputs: aContext [
+	^self subProcesses inject: Set new into:[:acc :each | acc addAll: (each inputs:aContext). acc] 
 ]
 
 { #category : #'process graph' }
@@ -151,4 +133,9 @@ ASTProcess >> simpleDiagram: aView inContext: aContext withColor: aColor atDepth
 { #category : #'process graph' }
 ASTProcess >> subProcesses [
 	^self children select:[:each | each isKindOf: ASTProcess] 
+]
+
+{ #category : #'as yet unclassified' }
+ASTProcess >> unroll [
+	^self
 ]
