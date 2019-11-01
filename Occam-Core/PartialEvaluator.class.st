@@ -71,7 +71,6 @@ PartialEvaluator >> visitVariable: aVariable [
 
 	state at: aVariable name value 
 		ifPresent:[: value |	
-				Transcript show: value integer; cr.
 				aVariable become: value copy].
 				
 	^aVariable

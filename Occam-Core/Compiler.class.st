@@ -10,13 +10,17 @@ Class {
 { #category : #compiling }
 Compiler class >> compile: anASTNode on: aWriteStream [
 
-	| aCompiler aCppProc |
-	
-	aCompiler := Compiler new.
+	| aCompiler aCppProc nodeCopy |
 
-	ParFlattener new acceptNode: anASTNode.
+	nodeCopy := anASTNode copyTree.
+		
+	TableOptimizer new acceptNode: nodeCopy.
 	
-	aCppProc := aCompiler acceptNode: anASTNode.
+	ParFlattener new acceptNode: nodeCopy.
+
+	aCompiler := Compiler new.
+	
+	aCppProc := aCompiler acceptNode: nodeCopy.
 	
 	aCppProc streamOn: aWriteStream.
 

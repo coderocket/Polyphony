@@ -37,6 +37,11 @@ ASTDataType >> parallelComponents [
 	^OrderedCollection new
 ]
 
+{ #category : #accessing }
+ASTDataType >> parent: aSmaCCParseNode [
+	parent := aSmaCCParseNode
+]
+
 { #category : #generated }
 ASTDataType >> periodToken [
 	^ periodToken

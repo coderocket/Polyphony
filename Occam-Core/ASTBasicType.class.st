@@ -89,6 +89,12 @@ ASTBasicType class >> initialize [
 	self computeLeastUpperBound
 ]
 
+{ #category : #'error handling' }
+ASTBasicType class >> topType [
+
+	^ASTBasicType new name: (SmaCCToken value:'-|-')
+]
+
 { #category : #generated }
 ASTBasicType >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitBasicType: self

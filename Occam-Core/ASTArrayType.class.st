@@ -45,6 +45,25 @@ ASTArrayType >> isBigEnoughToHold: aType [
 	^aType isArrayType and:[ (index = aType index) and:[type isBigEnoughToHold: aType type] ]
 ]
 
+{ #category : #'as yet unclassified' }
+ASTArrayType >> isTop [
+	^type isTop
+]
+
+{ #category : #'as yet unclassified' }
+ASTArrayType >> leastUpperBound: aType [
+
+	| elementLUB |
+	
+	(aType isArrayType) ifFalse:[^ASTBasicType topType].
+	(aType index = index) ifFalse:[^ASTBasicType topType].
+	
+	elementLUB := type leastUpperBound: aType type.
+	
+	^ASTArrayType new type: elementLUB; index: index.
+	 
+]
+
 { #category : #generated }
 ASTArrayType >> leftBracketToken [
 	^ leftBracketToken

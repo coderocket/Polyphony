@@ -53,21 +53,21 @@ ASTRoot >> copyTree [
 
 	| copy |
 	
-	copy := self copy.
+	copy := self class new.
 	
 	self tokenVariables
 		do:
 			[ :selector | 
 			copy
 				perform: (self convertToSetter: selector)
-				with: ((self perform: selector) copy) ].
+				with: ((self perform: selector) shallowCopy) ].
 			
 	self nodeVariables
 		do:
 			[ :selector | 
 			copy
 				perform: (self convertToSetter: selector)
-				with: ((self perform: selector) copyTree) ].
+				with: ((self perform: selector) ifNotNil:[:x | x copyTree]) ].
 			
 	self compositeTokenVariables
 		do:
@@ -76,7 +76,7 @@ ASTRoot >> copyTree [
 				perform: (self convertToSetter: selector)
 				with:
 					((self perform: selector)
-						collect: [ :each | each copy ]) ].
+						collect: [ :each | each shallowCopy ]) ].
 
 	self compositeNodeVariables
 		do:

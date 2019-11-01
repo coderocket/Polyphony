@@ -200,6 +200,7 @@ ASTAbstraction >> parseLocalAbbrev: aString [
 	TypeChecker check: anAST inContext: self.
 	
 	self locals add: anAST.
+	anAST parent: self.
 	
 	self check
 ]
@@ -218,6 +219,7 @@ ASTAbstraction >> parseLocalVariable: aString [
 	anAST attributeNamed: #localSource put: aString.
  
 	self locals add: anAST.
+	anAST parent: self.
 	
 	self check.
 ]
