@@ -5,9 +5,9 @@ Class {
 		'totalMemorySize',
 		'numProcessors',
 		'processorStackSize',
-		'schedulerStackSize',
 		'minimumStackSize',
-		'debugSupport'
+		'debugSupport',
+		'firstProcessorStackSize'
 	],
 	#classVars : [
 		'memoryLayoutForBoard',
@@ -71,11 +71,11 @@ MemoryLayout >> cells [
 
 	memoryLayout add: Color paleRed -> (self machineSize * 1.0 / totalMemorySize). 
 	
-	memoryLayout add: Color paleYellow -> (schedulerStackSize * 1.0 / totalMemorySize). 
+	memoryLayout add: Color paleYellow -> (firstProcessorStackSize * 1.0 / totalMemorySize). 
 	
 	memoryLayout addAll: ((Interval from: 1 to: numProcessors) collect:[:each | Color paleGreen -> (processorStackSize * 1.0 / totalMemorySize) ]).
 	
-	memoryLayout add: (Color gray:0.6) -> ((totalMemorySize - self machineSize - schedulerStackSize - (numProcessors * processorStackSize) ) * 1.0 / totalMemorySize). 
+	memoryLayout add: (Color gray:0.6) -> ((totalMemorySize - self machineSize - firstProcessorStackSize - (numProcessors * processorStackSize) ) * 1.0 / totalMemorySize). 
 	
 	^memoryLayout 
 	 
@@ -102,6 +102,15 @@ MemoryLayout >> descriptionDebugSupport [
 ]
 
 { #category : #'acessing-magritte' }
+MemoryLayout >> descriptionFirstProcessorStackSize [
+	<magritteDescription>
+	^ MANumberDescription new
+		accessor: #firstProcessorStackSize;
+		label: 'First Stack';
+		yourself
+]
+
+{ #category : #'acessing-magritte' }
 MemoryLayout >> descriptionNumProcessors [
 	<magritteDescription>
 	^ MANumberDescription new
@@ -115,16 +124,7 @@ MemoryLayout >> descriptionProcessorStackSize [
 	<magritteDescription>
 	^ MANumberDescription new
 		accessor: #processorStackSize;
-		label: 'Processor Stack';
-		yourself
-]
-
-{ #category : #'acessing-magritte' }
-MemoryLayout >> descriptionSchedulerStackSize [
-	<magritteDescription>
-	^ MANumberDescription new
-		accessor: #schedulerStackSize;
-		label: 'Scheduler Stack';
+		label: 'Rest Stack';
 		yourself
 ]
 
@@ -135,6 +135,25 @@ MemoryLayout >> descriptionTotalMemorySize [
 		accessor: #totalMemorySize;
 		label: 'Memory Size';
 		yourself
+]
+
+{ #category : #accessing }
+MemoryLayout >> firstProcessorStackSize [ 
+	^firstProcessorStackSize 
+]
+
+{ #category : #accessing }
+MemoryLayout >> firstProcessorStackSize: anInteger [
+
+	| oldSchedulerStackSize |
+	
+	oldSchedulerStackSize := firstProcessorStackSize.
+	
+	firstProcessorStackSize := anInteger.
+	
+	self ifNotValid: [ firstProcessorStackSize := oldSchedulerStackSize].
+	
+	self changed
 ]
 
 { #category : #testing }
@@ -152,7 +171,7 @@ MemoryLayout >> initialize [
 	
 	processorStackSize := 128.
 	
-	schedulerStackSize := 48.
+	firstProcessorStackSize := 48.
 	
 	totalMemorySize := 2048.
 	
@@ -165,9 +184,9 @@ MemoryLayout >> initialize [
 MemoryLayout >> isValid [ 
 	
 	^	(numProcessors > 0) and:[ 
-		(schedulerStackSize >= minimumStackSize) and:[
+		(firstProcessorStackSize >= minimumStackSize) and:[
 		(processorStackSize >= minimumStackSize) and:[
-		(self machineSize) + schedulerStackSize + (numProcessors * processorStackSize) <= totalMemorySize ] ] ]. 
+		(self machineSize) + firstProcessorStackSize + (numProcessors * processorStackSize) <= totalMemorySize ] ] ]. 
 	
 ]
 
@@ -218,33 +237,14 @@ MemoryLayout >> processorStackSize: anInteger [
 	self changed.
 ]
 
-{ #category : #accessing }
-MemoryLayout >> schedulerStackSize [ 
-	^schedulerStackSize 
-]
-
-{ #category : #accessing }
-MemoryLayout >> schedulerStackSize: anInteger [
-
-	| oldSchedulerStackSize |
-	
-	oldSchedulerStackSize := schedulerStackSize.
-	
-	schedulerStackSize := anInteger.
-	
-	self ifNotValid: [ schedulerStackSize := oldSchedulerStackSize].
-	
-	self changed
-]
-
 { #category : #'stream out' }
 MemoryLayout >> streamOn: aWriteStream [
 
 	aWriteStream put:
 ('#define NUM_PROCESSORS {n}
 #define PROCESSOR_STACK_SIZE {ps}
-#define OCCAM_SCHEDULER_STACK_SIZE {ss}
-' format: (Dictionary with: #n -> (numProcessors + 1) with: #ps -> processorStackSize with: #ss -> schedulerStackSize)).
+#define FIRST_PROCESSOR_STACK_SIZE {ss}
+' format: (Dictionary with: #n -> (numProcessors + 1) with: #ps -> processorStackSize with: #ss -> firstProcessorStackSize)).
 
 	debugSupport ifTrue:[
 		aWriteStream put:'#define POLYPHONY_DEBUG' ; put: String cr.
