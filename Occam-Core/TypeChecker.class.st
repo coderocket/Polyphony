@@ -50,7 +50,7 @@ TypeChecker >> visitArrayComponent: anArrayComponent [
 	(indexType isIntegerType)
 		ifFalse:[anArrayComponent expr addViolation: 'Not an integer'].
 		
-	 ^arrayType type
+	 ^arrayType representedType type
 ]
 
 { #category : #generated }
@@ -73,7 +73,7 @@ TypeChecker >> visitArraySegment: anArraySegment [
 	(sizeType isIntegerType)
 		ifFalse:[anArraySegment count addViolation: 'Not an integer'].
 		
-	 ^arrayType
+	 ^arrayType representedType
 ]
 
 { #category : #generated }

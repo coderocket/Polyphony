@@ -24,6 +24,12 @@ ASTArrayReferenceType >> isArrayType [
 	^true
 ]
 
+{ #category : #testing }
+ASTArrayReferenceType >> isBigEnoughToHold: aType [
+
+	^aType isArrayType and:[type isBigEnoughToHold: aType type] 
+]
+
 { #category : #generated }
 ASTArrayReferenceType >> leftBracketToken [
 	^ leftBracketToken

@@ -60,6 +60,40 @@ ASTExternalAbbreviation >> eXTERNALToken: aSmaCCToken [
 	eXTERNALToken := aSmaCCToken
 ]
 
+{ #category : #testing }
+ASTExternalAbbreviation >> isArrayType [
+	^self representedType isArrayType
+	
+]
+
+{ #category : #testing }
+ASTExternalAbbreviation >> isBooleanType [
+	^self representedType isBooleanType
+
+	
+]
+
+{ #category : #testing }
+ASTExternalAbbreviation >> isInputSource [
+	^self representedType isInputSource
+
+	
+]
+
+{ #category : #testing }
+ASTExternalAbbreviation >> isIntegerType [
+	^self representedType isIntegerType
+
+	
+]
+
+{ #category : #testing }
+ASTExternalAbbreviation >> isNumericType [
+	^self representedType isNumericType
+
+	
+]
+
 { #category : #generated }
 ASTExternalAbbreviation >> name [
 	^ name
@@ -89,6 +123,11 @@ ASTExternalAbbreviation >> periodToken: aSmaCCToken [
 ASTExternalAbbreviation >> representedType [
 	^type
 
+]
+
+{ #category : #testing }
+ASTExternalAbbreviation >> subsumes: aType [
+	self representedType = aType representedType 
 ]
 
 { #category : #generated }
