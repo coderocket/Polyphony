@@ -25,6 +25,21 @@ ASTReferenceParameter >> changeDirectionTo: aString [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ASTReferenceParameter >> changeStyleTo: aString [
+	
+	| aValueParameter |
+	
+	(aString = 'VAL') ifFalse:[^self].
+	
+	aValueParameter := ASTValueParameter new.
+	aValueParameter name: self name.
+	aValueParameter type: self type.
+	aValueParameter attributes addAll: self attributes.
+	self become: aValueParameter.
+	
+]
+
 { #category : #generated }
 ASTReferenceParameter >> direction [
 	^ direction

@@ -117,6 +117,8 @@ ASTReplicatedPar >> unroll [
 
 			anAssign := ASTAssign new lvalue: (ASTVariable new name: self process index); expr: (ASTLiteralInteger fromInteger: i).
 			
+			anAssign attributeNamed: #hidden put: true.
+			
 			ASTSeq new sourceFrom: self process body ; processes: (OrderedCollection with: aDataType with:anAssign with: (self process body copyTree )).
 		].
 	

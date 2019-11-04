@@ -328,7 +328,7 @@ constructor fastTable
 	column: 'type' evaluated: [ :each | each type localSource ] width:60; 
 	column: 'name' evaluated: [ :each | each name value ] modified: [ :newValue :item :presentation | item renameTo: newValue. ] width:80; 
 	column: 'direction' evaluated: [ : each | each direction ifNil:[''] ifNotNil:[ :x | x title ] ] modified: [ :newValue :item :presentation | item changeDirectionTo: newValue ] width:60 ;
-	column: 'style' evaluated: [ :each | each style ] ;
+	column: 'style' evaluated: [ :each | each style ] modified:[ :newValue :item | item changeStyleTo: newValue ] ;
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:tab :proc | self addParameterTo: proc ] entitled: 'Add' ;
 	selectionAct:[:tab :proc | proc removeParameter: tab selection ] entitled: 'Remove';

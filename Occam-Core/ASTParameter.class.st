@@ -13,6 +13,11 @@ ASTParameter >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitParameter: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTParameter >> changeStyleTo: aString [ 
+	self subclassResponsibility 
+]
+
 { #category : #generated }
 ASTParameter >> name [
 	^ name

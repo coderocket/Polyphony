@@ -32,7 +32,7 @@ ASTProcess >> outputs: aContext [
 { #category : #'as yet unclassified' }
 ASTProcess >> parallelComponents [
 
-	^OrderedCollection with: self
+	^self attributeNamed: #hidden ifPresent:[OrderedCollection new] ifAbsent:[^OrderedCollection with:self]
 	
 ]
 
