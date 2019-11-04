@@ -35,6 +35,16 @@ StaticEvaluator >> visitAbbreviation: anAbbrev [
 ]
 
 { #category : #generated }
+StaticEvaluator >> visitArrayComponent: anArrayComponent [
+
+	anArrayComponent array: (self acceptNode: anArrayComponent array).
+	
+	anArrayComponent expr: (self acceptNode: anArrayComponent expr).
+	
+	^anArrayComponent 
+]
+
+{ #category : #generated }
 StaticEvaluator >> visitDyadicExpression: aDyadicExpression [
 
 	| left right operator x y |
@@ -86,6 +96,12 @@ StaticEvaluator >> visitMonadicExpression: aMonadicExpression [
 	
 	^aMonadicExpression
 
+]
+
+{ #category : #generated }
+StaticEvaluator >> visitParenthesisExpression: aParenthesisExpression [
+
+	^self acceptNode: aParenthesisExpression expression
 ]
 
 { #category : #generated }

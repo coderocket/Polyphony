@@ -39,6 +39,8 @@ PartialEvaluator >> visitAssign: anAssignmentNode [
 
 	result := self acceptNode: anAssignmentNode expr.
 
+	anAssignmentNode expr: result.
+	
 	(anAssignmentNode lvalue isKindOf: ASTVariable)
 		ifFalse:[^self]. 
 	
@@ -51,19 +53,6 @@ PartialEvaluator >> visitAssign: anAssignmentNode [
 	state at: anAssignmentNode lvalue name value put: result.
 		
 
-]
-
-{ #category : #generated }
-PartialEvaluator >> visitDyadicExpression: aDyadicExpression [
-
-	| result |
-	
-	result := super visitDyadicExpression: aDyadicExpression.
-	
-	(result isKindOf: ASTLiteralInteger)
-		ifTrue:[aDyadicExpression become: result].
-
-	^result.
 ]
 
 { #category : #generated }
