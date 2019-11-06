@@ -28,6 +28,13 @@ ASTLiteralInteger >> integer: aSmaCCToken [
 	integer := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTLiteralInteger >> streamOn: aWriteStream [
+
+	aWriteStream put: integer value
+
+]
+
 { #category : #generated }
 ASTLiteralInteger >> tokenVariables [
 	^ #(#integer)

@@ -1,6 +1,6 @@
 Class {
 	#name : #ASTDataType,
-	#superclass : #ASTRoot,
+	#superclass : #ASTDefinition,
 	#instVars : [
 		'name',
 		'type',
@@ -29,14 +29,6 @@ ASTDataType >> nodeVariables [
 	^ #(#type)
 ]
 
-{ #category : #'as yet unclassified' }
-ASTDataType >> parallelComponents [
-
-	"a data type definition is inserted by the compiler when it expands replicated par"
-	
-	^OrderedCollection new
-]
-
 { #category : #accessing }
 ASTDataType >> parent: aSmaCCParseNode [
 	parent := aSmaCCParseNode
@@ -50,6 +42,12 @@ ASTDataType >> periodToken [
 { #category : #generated }
 ASTDataType >> periodToken: aSmaCCToken [
 	periodToken := aSmaCCToken
+]
+
+{ #category : #streaming }
+ASTDataType >> streamOn: aWriteStream [
+	type streamOn: aWriteStream.
+	aWriteStream put: ' '; put:name value; put:' :'
 ]
 
 { #category : #generated }

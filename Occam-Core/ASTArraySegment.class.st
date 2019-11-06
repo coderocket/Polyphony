@@ -115,6 +115,18 @@ ASTArraySegment >> rightBracketToken: aSmaCCToken [
 	rightBracketToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTArraySegment >> streamOn: aWriteStream [
+
+	array streamOn: aWriteStream.
+	aWriteStream put:'[ '.
+	base streamOn: aWriteStream.
+	aWriteStream put: ' FOR '.
+	count streamOn: aWriteStream.
+	aWriteStream put:' ]'.
+
+]
+
 { #category : #generated }
 ASTArraySegment >> tokenVariables [
 	^ #(#fROMToken #fORToken)

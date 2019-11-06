@@ -85,3 +85,13 @@ ASTTable >> rightBracketToken [
 ASTTable >> rightBracketToken: aSmaCCToken [
 	rightBracketToken := aSmaCCToken
 ]
+
+{ #category : #streaming }
+ASTTable >> streamOn: aWriteStream [
+
+	aWriteStream put: '['.
+	
+	exprs do:[:each | each streamOn: aWriteStream] separatedBy: ', '.
+
+	aWriteStream put: '['
+]

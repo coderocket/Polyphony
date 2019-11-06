@@ -59,6 +59,14 @@ ASTReferenceParameter >> nodeVariables [
 	^ #(#direction #type)
 ]
 
+{ #category : #streaming }
+ASTReferenceParameter >> streamOn: aWriteStream [
+	type streamOn: aWriteStream.
+	aWriteStream put: ' '; put: name value.
+	direction ifNotNil:[direction streamOn: aWriteStream].
+
+]
+
 { #category : #accessing }
 ASTReferenceParameter >> style [ 
 	^''

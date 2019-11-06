@@ -150,6 +150,13 @@ ASTBasicType >> name: aSmaCCToken [
 	name := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTBasicType >> streamOn: aWriteStream [
+
+	aWriteStream put:name value.
+	
+]
+
 { #category : #'as yet unclassified' }
 ASTBasicType >> subsumes: aType [
 

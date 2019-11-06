@@ -48,6 +48,12 @@ ASTMonadicExpression >> operator: aSmaCCToken [
 	operator := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTMonadicExpression >> streamOn: aWriteStream [
+	aWriteStream put: operator value; put: ' '.
+	operand streamOn: aWriteStream.	
+]
+
 { #category : #generated }
 ASTMonadicExpression >> tokenVariables [
 	^ #(#operator)

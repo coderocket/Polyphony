@@ -206,6 +206,24 @@ OccamBrowser >> fileInto: aLibrary [
 
 ]
 
+{ #category : #ToDeprecate }
+OccamBrowser >> fileOut: aLibrary [
+
+	| aStream aFileReference anIndentedPrinterStream |
+
+	aFileReference := (UITheme builder chooseForSaveFileReference: 'Save as' extensions: {'ocm'} path: '.').
+	
+	aFileReference ifNil:[^self].
+	
+	anIndentedPrinterStream := IndentedPrinterStream new.
+	aLibrary streamOn: anIndentedPrinterStream.
+
+	aStream := aFileReference writeStream.
+	
+	[aStream nextPutAll: anIndentedPrinterStream contents ] ensure:[ aStream close]
+
+]
+
 { #category : #'as yet unclassified' }
 OccamBrowser >> graphIn: constructor [
 
@@ -254,14 +272,16 @@ constructor tree
 	updateOn: GLMItemChanged from: [ :libraries | libraries first announcer ] ;
 	selectionAct:[ :tree |
 		self fileInto: tree selection ] entitled: 'File in...' ;
+	selectionAct:[ :tree |
+		self fileOut: tree selection ] entitled: 'File out...' ;
 	selectionAct:[:tree | 
 		self addLibraryInto: tree selection ] entitled: 'Add Library...' ;
 	selectionAct:[:tree | 
 		self addProcedureTo: tree selection ] entitled: 'Add Procedure...' ;
 	selectionAct:[:tree | 
 		self addFunctionTo: tree selection ] entitled: 'Add Function...' ;
-	selectionAct:[:tree |
-		self removeScope: tree selection ] entitled: 'Remove';
+	selectionAct:[:tree :root | 
+		self removeScope: tree selectionPath. root first check. ] entitled: 'Remove';
 	allowItemDrag: [:item :tree | true ];
 	transformDraggedItem: [:item :tree | OrderedCollection with: item ] ;
 	allowDropOnItem: [:draggedObject :targetItem :list | draggedObject isKindOf: ASTAbstraction ] ;
@@ -386,9 +406,14 @@ OccamBrowser >> removeAbstraction: anAbstraction from: aScope [
 ]
 
 { #category : #adding }
-OccamBrowser >> removeScope: aScope [
+OccamBrowser >> removeScope: anOrderedSequence [
+
+	[anOrderedSequence size > 2] whileTrue:[anOrderedSequence removeFirst].
+
+	(anOrderedSequence size < 2) ifTrue:[^self].
 	
-	aScope parent ifNotNil:[aScope parent removeAbstraction: aScope ]
+	anOrderedSequence first removeAbstraction: anOrderedSequence last.
+
 ]
 
 { #category : #'as yet unclassified' }

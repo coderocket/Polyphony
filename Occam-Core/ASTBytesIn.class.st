@@ -35,6 +35,14 @@ ASTBytesIn >> nodeVariables [
 	^ #(#type)
 ]
 
+{ #category : #streaming }
+ASTBytesIn >> streamOn: aWriteStream [
+
+	aWriteStream put:'BYTESIN '.
+	type streamOn: aWriteStream.
+	
+]
+
 { #category : #generated }
 ASTBytesIn >> tokenVariables [
 	^ #(#bYTESINToken)

@@ -274,6 +274,16 @@ ASTAbstraction >> rightParenToken: aSmaCCToken [
 	rightParenToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTAbstraction >> streamOn: aWriteStream [
+
+	aWriteStream put: name value ; put: '('.
+	params do: [ :each | each streamOn: aWriteStream ] separatedBy: [ aWriteStream put:', ' ].
+	aWriteStream put: ') '.
+	self doc streamOn: aWriteStream.
+
+]
+
 { #category : #generated }
 ASTAbstraction >> tokenVariables [
 	^ #(#leftParenToken #rightParenToken #name #periodToken)

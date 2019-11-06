@@ -54,7 +54,8 @@ ASTSeq >> initialize [
 { #category : #'as yet unclassified' }
 ASTSeq >> parallelComponents [
 
-	^ self processes inject: OrderedCollection new into: [ :acc :each | acc addAll: each parallelComponents . acc ]
+	^ self processes inject: OrderedCollection new into: [ :acc :each | 
+		each attributeNamed:#hidden ifAbsent:[acc addAll: each parallelComponents] . acc ] 
 
 ]
 

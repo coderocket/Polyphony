@@ -139,6 +139,14 @@ ASTCall >> rightParenToken: aSmaCCToken [
 	rightParenToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTCall >> streamOn: aWriteStream [
+	aWriteStream put: name value; put: '('.
+	exprs do:[:each | each streamOn: aWriteStream ] separatedBy:[aWriteStream put:', '].
+	aWriteStream put: ')'
+	
+]
+
 { #category : #generated }
 ASTCall >> tokenVariables [
 	^ #(#name #leftParenToken #rightParenToken)

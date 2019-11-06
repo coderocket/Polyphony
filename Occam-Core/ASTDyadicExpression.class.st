@@ -114,6 +114,13 @@ ASTDyadicExpression >> right: anASTRoot [
 		ifTrue: [ self right parent: self ]
 ]
 
+{ #category : #streaming }
+ASTDyadicExpression >> streamOn: aWriteStream [
+	left streamOn: aWriteStream.
+	aWriteStream put: ' '; put: operator value; put: ' '.
+	right streamOn: aWriteStream.	
+]
+
 { #category : #generated }
 ASTDyadicExpression >> tokenVariables [
 	^ #(#operator)

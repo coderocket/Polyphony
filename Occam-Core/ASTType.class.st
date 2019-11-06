@@ -54,6 +54,11 @@ ASTType >> isNumericType [
 	^false
 ]
 
+{ #category : #testing }
+ASTType >> isValidGuardType [
+	^false
+]
+
 { #category : #'as yet unclassified' }
 ASTType >> representedType [
 	^self

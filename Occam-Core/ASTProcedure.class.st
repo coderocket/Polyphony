@@ -279,6 +279,17 @@ ASTProcedure >> removeAbstraction: anASTProcedure [
 	self check
 ]
 
+{ #category : #streaming }
+ASTProcedure >> streamOn: aWriteStream [
+
+	aWriteStream put: 'PROC '.
+	super streamOn: aWriteStream.
+	aWriteStream open.
+	self locals do: [ :each | each streamOn: aWriteStream. aWriteStream newLine].
+	aWriteStream putManyLines: self body localSource trimRight.
+	aWriteStream close; put:':'.
+]
+
 { #category : #generated }
 ASTProcedure >> tokenVariables [
 	^ #(#bEGINToken #eNDToken #pROCToken #leftParenToken #rightParenToken #name #periodToken)

@@ -28,6 +28,12 @@ ASTDirIn >> questionMarkToken: aSmaCCToken [
 	questionMarkToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTDirIn >> streamOn: aWriteStream [
+
+	aWriteStream put:'?'
+]
+
 { #category : #accessing }
 ASTDirIn >> title [ 
 	^'?'

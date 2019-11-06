@@ -89,6 +89,16 @@ ASTArrayType >> rightBracketToken: aSmaCCToken [
 	rightBracketToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTArrayType >> streamOn: aWriteStream [
+
+	aWriteStream put:'['.
+	index streamOn: aWriteStream.
+	aWriteStream put:'] '.
+	type streamOn: aWriteStream.
+	
+]
+
 { #category : #generated }
 ASTArrayType >> type [
 	^ type

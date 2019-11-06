@@ -12,6 +12,12 @@ ASTTimerType >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitTimerType: self
 ]
 
+{ #category : #streaming }
+ASTTimerType >> streamOn: aWriteStream [
+
+	aWriteStream put:'TIMER'.
+]
+
 { #category : #generated }
 ASTTimerType >> tIMERToken [
 	^ tIMERToken

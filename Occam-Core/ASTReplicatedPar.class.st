@@ -114,6 +114,8 @@ ASTReplicatedPar >> unroll [
 	anOrderedCollection := (begin to: end) collect:[ :i | | anAssign aDataType |
 
 			aDataType := ASTDataType new name: self process index; type: (ASTBasicType new name:(SmaCCToken value:'INT')).
+			
+			aDataType attributeNamed: #hidden put: true.
 
 			anAssign := ASTAssign new lvalue: (ASTVariable new name: self process index); expr: (ASTLiteralInteger fromInteger: i).
 			

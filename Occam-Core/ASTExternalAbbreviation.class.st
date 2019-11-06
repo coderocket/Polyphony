@@ -1,6 +1,6 @@
 Class {
 	#name : #ASTExternalAbbreviation,
-	#superclass : #ASTType,
+	#superclass : #ASTDefinition,
 	#instVars : [
 		'eXTERNALToken',
 		'vALToken',
@@ -123,6 +123,13 @@ ASTExternalAbbreviation >> periodToken: aSmaCCToken [
 ASTExternalAbbreviation >> representedType [
 	^type
 
+]
+
+{ #category : #streaming }
+ASTExternalAbbreviation >> streamOn: aWriteStream [
+	aWriteStream put: 'EXTERNAL VAL '.
+	type streamOn: aWriteStream.
+	aWriteStream put: ' '; put:name value; put:':'
 ]
 
 { #category : #testing }

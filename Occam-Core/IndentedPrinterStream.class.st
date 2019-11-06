@@ -55,3 +55,11 @@ IndentedPrinterStream >> put: aString [
 	self closeIfNecessary.
 	stream nextPutAll: aString
 ]
+
+{ #category : #writing }
+IndentedPrinterStream >> putManyLines: aString [
+	self closeIfNecessary.
+	aString lines do:[:each | stream nextPutAll: each ] separatedBy:[self newLine].
+
+	
+]

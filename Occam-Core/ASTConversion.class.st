@@ -47,6 +47,13 @@ ASTConversion >> operand: anASTRoot [
 		ifTrue: [ self operand parent: self ]
 ]
 
+{ #category : #streaming }
+ASTConversion >> streamOn: aWriteStream [
+	aWriteStream put:'( '; put: dataTypeName value; put: ' '.
+	operand streamOn: aWriteStream.
+	aWriteStream put:' )'
+]
+
 { #category : #generated }
 ASTConversion >> tokenVariables [
 	^ #(#dataTypeName)

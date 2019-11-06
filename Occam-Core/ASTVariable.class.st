@@ -34,6 +34,13 @@ ASTVariable >> principalName [
 	^name
 ]
 
+{ #category : #streaming }
+ASTVariable >> streamOn: aWriteStream [
+
+	aWriteStream put: name value.
+
+]
+
 { #category : #generated }
 ASTVariable >> tokenVariables [
 	^ #(#name)

@@ -58,6 +58,13 @@ ASTLiteralString >> cook [
 	^aWriteStream contents.
 ]
 
+{ #category : #streaming }
+ASTLiteralString >> streamOn: aWriteStream [
+
+	aWriteStream put: '"'; put: (string value) ; put: '"'
+
+]
+
 { #category : #generated }
 ASTLiteralString >> string [
 	^ string

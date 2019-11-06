@@ -24,6 +24,14 @@ ASTDoc >> dOCToken: aSmaCCToken [
 	dOCToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTDoc >> streamOn: aWriteStream [
+
+	aWriteStream put:'DOC '.
+	aWriteStream put: text value.
+	aWriteStream put: '*/'.
+]
+
 { #category : #generated }
 ASTDoc >> text [
 	^ text

@@ -29,6 +29,12 @@ ASTDirOut >> bangToken: aSmaCCToken [
 	bangToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTDirOut >> streamOn: aWriteStream [
+
+	aWriteStream put:'!'
+]
+
 { #category : #accessing }
 ASTDirOut >> title [ 	
 	^'!'

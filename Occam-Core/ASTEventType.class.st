@@ -22,6 +22,13 @@ ASTEventType >> eVENTToken: aSmaCCToken [
 	eVENTToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTEventType >> streamOn: aWriteStream [
+
+	aWriteStream put:'EVENT'.
+	
+]
+
 { #category : #generated }
 ASTEventType >> tokenVariables [
 	^ #(#eVENTToken)

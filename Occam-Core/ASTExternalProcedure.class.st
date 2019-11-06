@@ -37,6 +37,14 @@ ASTExternalProcedure >> locals [
 	^OrderedCollection new
 ]
 
+{ #category : #streaming }
+ASTExternalProcedure >> streamOn: aWriteStream [
+
+	aWriteStream put: 'EXTERNAL PROC '.
+	super streamOn: aWriteStream.
+	aWriteStream put:':'.
+]
+
 { #category : #generated }
 ASTExternalProcedure >> tokenVariables [
 	^ #(#eXTERNALToken #pROCToken #leftParenToken #rightParenToken #name #periodToken)

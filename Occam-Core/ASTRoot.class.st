@@ -9,22 +9,22 @@ ASTRoot >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitRoot: self
 ]
 
-{ #category : #adding }
+{ #category : #violations }
 ASTRoot >> addViolation: aString [
 
 	(self attributeNamed: #violations) add: (Violation new reason: aString; startPosition: self startPosition; stopPosition: self stopPosition) 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #violations }
 ASTRoot >> clearViolations [
 
-	(self attributeNamed: #violations) removeAll.
+	(self attributeNamed: #violations) ifNotNil:[ :a | a removeAll].
 
 	self children do:[:each | each clearViolations ]
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'source code' }
 ASTRoot >> completeLocalSource [
 
 	^self attributeNamed: #localSource ifAbsent:[parent 
@@ -33,7 +33,7 @@ ASTRoot >> completeLocalSource [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'source code' }
 ASTRoot >> computeOffsetIn: aString [
 
 	| index offset |
@@ -111,12 +111,7 @@ ASTRoot >> isLocked [
 	
 ]
 
-{ #category : #testing }
-ASTRoot >> isValidGuardType [
-	^false
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'source code' }
 ASTRoot >> localSource [
 
 	^self completeLocalSource 
@@ -127,7 +122,13 @@ ASTRoot >> localSource [
 			t copyReplaceAll: s with: Character cr asString]
 ]
 
-{ #category : #accessing }
+{ #category : #streaming }
+ASTRoot >> streamOn: aWriteStream [
+	^self subclassResponsibility 
+	
+]
+
+{ #category : #'source code' }
 ASTRoot >> title [
 
 	self localSource ifNil:[^self class asString].

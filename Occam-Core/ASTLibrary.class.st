@@ -129,8 +129,8 @@ ASTLibrary >> fileIn: aStream [
 	| anASTLibraryNode |
 	
 	anASTLibraryNode := OccamCoreParser parse: aStream contents.
-	TypeChecker check: anASTLibraryNode inContext: nil.
 	members add: anASTLibraryNode.
+	self check
 
 ]
 
@@ -197,6 +197,16 @@ ASTLibrary >> removeAbstraction: anASTAbstraction [
 		
 	self check
   
+]
+
+{ #category : #streaming }
+ASTLibrary >> streamOn: aWriteStream [
+
+	aWriteStream put: 'LIBRARY ' ; put:name value ; put: ' IS '.
+	self doc streamOn: aWriteStream.
+	aWriteStream open.
+	self members do: [ :each | each streamOn: aWriteStream ] separatedBy:[aWriteStream newLine].
+	aWriteStream close; put:':'; newLine.
 ]
 
 { #category : #generated }

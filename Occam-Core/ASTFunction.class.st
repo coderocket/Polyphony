@@ -118,6 +118,18 @@ ASTFunction >> removeAbstraction: anASTProcedure [
 	locals remove: anASTProcedure
 ]
 
+{ #category : #streaming }
+ASTFunction >> streamOn: aWriteStream [
+
+	type streamOn: aWriteStream.
+	aWriteStream put: ' FUNCTION '.
+	super streamOn: aWriteStream.
+	aWriteStream open.
+	self locals do: [ :each | each streamOn: aWriteStream. aWriteStream newLine].
+	aWriteStream putManyLines: self body localSource trimRight.
+	aWriteStream close; put:':'.
+]
+
 { #category : #generated }
 ASTFunction >> tokenVariables [
 	^ #(#bEGINToken #eNDToken #fUNCTIONToken #leftParenToken #rightParenToken #name #periodToken)

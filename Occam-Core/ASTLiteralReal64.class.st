@@ -22,6 +22,13 @@ ASTLiteralReal64 >> number: aSmaCCToken [
 	number := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTLiteralReal64 >> streamOn: aWriteStream [
+
+	aWriteStream put: '#'; put: (number value)
+
+]
+
 { #category : #generated }
 ASTLiteralReal64 >> tokenVariables [
 	^ #(#number)

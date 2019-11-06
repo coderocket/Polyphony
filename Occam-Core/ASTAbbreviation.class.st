@@ -1,6 +1,6 @@
 Class {
 	#name : #ASTAbbreviation,
-	#superclass : #ASTRoot,
+	#superclass : #ASTDefinition,
 	#instVars : [
 		'vALToken',
 		'name',
@@ -65,6 +65,13 @@ ASTAbbreviation >> periodToken: aSmaCCToken [
 	periodToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTAbbreviation >> streamOn: aWriteStream [
+	aWriteStream put: 'VAL '; put: name value; put: ' IS '.
+	expr streamOn: aWriteStream.
+	aWriteStream put:':'
+]
+
 { #category : #generated }
 ASTAbbreviation >> tokenVariables [
 	^ #(#vALToken #name #iSToken #periodToken)
@@ -72,7 +79,7 @@ ASTAbbreviation >> tokenVariables [
 
 { #category : #accessing }
 ASTAbbreviation >> type [
-	^self attributeNamed: #type
+	^self attributeNamed: #type ifAbsent:[ASTBasicType errorType]
 ]
 
 { #category : #generated }

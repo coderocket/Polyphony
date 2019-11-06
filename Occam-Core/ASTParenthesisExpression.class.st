@@ -58,6 +58,15 @@ ASTParenthesisExpression >> rightParenToken: aSmaCCToken [
 	rightParenToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTParenthesisExpression >> streamOn: aWriteStream [
+
+	aWriteStream put: '('.
+	expression streamOn: aWriteStream.
+	aWriteStream put: ')'
+
+]
+
 { #category : #generated }
 ASTParenthesisExpression >> tokenVariables [
 	^ #(#leftParenToken #rightParenToken)

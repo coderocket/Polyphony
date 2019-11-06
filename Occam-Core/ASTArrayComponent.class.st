@@ -89,3 +89,13 @@ ASTArrayComponent >> rightBracketToken [
 ASTArrayComponent >> rightBracketToken: aSmaCCToken [
 	rightBracketToken := aSmaCCToken
 ]
+
+{ #category : #streaming }
+ASTArrayComponent >> streamOn: aWriteStream [
+
+	array streamOn: aWriteStream.
+	aWriteStream put:'[ '.
+	expr streamOn: aWriteStream.
+	aWriteStream put:' ]'.
+
+]

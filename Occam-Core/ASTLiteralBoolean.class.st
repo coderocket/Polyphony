@@ -22,6 +22,13 @@ ASTLiteralBoolean >> boolean: aSmaCCToken [
 	boolean := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTLiteralBoolean >> streamOn: aWriteStream [
+
+	aWriteStream put: boolean value.
+
+]
+
 { #category : #generated }
 ASTLiteralBoolean >> tokenVariables [
 	^ #(#boolean)

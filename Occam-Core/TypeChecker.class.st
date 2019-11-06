@@ -202,7 +202,7 @@ TypeChecker >> visitFunction: aFunction [
 		aFunction body addViolation:'Does not end with a result'. nil].
 
 	((TypeChecker check: aResult return inContext: aFunction) = aFunction type) 
-		ifFalse:[aFunction resultType addViolation: 'Type mismatch'].
+		ifFalse:[aFunction type addViolation: 'Type mismatch'].
 				
 	^TypeChecker check: aFunction body inContext: aFunction.
 
@@ -382,7 +382,7 @@ TypeChecker >> visitOutput: anOutputNode [
 	
 	(aChannelType isKindOf: ASTChannelType)
 		ifFalse:[anOutputNode addViolation: 'Not a channel']
-		ifTrue:[(aChannelType type = anExprType)
+		ifTrue:[(aChannelType type isBigEnoughToHold: anExprType)
 			ifFalse:[anOutputNode addViolation: 'Type mismatch'] ]
 
 ]

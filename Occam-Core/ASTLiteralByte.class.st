@@ -22,6 +22,13 @@ ASTLiteralByte >> byte: aSmaCCToken [
 	byte := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTLiteralByte >> streamOn: aWriteStream [
+
+	aWriteStream put: byte value.
+
+]
+
 { #category : #generated }
 ASTLiteralByte >> tokenVariables [
 	^ #(#byte)

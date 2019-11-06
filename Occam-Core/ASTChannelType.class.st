@@ -39,6 +39,14 @@ ASTChannelType >> oFToken: aSmaCCToken [
 	oFToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTChannelType >> streamOn: aWriteStream [
+
+	aWriteStream put:'CHAN OF '.
+	type streamOn: aWriteStream.
+	
+]
+
 { #category : #generated }
 ASTChannelType >> tokenVariables [
 	^ #(#cHANToken #oFToken)

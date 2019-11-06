@@ -55,6 +55,14 @@ ASTArrayReferenceType >> rightBracketToken: aSmaCCToken [
 	rightBracketToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTArrayReferenceType >> streamOn: aWriteStream [
+
+	aWriteStream put:'[]'.
+	type streamOn: aWriteStream.
+	
+]
+
 { #category : #'as yet unclassified' }
 ASTArrayReferenceType >> subsumes: aType [
 

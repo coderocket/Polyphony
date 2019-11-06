@@ -37,6 +37,16 @@ ASTExternalFunction >> locals [
 	^OrderedCollection new
 ]
 
+{ #category : #streaming }
+ASTExternalFunction >> streamOn: aWriteStream [
+
+	aWriteStream put: 'EXTERNAL '.
+	type streamOn: aWriteStream.
+	aWriteStream put: ' FUNCTION '.
+	super streamOn: aWriteStream.
+	aWriteStream put:':'.
+]
+
 { #category : #generated }
 ASTExternalFunction >> tokenVariables [
 	^ #(#eXTERNALToken #fUNCTIONToken #leftParenToken #rightParenToken #name #periodToken)

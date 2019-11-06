@@ -18,6 +18,14 @@ ASTValueParameter >> direction [
 
 ]
 
+{ #category : #streaming }
+ASTValueParameter >> streamOn: aWriteStream [
+	aWriteStream put:'VAL '.
+	type streamOn: aWriteStream.
+	aWriteStream put: ' '; put: name value.
+
+]
+
 { #category : #accessing }
 ASTValueParameter >> style [
 	^'VAL'
