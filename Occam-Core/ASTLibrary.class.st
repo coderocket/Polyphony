@@ -11,6 +11,22 @@ Class {
 	#category : #'Occam-Core-AST'
 }
 
+{ #category : #menu }
+ASTLibrary class >> fileIn [
+
+	| anASTLibraryNode aStream aFileReference |
+	
+	aFileReference := (UITheme builder chooseExistingFileReference: 'Select a Library' extensions: {'ocm'} path: '.').
+	
+	aStream := aFileReference readStream.
+
+	anASTLibraryNode := [ OccamCoreParser parse: aStream contents ] ensure:[aStream close].
+	
+	InternalizeSource new acceptNode: anASTLibraryNode.
+	
+	^anASTLibraryNode 
+]
+
 { #category : #generated }
 ASTLibrary >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitLibrary: self
