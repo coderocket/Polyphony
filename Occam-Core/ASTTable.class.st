@@ -15,13 +15,6 @@ ASTTable >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitTable: self
 ]
 
-{ #category : #converting }
-ASTTable >> asString [ 
-	
-	^'[' , ((exprs collect:[:each | each asString ]) joinUsing: ', '), ']'
-
-]
-
 { #category : #generated }
 ASTTable >> commaTokens [
 	^ commaTokens

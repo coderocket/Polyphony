@@ -12,13 +12,6 @@ ASTVariable >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitVariable: self
 ]
 
-{ #category : #converting }
-ASTVariable >> asString [ 
-
-	^self name value
-	
-]
-
 { #category : #generated }
 ASTVariable >> name [
 	^ name

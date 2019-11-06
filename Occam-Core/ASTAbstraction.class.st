@@ -61,6 +61,13 @@ ASTAbstraction >> inputs [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ASTAbstraction >> internalizeSource [
+
+	self body internalizeSource
+
+]
+
 { #category : #testing }
 ASTAbstraction >> isClosed [
 	^false
@@ -195,8 +202,6 @@ ASTAbstraction >> parseLocalAbbrev: aString [
 	 
 	anAST := aParser parse.
 		
-	anAST attributeNamed: #localSource put: aString.
-
 	TypeChecker check: anAST inContext: self.
 	
 	self locals add: anAST.
@@ -216,8 +221,6 @@ ASTAbstraction >> parseLocalVariable: aString [
 	 
 	anAST := aParser parse.
 		
-	anAST attributeNamed: #localSource put: aString.
- 
 	self locals add: anAST.
 	anAST parent: self.
 	
@@ -235,8 +238,6 @@ ASTAbstraction >> parseParameter: aString [
 	
 	anAST := aParser parse.
 		
-	anAST attributeNamed: #localSource put: aString.
-	 
 	self params add: anAST.
 	
 	self check.

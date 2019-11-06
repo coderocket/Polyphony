@@ -32,11 +32,6 @@ ASTArraySegment >> array: anASTLValue [
 		ifTrue: [ self array parent: self ]
 ]
 
-{ #category : #converting }
-ASTArraySegment >> asString [ 
-	^self array asString, '[FROM ', self base asString, ' FOR ', self count asString, ']'
-]
-
 { #category : #generated }
 ASTArraySegment >> base [
 	^ base

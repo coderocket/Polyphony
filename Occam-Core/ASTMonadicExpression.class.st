@@ -13,12 +13,6 @@ ASTMonadicExpression >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitMonadicExpression: self
 ]
 
-{ #category : #converting }
-ASTMonadicExpression >> asString [ 
-	^self operator value, self operand asString
-	
-]
-
 { #category : #generated }
 ASTMonadicExpression >> nodeVariables [
 	^ #(#operand)

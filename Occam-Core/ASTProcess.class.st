@@ -24,6 +24,24 @@ ASTProcess >> inputs: aContext [
 	^self subProcesses inject: Set new into:[:acc :each | acc addAll: (each inputs:aContext). acc] 
 ]
 
+{ #category : #'as yet unclassified' }
+ASTProcess >> internalizeSource [
+
+	| source offset indentation s |
+		
+	source := self completeSource.
+	offset := self attributeNamed:#startPosition.
+	indentation := 0.
+	
+	[ (source at: offset - indentation) = Character cr ] 
+		whileFalse:[ indentation := indentation + 1].
+
+	s := Character cr asString, (' ' repeat: indentation - 1).	
+	
+	self attributeNamed:#localSource put: (self source copyReplaceAll: s with: Character cr asString).
+
+]
+
 { #category : #'process graph' }
 ASTProcess >> outputs: aContext [
 	^self subProcesses inject: Set new into:[:acc :each | acc addAll: (each outputs: aContext). acc] 

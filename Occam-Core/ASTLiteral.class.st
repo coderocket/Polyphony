@@ -8,8 +8,3 @@ Class {
 ASTLiteral >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitLiteral: self
 ]
-
-{ #category : #converting }
-ASTLiteral >> asString [ 
-	^(self perform: self tokenVariables first) value
-]

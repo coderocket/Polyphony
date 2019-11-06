@@ -14,11 +14,6 @@ ASTParenthesisExpression >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitParenthesisExpression: self
 ]
 
-{ #category : #converting }
-ASTParenthesisExpression >> asString [ 	
-	^'(', self expression asString, ')'
-]
-
 { #category : #generated }
 ASTParenthesisExpression >> expression [
 	^ expression

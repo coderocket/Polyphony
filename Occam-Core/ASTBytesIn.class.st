@@ -13,13 +13,6 @@ ASTBytesIn >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitBytesIn: self
 ]
 
-{ #category : #converting }
-ASTBytesIn >> asString [ 
-
-	^'BYTESIN ', type localSource
-	
-]
-
 { #category : #generated }
 ASTBytesIn >> bYTESINToken [
 	^ bYTESINToken

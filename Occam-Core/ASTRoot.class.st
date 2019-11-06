@@ -15,6 +15,18 @@ ASTRoot >> addViolation: aString [
 	(self attributeNamed: #violations) add: (Violation new reason: aString; startPosition: self startPosition; stopPosition: self stopPosition) 
 ]
 
+{ #category : #converting }
+ASTRoot >> asString [ 	
+	
+	| anIndentedPrinterStream |
+	
+	anIndentedPrinterStream := IndentedPrinterStream new.
+	
+	self streamOn: anIndentedPrinterStream.
+	
+	^anIndentedPrinterStream contents
+]
+
 { #category : #violations }
 ASTRoot >> clearViolations [
 
@@ -22,30 +34,6 @@ ASTRoot >> clearViolations [
 
 	self children do:[:each | each clearViolations ]
 
-]
-
-{ #category : #'source code' }
-ASTRoot >> completeLocalSource [
-
-	^self attributeNamed: #localSource ifAbsent:[parent 
-																ifNil:[self source] 
-																ifNotNil:[parent completeLocalSource]]
-	
-]
-
-{ #category : #'source code' }
-ASTRoot >> computeOffsetIn: aString [
-
-	| index offset |
-	
-	offset := 0.
-	index := self startPosition - 1.
-	[ (index > 0) and:[(aString at:index) ~~ Character cr] ]
-		whileTrue:[ 
-			index := index - 1 . 
-			offset := offset + 1 ].
-
-	^offset
 ]
 
 { #category : #copying }
@@ -114,12 +102,8 @@ ASTRoot >> isLocked [
 { #category : #'source code' }
 ASTRoot >> localSource [
 
-	^self completeLocalSource 
-		ifNotNil:[ :value | | indentLevel s t |
-			indentLevel := self computeOffsetIn: value.
-			s := Character cr asString, (' ' repeat: indentLevel).
-			t := (value copyFrom: (self startPosition max:1) to: (self stopPosition min: value size)) asString.
-			t copyReplaceAll: s with: Character cr asString]
+	^self attributeNamed: #localSource
+
 ]
 
 { #category : #streaming }
@@ -131,9 +115,13 @@ ASTRoot >> streamOn: aWriteStream [
 { #category : #'source code' }
 ASTRoot >> title [
 
-	self localSource ifNil:[^self class asString].
+	| anIndentedPrinterStream |
 	
-	^(self localSource copyWithoutAll: String cr) takeFirst:8
+	anIndentedPrinterStream := IndentedPrinterStream new.
+	
+	self streamOn: anIndentedPrinterStream.
+	
+	^(anIndentedPrinterStream copyWithoutAll: String cr) takeFirst:8
 
 	
 ]

@@ -9,11 +9,6 @@ ASTExpression >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitExpression: self
 ]
 
-{ #category : #converting }
-ASTExpression >> asString [ 	
-	^self subclassResponsibility 
-]
-
 { #category : #accessing }
 ASTExpression >> input [ 
 	^ASTSkip new 

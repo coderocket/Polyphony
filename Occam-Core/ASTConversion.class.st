@@ -13,11 +13,6 @@ ASTConversion >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitConversion: self
 ]
 
-{ #category : #converting }
-ASTConversion >> asString [
-	^'(', self dataTypeName value, ' ', self operand asString, ')'
-]
-
 { #category : #generated }
 ASTConversion >> dataTypeName [
 	^ dataTypeName

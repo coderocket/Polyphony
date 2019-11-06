@@ -302,7 +302,7 @@ constructor table
 	title: 'Abbreviations' ;
 	display:[ :proc | proc localAbbrevs ]; 
 	column: 'name' evaluated: [ :each | each name value ] width:80 ;	
-	column: 'value' evaluated: [ :each | each expr localSource ] ; 
+	column: 'value' evaluated: [ :each | each expr asString ] ; 
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:table :proc | self addLocalAbbrevTo: proc ] entitled: 'Add' ;
 	selectionAct:[:tab :proc | proc removeLocal: tab selection] entitled: 'Remove' 
@@ -318,7 +318,7 @@ constructor table
 	title: 'Variables';
 	when:[ :proc | proc class canUnderstand: #localVariables ] ;
 	display:[ :proc | proc localVariables ]; 
-	column: 'type' evaluated: [ :each | each type localSource ] width:80 ;	
+	column: 'type' evaluated: [ :each | each type asString ] width:80 ;	
 	column: 'name' evaluated: [ :each | each name value ] ; 
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:table :proc | self addLocalVariableTo: proc] entitled: 'Add' ;
@@ -345,7 +345,7 @@ constructor fastTable
 	when:[ :proc | proc class canUnderstand: #params ] ;
 	title: 'Parameters'; 
 	display:[ :proc | proc params ]; 
-	column: 'type' evaluated: [ :each | each type localSource ] width:60; 
+	column: 'type' evaluated: [ :each | each type asString ] width:60; 
 	column: 'name' evaluated: [ :each | each name value ] modified: [ :newValue :item :presentation | item renameTo: newValue. ] width:80; 
 	column: 'direction' evaluated: [ : each | each direction ifNil:[''] ifNotNil:[ :x | x title ] ] modified: [ :newValue :item :presentation | item changeDirectionTo: newValue ] width:60 ;
 	column: 'style' evaluated: [ :each | each style ] modified:[ :newValue :item | item changeStyleTo: newValue ] ;
@@ -390,7 +390,7 @@ constructor table
    title: 'Abbreviations' ;
 	display:[ :library | library allExternalAbbrevs ];
 	updateOn: GLMItemChanged from: [ :library | library announcer ] ;
-	column: 'type' evaluated: [ :each | each type localSource ] width:80; 
+	column: 'type' evaluated: [ :each | each type asString ] width:80; 
 	column: 'name' evaluated: [ :each | each name value ]  
 
 ]

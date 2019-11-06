@@ -129,7 +129,11 @@ ASTLibrary >> fileIn: aStream [
 	| anASTLibraryNode |
 	
 	anASTLibraryNode := OccamCoreParser parse: aStream contents.
+	
+	InternalizeSource new acceptNode: anASTLibraryNode.
+	
 	members add: anASTLibraryNode.
+	anASTLibraryNode parent: self.
 	self check
 
 ]

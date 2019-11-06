@@ -110,7 +110,7 @@ constructor table
 	when: [ :proc | showAbbreviations ] ;
 	display:[ :proc | proc allExternalAbbrevs ];
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
-	column: 'type' evaluated: [ :each | each type localSource ] width:80; 
+	column: 'type' evaluated: [ :each | each type asString ] width:80; 
 	column: 'name' evaluated: [ :each | each name value ]  
 
 	

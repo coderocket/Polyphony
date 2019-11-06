@@ -29,11 +29,6 @@ ASTArrayComponent >> array: anASTLValue [
 		ifTrue: [ self array parent: self ]
 ]
 
-{ #category : #converting }
-ASTArrayComponent >> asString [
-	^self array asString, '[', self expr asString, ']'
-]
-
 { #category : #testing }
 ASTArrayComponent >> contains: anASTLValue [
 

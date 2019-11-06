@@ -42,11 +42,6 @@ ASTDyadicExpression >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitDyadicExpression: self
 ]
 
-{ #category : #converting }
-ASTDyadicExpression >> asString [
-	^ '(', self left asString, ' ', self operator value, ' ', self right asString, ')'
-]
-
 { #category : #testing }
 ASTDyadicExpression >> ifArithmeticOperator: aBlock [
 	(arithmeticOperators includes: operator value)

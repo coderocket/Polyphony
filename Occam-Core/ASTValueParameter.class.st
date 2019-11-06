@@ -12,6 +12,21 @@ ASTValueParameter >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitValueParameter: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTValueParameter >> changeStyleTo: aString [
+	
+	| aReferenceParameter |
+	
+	(aString = '') ifFalse:[^self].
+	
+	aReferenceParameter := ASTReferenceParameter new.
+	aReferenceParameter name: self name.
+	aReferenceParameter type: self type.
+	aReferenceParameter attributes addAll: self attributes.
+	self become: aReferenceParameter.
+	
+]
+
 { #category : #accessing }
 ASTValueParameter >> direction [ 
 	^ASTDirNone new
