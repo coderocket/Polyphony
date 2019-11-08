@@ -3,8 +3,7 @@ Class {
 	#superclass : #ASTProcess,
 	#instVars : [
 		'pARToken',
-		'process',
-		'unrolled'
+		'process'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -14,27 +13,9 @@ ASTReplicatedPar >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitReplicatedPar: self
 ]
 
-{ #category : #'process graph' }
-ASTReplicatedPar >> inputs: aContext [
-
-	unrolled ifNil:[self unrollInContext: aContext].
-	
-	^unrolled inputs: aContext
-	
-]
-
 { #category : #generated }
 ASTReplicatedPar >> nodeVariables [
 	^ #(#process)
-]
-
-{ #category : #'process graph' }
-ASTReplicatedPar >> outputs: aContext [
-
-	unrolled ifNil:[self unrollInContext: aContext].
-	
-	^unrolled outputs: aContext
-		
 ]
 
 { #category : #generated }
@@ -45,15 +26,6 @@ ASTReplicatedPar >> pARToken [
 { #category : #generated }
 ASTReplicatedPar >> pARToken: aSmaCCToken [
 	pARToken := aSmaCCToken
-]
-
-{ #category : #'as yet unclassified' }
-ASTReplicatedPar >> parallelComponents [ 
-
-	^unrolled 
-		ifNil:[OrderedCollection with: self]
-		ifNotNil:[unrolled parallelComponents].
-		
 ]
 
 { #category : #generated }
@@ -68,15 +40,6 @@ ASTReplicatedPar >> process: anASTReplicatedProcess [
 	process := anASTReplicatedProcess.
 	self process notNil
 		ifTrue: [ self process parent: self ]
-]
-
-{ #category : #'as yet unclassified' }
-ASTReplicatedPar >> simpleDiagram: aView inContext: aContext withColor: aColor atDepth: anInteger [
-
-	self unrollInContext: aContext.
-	
-	^unrolled simpleDiagram: aView inContext: aContext withColor: aColor atDepth: anInteger
-
 ]
 
 { #category : #generated }
@@ -131,31 +94,4 @@ ASTReplicatedPar >> unroll [
 	
 	^aPar
 
-]
-
-{ #category : #'as yet unclassified' }
-ASTReplicatedPar >> unrollInContext: aContext [
-
-	| index |
-	
-	unrolled := self unroll.
-	
-	index := self process index value.
-	
-	unrolled processes do: [ :each | 
-		PartialEvaluator evaluate: each expanding: index inContext: aContext ].
-
-	
-
-]
-
-{ #category : #accessing }
-ASTReplicatedPar >> unrolled [
-	^unrolled
-	
-]
-
-{ #category : #generated }
-ASTReplicatedPar >> unrolled: anObject [
-	unrolled := anObject
 ]

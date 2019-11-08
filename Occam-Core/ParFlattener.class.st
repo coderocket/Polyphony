@@ -37,7 +37,7 @@ Class {
 
 { #category : #generated }
 ParFlattener >> visitPar: anASTPar [
-	anASTPar processes: (anASTPar processes inject:OrderedCollection new into:[:acc :each | acc addAll: (self acceptNode: each unroll) flattenParallels. acc]).
+	anASTPar processes: (anASTPar processes inject:OrderedCollection new into:[:acc :each | acc addAll: (self acceptNode: each) flattenParallels. acc]).
 	
 	^anASTPar
 ]

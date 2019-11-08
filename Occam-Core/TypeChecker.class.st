@@ -21,7 +21,7 @@ TypeChecker >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #generated }
+{ #category : #'visiting abstractions' }
 TypeChecker >> visitAbbreviation: anAbbreviation [
 
 	| aType |
@@ -35,7 +35,7 @@ TypeChecker >> visitAbbreviation: anAbbreviation [
 	^aType
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitArrayComponent: anArrayComponent [
 
 	| arrayType indexType |
@@ -50,10 +50,10 @@ TypeChecker >> visitArrayComponent: anArrayComponent [
 	(indexType isIntegerType)
 		ifFalse:[anArrayComponent expr addViolation: 'Not an integer'].
 		
-	 ^arrayType representedType type
+	 ^arrayType type
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitArraySegment: anArraySegment [
 
 	| arrayType startIndexType sizeType |
@@ -73,10 +73,10 @@ TypeChecker >> visitArraySegment: anArraySegment [
 	(sizeType isIntegerType)
 		ifFalse:[anArraySegment count addViolation: 'Not an integer'].
 		
-	 ^arrayType representedType
+	 ^arrayType 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitAssign: anAssignNode [
 
 	| anLValueType anExprType |
@@ -92,7 +92,7 @@ TypeChecker >> visitAssign: anAssignNode [
 		ifFalse:[anAssignNode addViolation:'Type mismatch']
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitBytesIn: aBytesInExpr [
 
 	self acceptNode: aBytesInExpr type.
@@ -100,7 +100,7 @@ TypeChecker >> visitBytesIn: aBytesInExpr [
 	^ASTBasicType new name: (SmaCCToken value: 'INT')
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitCall: aCallNode [
 
 	| anAbstraction |
@@ -116,7 +116,7 @@ TypeChecker >> visitCall: aCallNode [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitConversion: aConversionNode [
 
 	| operandType convertedType | 
@@ -135,7 +135,7 @@ TypeChecker >> visitConversion: aConversionNode [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitDyadicExpression: aDyadicExpression [
 
 	| leftType rightType leastUpperBound |
@@ -187,14 +187,14 @@ TypeChecker >> visitDyadicExpression: aDyadicExpression [
 	^ASTBasicType errorType
 ]
 
-{ #category : #generated }
+{ #category : #'visiting abstractions' }
 TypeChecker >> visitFunction: aFunction [
 
 	| aResult |
 	
 	aFunction params do:[:each | (each isKindOf: ASTReferenceParameter) ifTrue:[each addViolation: 'Not a value parameter'] ].
 	  
-	aFunction locals do:[:each | self acceptNode: each ].
+	aFunction locals do:[:each | TypeChecker check: each inContext: aFunction ].
 	
 	aFunction resolveImports.
 	
@@ -208,7 +208,7 @@ TypeChecker >> visitFunction: aFunction [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitGuardedCommand: aGuardedCommand [
 
 	self acceptNode: aGuardedCommand process.
@@ -219,7 +219,7 @@ TypeChecker >> visitGuardedCommand: aGuardedCommand [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitIf: anIfNode [
 
 	anIfNode processes do:[:each | self acceptNode: each process ].
@@ -229,7 +229,7 @@ TypeChecker >> visitIf: anIfNode [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitImmediateInput: anInputNode [
 
 	| aChannelType anLValType |
@@ -247,7 +247,7 @@ TypeChecker >> visitImmediateInput: anInputNode [
 	^anInputNode 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitInputGuard: anInputGuardNode [
 
 	self acceptNode: anInputGuardNode input.
@@ -259,25 +259,25 @@ TypeChecker >> visitInputGuard: anInputGuardNode [
 	
 ]
 
-{ #category : #generated }
+{ #category : #'visiting abstractions' }
 TypeChecker >> visitLibrary: aLibraryNode [
 
 	aLibraryNode members do:[:each | TypeChecker check: each inContext: aLibraryNode].
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralBoolean: aLiteralBooleanNode [
 
 	^ASTBasicType new name: (SmaCCToken value: 'BOOL').
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralByte: aLiteralByteNode [
 
 	^ASTBasicType new name: (SmaCCToken value: 'BYTE').
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralHexInteger: aLiteralIntegerNode [
 
 	| aNumber |
@@ -293,7 +293,7 @@ TypeChecker >> visitLiteralHexInteger: aLiteralIntegerNode [
 	^ASTBasicType new name: (SmaCCToken value: 'INT32').
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralInteger: aLiteralIntegerNode [
 
 	| aNumber |
@@ -310,19 +310,19 @@ TypeChecker >> visitLiteralInteger: aLiteralIntegerNode [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralReal64: aLiteralRealNode [
 
 	^ASTBasicType new name: (SmaCCToken value: 'REAL64').
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralReal: aLiteralRealNode [
 
 	^ASTBasicType new name: (SmaCCToken value: 'REAL32').
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitLiteralString: aStringLiteral [
 
 	| stringType aString |
@@ -339,7 +339,7 @@ TypeChecker >> visitLiteralString: aStringLiteral [
 	
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitMonadicExpression: aMonadicExpression [
 
 	| operandType |
@@ -365,13 +365,7 @@ TypeChecker >> visitMonadicExpression: aMonadicExpression [
 
 ]
 
-{ #category : #generated }
-TypeChecker >> visitOperand: aParenExpression [
-
-	^self acceptNode: aParenExpression expression 
-]
-
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitOutput: anOutputNode [
 
 	| aChannelType anExprType |
@@ -387,17 +381,17 @@ TypeChecker >> visitOutput: anOutputNode [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitParenthesisExpression: aParenthesisExpression [
 
 	^self acceptNode: aParenthesisExpression expression
 	
 ]
 
-{ #category : #generated }
+{ #category : #'visiting abstractions' }
 TypeChecker >> visitProcedure: aProcedure [
 
-	aProcedure locals do:[:each | self acceptNode: each ].
+	aProcedure locals do:[:each | TypeChecker check: each inContext: aProcedure ].
 	
 	aProcedure resolveImports.
 	
@@ -405,7 +399,7 @@ TypeChecker >> visitProcedure: aProcedure [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitReplicatedGuardedCommand: aReplicatedGuardedCommand [
 
 	| baseType countType |
@@ -424,7 +418,7 @@ TypeChecker >> visitReplicatedGuardedCommand: aReplicatedGuardedCommand [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitReplicatedPar: aReplicatedPar [
 
 	| base count |
@@ -451,7 +445,7 @@ TypeChecker >> visitReplicatedPar: aReplicatedPar [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitReplicatedProcess: aReplicatedProcess [
 
 	| baseType countType |
@@ -471,7 +465,7 @@ TypeChecker >> visitReplicatedProcess: aReplicatedProcess [
 
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitTable: aTableNode [
 
 	| elementType tableType |
@@ -492,15 +486,15 @@ TypeChecker >> visitTable: aTableNode [
 		
 ]
 
-{ #category : #generated }
+{ #category : #'visiting expressions' }
 TypeChecker >> visitVariable: aVariableNode [
 
 	^context lookup: aVariableNode name value 
 		ifPresent:[:x | x type ]
-		ifAbsent:[ aVariableNode addViolation:'Undefined variable'. ASTBasicType errorType]
+		ifAbsent:[aVariableNode addViolation:'Undefined variable'. ASTBasicType errorType]
 ]
 
-{ #category : #generated }
+{ #category : #'visiting processes' }
 TypeChecker >> visitWhile: aWhileNode [
 
 	self acceptNode:aWhileNode body.

@@ -1,11 +1,10 @@
 Class {
 	#name : #ASTAbstraction,
-	#superclass : #ASTScope,
+	#superclass : #ASTDefinition,
 	#instVars : [
-		'leftParenToken',
-		'params',
-		'commaTokens',
-		'rightParenToken'
+		'name',
+		'doc',
+		'periodToken'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -29,30 +28,22 @@ ASTAbstraction >> allAbstractions [
 ]
 
 { #category : #generated }
-ASTAbstraction >> commaTokens [
-	^ commaTokens
+ASTAbstraction >> doc [
+	^ doc
 ]
 
 { #category : #generated }
-ASTAbstraction >> commaTokens: anOrderedCollection [
-	commaTokens := anOrderedCollection
+ASTAbstraction >> doc: anASTDoc [
+	self doc notNil
+		ifTrue: [ self doc parent: nil ].
+	doc := anASTDoc.
+	self doc notNil
+		ifTrue: [ self doc parent: self ]
 ]
 
-{ #category : #generated }
-ASTAbstraction >> compositeNodeVariables [
-	^ #(#params)
-]
-
-{ #category : #generated }
-ASTAbstraction >> compositeTokenVariables [
-	^ #(#commaTokens)
-]
-
-{ #category : #'generated-initialize-release' }
-ASTAbstraction >> initialize [
-	super initialize.
-	params := OrderedCollection new: 2.
-	commaTokens := OrderedCollection new: 2.
+{ #category : #accessing }
+ASTAbstraction >> imports [
+	^OrderedCollection new
 ]
 
 { #category : #'process graph' }
@@ -61,11 +52,14 @@ ASTAbstraction >> inputs [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'source code' }
 ASTAbstraction >> internalizeSource [
 
-	self body internalizeSource
+]
 
+{ #category : #testing }
+ASTAbstraction >> isAbstraction [
+	^true
 ]
 
 { #category : #testing }
@@ -98,133 +92,24 @@ ASTAbstraction >> isValid [
 ]
 
 { #category : #generated }
-ASTAbstraction >> leftParenToken [
-	^ leftParenToken
+ASTAbstraction >> name [
+	^ name
 ]
 
 { #category : #generated }
-ASTAbstraction >> leftParenToken: aSmaCCToken [
-	leftParenToken := aSmaCCToken
-]
-
-{ #category : #'as yet unclassified' }
-ASTAbstraction >> localAbbrevs [ 
-
-	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
-]
-
-{ #category : #'as yet unclassified' }
-ASTAbstraction >> localVariables [
-
-	^self locals select:[:each | each isKindOf: ASTDataType ]
+ASTAbstraction >> name: aSmaCCToken [
+	name := aSmaCCToken
 ]
 
 { #category : #generated }
-ASTAbstraction >> locals [
-	^self subclassResponsibility 
-	
-]
-
-{ #category : #removing }
-ASTAbstraction >> moveLocal: anASTNode after: existingNode [ 
-
-	(anASTNode = existingNode) ifTrue:[^self].
-		
-	self locals remove: anASTNode.
-	self locals add: anASTNode after: existingNode.
-	
-	self check.
-	
-
-	
-]
-
-{ #category : #removing }
-ASTAbstraction >> moveParam: anASTNode after: existingNode [ 
-
-	(anASTNode = existingNode) ifTrue:[^self].
-		
-	self params remove: anASTNode.
-	self params add: anASTNode after: existingNode.
-	
-	self check.
-	
-
-	
+ASTAbstraction >> nodeVariables [
+	^ #(#doc)
 ]
 
 { #category : #'process graph' }
 ASTAbstraction >> outputs [
 	^OrderedCollection new
 
-]
-
-{ #category : #generated }
-ASTAbstraction >> params [
-	^ params
-]
-
-{ #category : #generated }
-ASTAbstraction >> params: anOrderedCollection [
-	self setParents: self params to: nil.
-	params := anOrderedCollection.
-	self setParents: self params to: self
-]
-
-{ #category : #parsing }
-ASTAbstraction >> parseBody: aString [
-
-	| aParser anAST |
-
-	aParser := OccamCoreParser on: (ReadStream on: aString).
-	
-	aParser setStartingState: OccamCoreParser startingStateForProcess.
-		
-	anAST := aParser parse.
-
-	"once we have successfully parsed the string we replace the body with the resulting ast and
-	set its localsource to the text."
-	
-	anAST attributeNamed: #localSource put: aString.
-	 
-	self body: anAST.
-	self check.
-]
-
-{ #category : #parsing }
-ASTAbstraction >> parseLocalAbbrev: aString [
-
-	| aParser anAST |
-
-	aParser := OccamCoreParser on: (ReadStream on: aString).
-	
-	aParser setStartingState: OccamCoreParser startingStateForAbbreviation. 
-	 
-	anAST := aParser parse.
-		
-	TypeChecker check: anAST inContext: self.
-	
-	self locals add: anAST.
-	anAST parent: self.
-	
-	self check
-]
-
-{ #category : #parsing }
-ASTAbstraction >> parseLocalVariable: aString [
-
-	| aParser anAST |
-
-	aParser := OccamCoreParser on: (ReadStream on: aString).
-	
-	aParser setStartingState: OccamCoreParser startingStateForDataType.
-	 
-	anAST := aParser parse.
-		
-	self locals add: anAST.
-	anAST parent: self.
-	
-	self check.
 ]
 
 { #category : #parsing }
@@ -241,6 +126,16 @@ ASTAbstraction >> parseParameter: aString [
 	self params add: anAST.
 	
 	self check.
+]
+
+{ #category : #generated }
+ASTAbstraction >> periodToken [
+	^ periodToken
+]
+
+{ #category : #generated }
+ASTAbstraction >> periodToken: aSmaCCToken [
+	periodToken := aSmaCCToken
 ]
 
 { #category : #removing }
@@ -265,29 +160,53 @@ ASTAbstraction >> renameTo: aString [
 
 ]
 
-{ #category : #generated }
-ASTAbstraction >> rightParenToken [
-	^ rightParenToken
+{ #category : #streaming }
+ASTAbstraction >> streamBodyOn: aWriteStream [
+
 ]
 
-{ #category : #generated }
-ASTAbstraction >> rightParenToken: aSmaCCToken [
-	rightParenToken := aSmaCCToken
+{ #category : #streaming }
+ASTAbstraction >> streamDocOn: aWriteStream [
+
+	self doc streamOn: aWriteStream.
+
+]
+
+{ #category : #streaming }
+ASTAbstraction >> streamLocalsOn: aWriteStream [
+
+]
+
+{ #category : #streaming }
+ASTAbstraction >> streamNameOn: aWriteStream [
+
+	aWriteStream put: name value.
+
 ]
 
 { #category : #streaming }
 ASTAbstraction >> streamOn: aWriteStream [
 
-	aWriteStream put: name value ; put: '('.
-	params do: [ :each | each streamOn: aWriteStream ] separatedBy: [ aWriteStream put:', ' ].
+	self streamNameOn: aWriteStream.
+	self streamParametersOn: aWriteStream.
+	self streamDocOn: aWriteStream.
+	self streamLocalsOn: aWriteStream.
+	self streamBodyOn: aWriteStream.
+
+]
+
+{ #category : #streaming }
+ASTAbstraction >> streamParametersOn: aWriteStream [
+
+	aWriteStream put: '('.
+	self params do: [ :each | each streamOn: aWriteStream ] separatedBy: [ aWriteStream put:', ' ].
 	aWriteStream put: ') '.
-	self doc streamOn: aWriteStream.
 
 ]
 
 { #category : #generated }
 ASTAbstraction >> tokenVariables [
-	^ #(#leftParenToken #rightParenToken #name #periodToken)
+	^ #(#name #periodToken)
 ]
 
 { #category : #api }

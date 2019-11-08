@@ -1,10 +1,7 @@
 Class {
 	#name : #ASTScope,
-	#superclass : #ASTRoot,
+	#superclass : #ASTAbstraction,
 	#instVars : [
-		'name',
-		'doc',
-		'periodToken',
 		'announcer'
 	],
 	#category : #'Occam-Core-AST'
@@ -21,9 +18,31 @@ ASTScope >> addDependency: anASTLibrary [
 	self check.
 ]
 
-{ #category : #scope }
-ASTScope >> allAbstractions [
-	^self subclassResponsibility 
+{ #category : #adding }
+ASTScope >> addFunctionNamed: aString [
+
+	| aFunction |
+	
+	aFunction := self makeFunctionNamed: aString.
+	self locals add: aFunction. 
+	
+	aFunction parent: self.
+	
+	self check
+]
+
+{ #category : #adding }
+ASTScope >> addProcedureNamed: aString [
+
+	| aProcedure |
+	
+	aProcedure := self makeProcedureNamed: aString.
+	
+	self locals add: aProcedure. 
+	
+	aProcedure parent: self.
+	
+	self check.
 ]
 
 { #category : #generated }
@@ -34,31 +53,6 @@ ASTScope >> announcer [
 { #category : #generated }
 ASTScope >> announcer: anObject [
 	announcer := anObject
-]
-
-{ #category : #scope }
-ASTScope >> callsProcedureNamed: aString [
-	^false
-
-]
-
-{ #category : #checking }
-ASTScope >> check [ 
-	^self subclassResponsibility 
-]
-
-{ #category : #generated }
-ASTScope >> doc [
-	^ doc
-]
-
-{ #category : #generated }
-ASTScope >> doc: anASTDoc [
-	self doc notNil
-		ifTrue: [ self doc parent: nil ].
-	doc := anASTDoc.
-	self doc notNil
-		ifTrue: [ self doc parent: self ]
 ]
 
 { #category : #documentation }
@@ -104,6 +98,16 @@ ASTScope >> isLibrary [
 	^false
 ]
 
+{ #category : #testing }
+ASTScope >> isScope [ 
+	^true
+]
+
+{ #category : #generated }
+ASTScope >> locals [
+	^self subclassResponsibility 
+]
+
 { #category : #scope }
 ASTScope >> lookup: aString [
 	^self lookup: aString ifAbsent:[nil]
@@ -121,7 +125,7 @@ ASTScope >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 	^self lookupHere: aString ifFound: aBlock ifNone:[
 		self imports reverse detect:[:each | 
 			each lookup: aString ifPresent:[true] ifAbsent:[false] ]
-		ifFound:[:aLibrary | aLibrary lookup: aString ] 
+		ifFound:[:aLibrary | aLibrary lookup: aString ifPresent:aBlock ifAbsent:[] ] 
 		ifNone:[
 			parent 
 				ifNil:[exceptionBlock value] 
@@ -156,7 +160,7 @@ ASTScope >> makeFunctionNamed: aString [
 	 
 	anAST := aParser parse.
 		
-	anAST attributeNamed: #localSource put: code.
+	anAST internalizeSource.
 	 
 	^anAST.	
 ]
@@ -176,41 +180,18 @@ ASTScope >> makeProcedureNamed: aString [
 	aParser setStartingState: OccamCoreParser startingStateForProcedure.
 	 
 	anAST := aParser parse.
-		
-	anAST attributeNamed: #localSource put: code.
+	
+	anAST attributeNamed:#source put: code.
+	
+	anAST internalizeSource.
 	 
-	^anAST.	
-]
-
-{ #category : #generated }
-ASTScope >> name [
-	^ name
-]
-
-{ #category : #generated }
-ASTScope >> name: aSmaCCToken [
-	name := aSmaCCToken
+	^anAST.
 ]
 
 { #category : #scope }
 ASTScope >> nestedImports [
 
 	^self abstractionClosure inject: Set new into:[:acc :each | acc addAll: each key imports . acc addAll: each value imports. acc ]
-]
-
-{ #category : #generated }
-ASTScope >> nodeVariables [
-	^ #(#doc)
-]
-
-{ #category : #generated }
-ASTScope >> periodToken [
-	^ periodToken
-]
-
-{ #category : #generated }
-ASTScope >> periodToken: aSmaCCToken [
-	periodToken := aSmaCCToken
 ]
 
 { #category : #adding }
@@ -256,7 +237,10 @@ ASTScope >> simpleLookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 
 ]
 
-{ #category : #generated }
-ASTScope >> tokenVariables [
-	^ #(#name #periodToken)
+{ #category : #streaming }
+ASTScope >> streamLocalsOn: aWriteStream [
+
+	aWriteStream open.
+	self locals do: [ :each | each streamOn: aWriteStream ] separatedBy:[aWriteStream newLine].
+
 ]

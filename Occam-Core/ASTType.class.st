@@ -68,7 +68,7 @@ ASTType >> representedType [
 { #category : #'as yet unclassified' }
 ASTType >> subsumes: aType [
 
-	^self = aType representedType
+	^self = aType 
 
 
 ]

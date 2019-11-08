@@ -15,6 +15,8 @@ Compiler class >> compile: anASTNode on: aWriteStream [
 	nodeCopy := anASTNode copyTree.
 		
 	TableOptimizer new acceptNode: nodeCopy.
+
+	ReplicatedParUnroller new acceptNode: nodeCopy.
 	
 	ParFlattener new acceptNode: nodeCopy.
 

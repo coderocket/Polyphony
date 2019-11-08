@@ -22,8 +22,12 @@ ASTLibrary class >> fileIn [
 
 	anASTLibraryNode := [ OccamCoreParser parse: aStream contents ] ensure:[aStream close].
 	
+	anASTLibraryNode source. "force the calculation of start and end positions"
+	
 	InternalizeSource new acceptNode: anASTLibraryNode.
 	
+	TypeChecker check: anASTLibraryNode inContext: anASTLibraryNode.
+		
 	^anASTLibraryNode 
 ]
 
@@ -89,7 +93,7 @@ ASTLibrary >> addProcedureNamed: aString [
 { #category : #scope }
 ASTLibrary >> allAbstractions [
 
-	^(self members select:[:each | each isKindOf:ASTScope ])
+	^(self members select:[:each | each isAbstraction ])
 	 	inject:OrderedCollection new into:[:acc :each | acc addAll: each allAbstractions . acc ]
 ]
 
@@ -150,6 +154,9 @@ ASTLibrary >> fileIn: aStream [
 	
 	members add: anASTLibraryNode.
 	anASTLibraryNode parent: self.
+	
+	TypeChecker check: anASTLibraryNode inContext: self.
+	
 	self check
 
 ]
@@ -183,6 +190,17 @@ ASTLibrary >> lIBRARYToken [
 { #category : #generated }
 ASTLibrary >> lIBRARYToken: aSmaCCToken [
 	lIBRARYToken := aSmaCCToken
+]
+
+{ #category : #'as yet unclassified' }
+ASTLibrary >> localAbbrevs [ 
+
+	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
+]
+
+{ #category : #generated }
+ASTLibrary >> locals [
+	^members
 ]
 
 { #category : #scope }
@@ -220,13 +238,15 @@ ASTLibrary >> removeAbstraction: anASTAbstraction [
 ]
 
 { #category : #streaming }
-ASTLibrary >> streamOn: aWriteStream [
+ASTLibrary >> streamBodyOn: aWriteStream [
 
-	aWriteStream put: 'LIBRARY ' ; put:name value ; put: ' IS '.
-	self doc streamOn: aWriteStream.
-	aWriteStream open.
-	self members do: [ :each | each streamOn: aWriteStream ] separatedBy:[aWriteStream newLine].
 	aWriteStream close; put:':'; newLine.
+]
+
+{ #category : #streaming }
+ASTLibrary >> streamNameOn: aWriteStream [
+
+	aWriteStream put: 'LIBRARY ' ; put:name value 
 ]
 
 { #category : #generated }

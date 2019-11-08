@@ -1,148 +1,63 @@
 Class {
 	#name : #ASTFunction,
-	#superclass : #ASTFunctionLike,
+	#superclass : #ASTProcessAbstraction,
 	#instVars : [
-		'bEGINToken',
-		'locals',
-		'body',
-		'eNDToken',
-		'uses'
+		'type',
+		'fUNCTIONToken'
 	],
 	#category : #'Occam-Core-AST'
 }
-
-{ #category : #scope }
-ASTFunction >> abstractionClosure [
-
-	"All the abstractions that are used by this abstraction"
-	
-	^(UsedAbstractionsCollector collect: self body inContext: self)	
-		reject:[:each | self lookupHere: each key name value ifFound:[true] ifNone:[false] ]
-]
 
 { #category : #generated }
 ASTFunction >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitFunction: self
 ]
 
-{ #category : #adding }
-ASTFunction >> addFunctionNamed: aString [
-
-	| aFunction |
-	
-	aFunction := self makeFunctionNamed: aString.
-	self locals add: aFunction. 
-	
-	aFunction parent: self
+{ #category : #generated }
+ASTFunction >> fUNCTIONToken [
+	^ fUNCTIONToken
 ]
 
 { #category : #generated }
-ASTFunction >> bEGINToken [
-	^ bEGINToken
-]
-
-{ #category : #generated }
-ASTFunction >> bEGINToken: aSmaCCToken [
-	bEGINToken := aSmaCCToken
-]
-
-{ #category : #generated }
-ASTFunction >> body [
-	^ body
-]
-
-{ #category : #generated }
-ASTFunction >> body: anASTProcess [
-	self body notNil
-		ifTrue: [ self body parent: nil ].
-	body := anASTProcess.
-	self body notNil
-		ifTrue: [ self body parent: self ]
-]
-
-{ #category : #checking }
-ASTFunction >> check [
-
-	TypeChecker check: self body inContext: self.
-]
-
-{ #category : #generated }
-ASTFunction >> compositeNodeVariables [
-	^ #(#uses #locals #params)
-]
-
-{ #category : #generated }
-ASTFunction >> eNDToken [
-	^ eNDToken
-]
-
-{ #category : #generated }
-ASTFunction >> eNDToken: aSmaCCToken [
-	eNDToken := aSmaCCToken
-]
-
-{ #category : #'generated-initialize-release' }
-ASTFunction >> initialize [
-	super initialize.
-	uses := OrderedCollection new: 2.
-	locals := OrderedCollection new: 2.
-]
-
-{ #category : #generated }
-ASTFunction >> locals [
-	^ locals
-]
-
-{ #category : #generated }
-ASTFunction >> locals: anOrderedCollection [
-	self setParents: self locals to: nil.
-	locals := anOrderedCollection.
-	self setParents: self locals to: self
-]
-
-{ #category : #scope }
-ASTFunction >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
-	^locals detect: [:each | each name value = aString] ifFound: aBlock ifNone:[
-		params detect: [ :each | each name value = aString ] ifFound: aBlock ifNone:exceptionBlock ]
-			
+ASTFunction >> fUNCTIONToken: aSmaCCToken [
+	fUNCTIONToken := aSmaCCToken
 ]
 
 { #category : #generated }
 ASTFunction >> nodeVariables [
-	^ #(#body #type #doc)
-]
-
-{ #category : #removing }
-ASTFunction >> removeAbstraction: anASTProcedure [
-
-	locals remove: anASTProcedure
+	^ #(#type #body #doc)
 ]
 
 { #category : #streaming }
-ASTFunction >> streamOn: aWriteStream [
+ASTFunction >> streamNameOn: aWriteStream [
 
 	type streamOn: aWriteStream.
-	aWriteStream put: ' FUNCTION '.
-	super streamOn: aWriteStream.
-	aWriteStream open.
-	self locals do: [ :each | each streamOn: aWriteStream. aWriteStream newLine].
-	aWriteStream putManyLines: self body localSource trimRight.
-	aWriteStream close; put:':'.
+	aWriteStream put: ' FUNCTION ' ; put: name value.
+
 ]
 
 { #category : #generated }
 ASTFunction >> tokenVariables [
-	^ #(#bEGINToken #eNDToken #fUNCTIONToken #leftParenToken #rightParenToken #name #periodToken)
+	^ #(#fUNCTIONToken #leftParenToken #rightParenToken #bEGINToken #eNDToken #name #periodToken)
 ]
 
 { #category : #generated }
-ASTFunction >> uses [
-	^ uses
+ASTFunction >> type [
+	^type
 ]
 
 { #category : #generated }
-ASTFunction >> uses: anOrderedCollection [
-	self setParents: self uses to: nil.
-	uses := anOrderedCollection.
-	self setParents: self uses to: self
+ASTFunction >> type: anASTType [
+	self type notNil
+		ifTrue: [ self type parent: nil ].
+	type := anASTType.
+	self type notNil
+		ifTrue: [ self type parent: self ]
+]
+
+{ #category : #'type checking' }
+ASTFunction >> typeCheckCall: aCallNode with: aTypeChecker [
+
+	super typeCheckCall: aCallNode with: aTypeChecker.
+	^self type
 ]

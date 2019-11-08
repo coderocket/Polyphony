@@ -147,6 +147,20 @@ ASTCall >> streamOn: aWriteStream [
 	
 ]
 
+{ #category : #'source code' }
+ASTCall >> title [
+
+	| anIndentedPrinterStream |
+	
+	anIndentedPrinterStream := IndentedPrinterStream new.
+	
+	self streamOn: anIndentedPrinterStream.
+	
+	^(anIndentedPrinterStream contents copyWithoutAll: String cr) takeFirst:8
+
+	
+]
+
 { #category : #generated }
 ASTCall >> tokenVariables [
 	^ #(#name #leftParenToken #rightParenToken)

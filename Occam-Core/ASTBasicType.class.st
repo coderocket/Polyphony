@@ -18,7 +18,7 @@ ASTBasicType class >> computeLeastUpperBound [
 
 	| basicTypeNames |
 	
-	basicTypeNames := { 'BYTE' . 'INT16' . 'INT' . 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-' }.
+	basicTypeNames := { 'BOOL' . 'BYTE' . 'INT16' . 'INT' . 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-' }.
 	
 	leastUpperBound := Dictionary new.
 
@@ -47,7 +47,7 @@ ASTBasicType class >> errorType [
 ASTBasicType class >> initialize [ 
 
 	"self initialize"
-	
+				
 	integerTypeNames := Set new.
 	
 	integerTypeNames add: 'BYTE' ; add:'INT16' ; add:'INT'; add:'WORD' ;add:'INT32'; add:'INT64'; add:'TIME'.
@@ -59,6 +59,8 @@ ASTBasicType class >> initialize [
 	numericTypeNames add: 'REAL32'; add:'REAL64'.
 	
 	partialOrder := Set new.
+
+	partialOrder add: 'BOOL' -> 'BOOL'.
 	
 	{ 'BYTE' . 'INT16' . 'INT' . 'WORD' . 'INT32' . 'INT64' . 'TIME' . 'REAL32' . 'REAL64' . '-|-'  } 
 	do:[:each | partialOrder add: 'BYTE' -> each ].
@@ -103,8 +105,8 @@ ASTBasicType >> acceptVisitor: aRootVisitor [
 { #category : #testing }
 ASTBasicType >> isBigEnoughToHold: aType [
 
-	^(aType representedType isKindOf: self class) and:
-	[partialOrder includes: aType representedType name value -> name value]
+	^(aType isKindOf: self class) and:
+	[partialOrder includes: aType name value -> name value]
 	
 ]
 

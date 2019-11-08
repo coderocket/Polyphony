@@ -21,11 +21,6 @@ PartialEvaluator class >> evaluate: aProcess expanding: aVariableName inContext:
 	
 ]
 
-{ #category : #accessing }
-PartialEvaluator >> frame: aSet [
-	frame := aSet
-]
-
 { #category : #initialization }
 PartialEvaluator >> initialize [
 
@@ -44,9 +39,6 @@ PartialEvaluator >> visitAssign: anAssignmentNode [
 	(anAssignmentNode lvalue isKindOf: ASTVariable)
 		ifFalse:[^self]. 
 	
-	(frame includes: anAssignmentNode lvalue name value)
-		ifFalse:[^self].
-
 	(result isKindOf: ASTLiteralInteger) 
 		ifFalse:[^self].
 			
@@ -60,8 +52,12 @@ PartialEvaluator >> visitVariable: aVariable [
 
 	state at: aVariable name value 
 		ifPresent:[: value |	
-				aVariable become: value copy].
-				
-	^aVariable
+				aVariable become: value copy]
+		ifAbsent:[
+				context lookup: aVariable name value 
+					ifPresent:[ :concept | (concept isKindOf: ASTAbbreviation) 
+						ifTrue:[ aVariable become: concept expr copy ] ]
+					ifAbsent: [ aVariable ] ].
 
+	^aVariable
 ]

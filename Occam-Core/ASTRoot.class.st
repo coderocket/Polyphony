@@ -112,23 +112,14 @@ ASTRoot >> streamOn: aWriteStream [
 	
 ]
 
-{ #category : #'source code' }
-ASTRoot >> title [
+{ #category : #streaming }
+ASTRoot >> streamParametersOn: aWriteStream [
 
-	| anIndentedPrinterStream |
-	
-	anIndentedPrinterStream := IndentedPrinterStream new.
-	
-	self streamOn: anIndentedPrinterStream.
-	
-	^(anIndentedPrinterStream copyWithoutAll: String cr) takeFirst:8
-
-	
 ]
 
-{ #category : #testing }
+{ #category : #violations }
 ASTRoot >> violations [ 
-
+ 
 	| aSet |
 	
 	aSet := Set new.

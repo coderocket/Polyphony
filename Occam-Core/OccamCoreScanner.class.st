@@ -72,12 +72,12 @@ OccamCoreScanner >> closeLine [
 
 { #category : #generated }
 OccamCoreScanner >> emptySymbolTokenId [
-	^ 186
+	^ 183
 ]
 
 { #category : #generated }
 OccamCoreScanner >> errorTokenId [
-	^ 187
+	^ 184
 ]
 
 { #category : #'initialize-release' }

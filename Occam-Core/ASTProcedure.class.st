@@ -1,109 +1,23 @@
 Class {
 	#name : #ASTProcedure,
-	#superclass : #ASTProcedureLike,
+	#superclass : #ASTProcessAbstraction,
 	#instVars : [
-		'bEGINToken',
-		'locals',
-		'body',
-		'eNDToken',
-		'uses',
-		'diagramDepth'
+		'diagramDepth',
+		'pROCToken'
 	],
 	#category : #'Occam-Core-AST'
 }
-
-{ #category : #scope }
-ASTProcedure >> abstractionClosure [
-
-	"All the abstractions that are used by this abstraction. We remove the abstractions that are defined directly by this procedure because they will be generated in the proper place as part of the compilation of this procedure."
-	
-	^UsedAbstractionsCollector collect: self body inContext: self	
-
-]
 
 { #category : #generated }
 ASTProcedure >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitProcedure: self
 ]
 
-{ #category : #adding }
-ASTProcedure >> addFunctionNamed: aString [
-
-	| aFunction |
-	
-	aFunction := self makeFunctionNamed: aString.
-	self locals add: aFunction. 
-	
-	aFunction parent: self.
-	
-	self check
-]
-
-{ #category : #adding }
-ASTProcedure >> addProcedureNamed: aString [
-
-	| aProcedure |
-	
-	aProcedure := self makeProcedureNamed: aString.
-	
-	self locals add: aProcedure. 
-	
-	aProcedure parent: self.
-	
-	self check.
-]
-
-{ #category : #generated }
-ASTProcedure >> bEGINToken [
-	^ bEGINToken
-]
-
-{ #category : #generated }
-ASTProcedure >> bEGINToken: aSmaCCToken [
-	bEGINToken := aSmaCCToken
-]
-
-{ #category : #generated }
-ASTProcedure >> body [
-	^ body
-]
-
-{ #category : #generated }
-ASTProcedure >> body: anASTProcess [
-	self body notNil
-		ifTrue: [ self body parent: nil ].
-	body := anASTProcess.
-	self body notNil
-		ifTrue: [ self body parent: self ]
-]
-
-{ #category : #scope }
-ASTProcedure >> callsProcedureNamed: aString [
-	^ (body callsProcedureNamed: aString) or:[(locals select:[:each | each isKindOf: ASTProcedure ]) anySatisfy: [ :p | p callsProcedureNamed: aString ] ]
-]
-
-{ #category : #checking }
-ASTProcedure >> check [ 
-	
-	| p |
-
-	TypeChecker check: self body inContext: self.
-
-	p := self.
-	
-	[p isKindOf: ASTLibrary] whileFalse: [ 
-		p announcer announce: GLMItemChanged. p := p parent.
-	].
-
-	p announcer announce: GLMItemChanged.
-
-]
-
 { #category : #compiling }
 ASTProcedure >> compileOn: aWriteStream [ 
 
 	| abstractions |
-	
+		
 	abstractions := ((self topologicSort: self abstractionClosure) 
 							reject:[:each | each isExternal ])
 									reject:[:each | self lookupHere: each name value ifFound:[true] ifNone:[false] ].
@@ -111,12 +25,7 @@ ASTProcedure >> compileOn: aWriteStream [
 	abstractions do:[:each | Compiler compile:each on: aWriteStream ]
 ]
 
-{ #category : #generated }
-ASTProcedure >> compositeNodeVariables [
-	^ #(#uses #locals #params)
-]
-
-{ #category : #accessing }
+{ #category : #'process graph' }
 ASTProcedure >> contractDiagramDepth [
 
 	diagramDepth ifNil:[ diagramDepth := 0].
@@ -132,7 +41,7 @@ ASTProcedure >> cppName [
 	^self name value copyReplaceAll:'.' with:'_'
 ]
 
-{ #category : #accessing }
+{ #category : #'process graph' }
 ASTProcedure >> diagramDepth [
 
 	diagramDepth ifNil:[
@@ -150,22 +59,22 @@ ASTProcedure >> diagramDepth: anObject [
 { #category : #'process graph' }
 ASTProcedure >> diagramIn: aView [
 
-	self body simpleDiagram: aView inContext: self withColor: Color black atDepth: self diagramDepth.
+	| aProcess |
+	
+	aProcess := self body copyTree.
+
+	ReplicatedParUnroller new acceptNode: aProcess.
+	
+	ParFlattener new acceptNode: aProcess.
+
+	PartialEvaluator new context: self ; acceptNode: aProcess.
+	
+	aProcess diagram: aView inContext: self withColor: Color black atDepth: self diagramDepth.
 
 
 ]
 
-{ #category : #generated }
-ASTProcedure >> eNDToken [
-	^ eNDToken
-]
-
-{ #category : #generated }
-ASTProcedure >> eNDToken: aSmaCCToken [
-	eNDToken := aSmaCCToken
-]
-
-{ #category : #accessing }
+{ #category : #'process graph' }
 ASTProcedure >> expandDiagramDepth [
 
 	diagramDepth ifNil:[ diagramDepth := 0].
@@ -209,13 +118,6 @@ ASTProcedure >> generateSketchNamed: aString InPath: anotherString [
 
 ]
 
-{ #category : #'generated-initialize-release' }
-ASTProcedure >> initialize [
-	super initialize.
-	uses := OrderedCollection new: 2.
-	locals := OrderedCollection new: 2.
-]
-
 { #category : #'process graph' }
 ASTProcedure >> inputs [
 
@@ -235,30 +137,6 @@ ASTProcedure >> isClosed [
 	
 ]
 
-{ #category : #generated }
-ASTProcedure >> locals [
-	^ locals
-]
-
-{ #category : #generated }
-ASTProcedure >> locals: anOrderedCollection [
-	self setParents: self locals to: nil.
-	locals := anOrderedCollection.
-	self setParents: self locals to: self
-]
-
-{ #category : #scope }
-ASTProcedure >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
-	^locals detect: [:each | each name value = aString] ifFound: aBlock ifNone:[
-		params detect: [ :each | each name value = aString ] ifFound: aBlock ifNone:exceptionBlock ]
-			
-]
-
-{ #category : #generated }
-ASTProcedure >> nodeVariables [
-	^ #(#body #doc)
-]
-
 { #category : #'process graph' }
 ASTProcedure >> outputs [
 
@@ -271,40 +149,26 @@ ASTProcedure >> outputs [
 	^aSet select:[:each | self isFree: each principalName value ]
 ]
 
-{ #category : #scope }
-ASTProcedure >> removeAbstraction: anASTProcedure [
+{ #category : #generated }
+ASTProcedure >> pROCToken [
+	^ pROCToken
+]
 
-	locals remove: anASTProcedure.
-	
-	self check
+{ #category : #generated }
+ASTProcedure >> pROCToken: aSmaCCToken [
+	pROCToken := aSmaCCToken
 ]
 
 { #category : #streaming }
-ASTProcedure >> streamOn: aWriteStream [
+ASTProcedure >> streamNameOn: aWriteStream [
 
-	aWriteStream put: 'PROC '.
-	super streamOn: aWriteStream.
-	aWriteStream open.
-	self locals do: [ :each | each streamOn: aWriteStream. aWriteStream newLine].
-	aWriteStream putManyLines: self body localSource trimRight.
-	aWriteStream close; put:':'.
+	aWriteStream put: 'PROC ' ; put: name value.
+
 ]
 
 { #category : #generated }
 ASTProcedure >> tokenVariables [
-	^ #(#bEGINToken #eNDToken #pROCToken #leftParenToken #rightParenToken #name #periodToken)
-]
-
-{ #category : #generated }
-ASTProcedure >> uses [
-	^ uses
-]
-
-{ #category : #generated }
-ASTProcedure >> uses: anOrderedCollection [
-	self setParents: self uses to: nil.
-	uses := anOrderedCollection.
-	self setParents: self uses to: self
+	^ #(#pROCToken #leftParenToken #rightParenToken #bEGINToken #eNDToken #name #periodToken)
 ]
 
 { #category : #writing }

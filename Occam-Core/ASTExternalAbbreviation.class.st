@@ -60,40 +60,6 @@ ASTExternalAbbreviation >> eXTERNALToken: aSmaCCToken [
 	eXTERNALToken := aSmaCCToken
 ]
 
-{ #category : #testing }
-ASTExternalAbbreviation >> isArrayType [
-	^self representedType isArrayType
-	
-]
-
-{ #category : #testing }
-ASTExternalAbbreviation >> isBooleanType [
-	^self representedType isBooleanType
-
-	
-]
-
-{ #category : #testing }
-ASTExternalAbbreviation >> isInputSource [
-	^self representedType isInputSource
-
-	
-]
-
-{ #category : #testing }
-ASTExternalAbbreviation >> isIntegerType [
-	^self representedType isIntegerType
-
-	
-]
-
-{ #category : #testing }
-ASTExternalAbbreviation >> isNumericType [
-	^self representedType isNumericType
-
-	
-]
-
 { #category : #generated }
 ASTExternalAbbreviation >> name [
 	^ name
@@ -119,12 +85,6 @@ ASTExternalAbbreviation >> periodToken: aSmaCCToken [
 	periodToken := aSmaCCToken
 ]
 
-{ #category : #'as yet unclassified' }
-ASTExternalAbbreviation >> representedType [
-	^type
-
-]
-
 { #category : #streaming }
 ASTExternalAbbreviation >> streamOn: aWriteStream [
 	aWriteStream put: 'EXTERNAL VAL '.
@@ -134,7 +94,7 @@ ASTExternalAbbreviation >> streamOn: aWriteStream [
 
 { #category : #testing }
 ASTExternalAbbreviation >> subsumes: aType [
-	self representedType = aType representedType 
+	self = aType 
 ]
 
 { #category : #generated }
@@ -142,9 +102,9 @@ ASTExternalAbbreviation >> tokenVariables [
 	^ #(#eXTERNALToken #vALToken #name #periodToken)
 ]
 
-{ #category : #generated }
+{ #category : #accessing }
 ASTExternalAbbreviation >> type [
-	^ type
+	^type
 ]
 
 { #category : #generated }

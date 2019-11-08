@@ -11,7 +11,7 @@ ASTRootVisitor >> visitAbbreviation: anAbbreviation [
 
 { #category : #generated }
 ASTRootVisitor >> visitAbstraction: anAbstraction [
-	^ self visitScope: anAbstraction
+	^ self visitRoot: anAbstraction
 ]
 
 { #category : #generated }
@@ -136,22 +136,17 @@ ASTRootVisitor >> visitExternalAbbreviation: anExternalAbbreviation [
 
 { #category : #generated }
 ASTRootVisitor >> visitExternalFunction: anExternalFunction [
-	^ self visitFunctionLike: anExternalFunction
+	^ self visitAbstraction: anExternalFunction
 ]
 
 { #category : #generated }
 ASTRootVisitor >> visitExternalProcedure: anExternalProcedure [
-	^ self visitProcedureLike: anExternalProcedure
+	^ self visitAbstraction: anExternalProcedure
 ]
 
 { #category : #generated }
 ASTRootVisitor >> visitFunction: aFunction [
-	^ self visitFunctionLike: aFunction
-]
-
-{ #category : #generated }
-ASTRootVisitor >> visitFunctionLike: aFunctionLike [
-	^ self visitAbstraction: aFunctionLike
+	^ self visitProcessAbstraction: aFunction
 ]
 
 { #category : #generated }
@@ -191,7 +186,7 @@ ASTRootVisitor >> visitLValue: aLValue [
 
 { #category : #generated }
 ASTRootVisitor >> visitLibrary: aLibrary [
-	^ self visitScope: aLibrary
+	^ self visitAbstraction: aLibrary
 ]
 
 { #category : #generated }
@@ -266,17 +261,17 @@ ASTRootVisitor >> visitParenthesisExpression: aParenthesisExpression [
 
 { #category : #generated }
 ASTRootVisitor >> visitProcedure: aProcedure [
-	^ self visitProcedureLike: aProcedure
-]
-
-{ #category : #generated }
-ASTRootVisitor >> visitProcedureLike: aProcedureLike [
-	^ self visitAbstraction: aProcedureLike
+	^ self visitProcessAbstraction: aProcedure
 ]
 
 { #category : #generated }
 ASTRootVisitor >> visitProcess: aProcess [
 	^ self visitRoot: aProcess
+]
+
+{ #category : #generated }
+ASTRootVisitor >> visitProcessAbstraction: aProcessAbstraction [
+	^ self visitAbstraction: aProcessAbstraction
 ]
 
 { #category : #generated }

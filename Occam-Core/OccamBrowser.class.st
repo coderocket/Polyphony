@@ -320,6 +320,7 @@ constructor table
 	display:[ :proc | proc localVariables ]; 
 	column: 'type' evaluated: [ :each | each type asString ] width:80 ;	
 	column: 'name' evaluated: [ :each | each name value ] ; 
+	column: 'violations' evaluated: [ :each | each violations ] ;
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:table :proc | self addLocalVariableTo: proc] entitled: 'Add' ;
 	selectionAct:[:tab :proc | proc removeLocal: tab selection ] entitled: 'Remove'; 

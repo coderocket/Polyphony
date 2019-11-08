@@ -55,9 +55,9 @@ ASTDataType >> tokenVariables [
 	^ #(#name #periodToken)
 ]
 
-{ #category : #generated }
+{ #category : #accessing }
 ASTDataType >> type [
-	^ type
+	^type
 ]
 
 { #category : #generated }
