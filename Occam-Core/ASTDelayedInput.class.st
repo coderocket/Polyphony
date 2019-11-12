@@ -38,6 +38,11 @@ ASTDelayedInput >> expr: anASTRoot [
 		ifTrue: [ self expr parent: self ]
 ]
 
+{ #category : #'as yet unclassified' }
+ASTDelayedInput >> input [
+	^self  
+]
+
 { #category : #generated }
 ASTDelayedInput >> nodeVariables [
 	^ #(#timer #expr)

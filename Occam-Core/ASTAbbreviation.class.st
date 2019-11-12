@@ -65,6 +65,22 @@ ASTAbbreviation >> periodToken: aSmaCCToken [
 	periodToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTAbbreviation >> replaceExpression: aString inContext: anAbstraction [
+
+	| aParser anAST |
+	
+	aParser := OccamCoreParser on: (ReadStream on: aString).
+	
+	aParser setStartingState: OccamCoreParser startingStateForExpression. 
+	 
+	anAST := aParser parse.
+	
+	self expr: anAST.
+	
+	anAbstraction check.
+]
+
 { #category : #streaming }
 ASTAbbreviation >> streamOn: aWriteStream [
 	aWriteStream put: 'VAL '; put: name value; put: ' IS '.

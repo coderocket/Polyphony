@@ -57,6 +57,11 @@ ASTReplicatedProcess >> body: anASTProcess [
 		ifTrue: [ self body parent: self ]
 ]
 
+{ #category : #'as yet unclassified' }
+ASTReplicatedProcess >> callsProcedureNamed: aString [ 
+	^self body callsProcedureNamed: aString
+]
+
 { #category : #generated }
 ASTReplicatedProcess >> count [
 	^ count

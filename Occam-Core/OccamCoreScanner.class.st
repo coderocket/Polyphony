@@ -475,7 +475,7 @@ OccamCoreScanner >> scan12X3 [
 		ifTrue: [ self recordMatch: #(60).
 			self step.
 			currentCharacter == $E
-				ifTrue: [ self recordMatch: #(55 60).
+				ifTrue: [ self recordMatch: #(54 60).
 					self step.
 					(('''.' includes: currentCharacter)
 						or: [ (currentCharacter between: $0 and: $9)
@@ -1220,7 +1220,7 @@ OccamCoreScanner >> scan13X6 [
 			currentCharacter == $*
 				ifTrue: [ ^ self scan15 ].
 			currentCharacter == $T
-				ifTrue: [ self recordMatch: #(56 60 74).
+				ifTrue: [ self recordMatch: #(55 60 74).
 					self step.
 					currentCharacter == $*
 						ifTrue: [ ^ self scan15 ].
@@ -2343,7 +2343,7 @@ OccamCoreScanner >> scan1X8 [
 		ifTrue: [ self recordMatch: #(60).
 			self step.
 			currentCharacter == $T
-				ifTrue: [ self recordMatch: #(56 60).
+				ifTrue: [ self recordMatch: #(55 60).
 					self step.
 					(('''.' includes: currentCharacter)
 						or: [ (currentCharacter between: $0 and: $9)
@@ -3050,7 +3050,7 @@ OccamCoreScanner >> scan29X2 [
 			currentCharacter == $*
 				ifTrue: [ ^ self scan15 ].
 			currentCharacter == $M
-				ifTrue: [ self recordMatch: #(54 60 74).
+				ifTrue: [ self recordMatch: #(56 60 74).
 					self step.
 					currentCharacter == $*
 						ifTrue: [ ^ self scan15 ].
@@ -3641,7 +3641,7 @@ OccamCoreScanner >> scan38X3 [
 			currentCharacter == $*
 				ifTrue: [ ^ self scan15 ].
 			currentCharacter == $E
-				ifTrue: [ self recordMatch: #(55 60 74).
+				ifTrue: [ self recordMatch: #(54 60 74).
 					self step.
 					currentCharacter == $*
 						ifTrue: [ ^ self scan15 ].
@@ -4442,7 +4442,7 @@ OccamCoreScanner >> scan7X2 [
 		ifTrue: [ self recordMatch: #(60).
 			self step.
 			currentCharacter == $M
-				ifTrue: [ self recordMatch: #(54 60).
+				ifTrue: [ self recordMatch: #(56 60).
 					self step.
 					(('''.' includes: currentCharacter)
 						or: [ (currentCharacter between: $0 and: $9)

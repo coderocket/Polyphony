@@ -3,7 +3,8 @@ Class {
 	#superclass : #ASTProcess,
 	#instVars : [
 		'pARToken',
-		'process'
+		'process',
+		'unrolled'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -94,4 +95,14 @@ ASTReplicatedPar >> unroll [
 	
 	^aPar
 
+]
+
+{ #category : #generated }
+ASTReplicatedPar >> unrolled [
+	^ unrolled
+]
+
+{ #category : #generated }
+ASTReplicatedPar >> unrolled: anObject [
+	unrolled := anObject
 ]

@@ -184,11 +184,6 @@ ASTLibrary >> localAbbrevs [
 	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
 ]
 
-{ #category : #generated }
-ASTLibrary >> locals [
-	^members
-]
-
 { #category : #scope }
 ASTLibrary >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
 

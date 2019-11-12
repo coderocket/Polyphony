@@ -244,6 +244,11 @@ ASTAbstraction >> topologicSort: aRelation [
 	^sorted
 ]
 
+{ #category : #accessing }
+ASTAbstraction >> type [
+	^ASTBasicType errorType
+]
+
 { #category : #'type checking' }
 ASTAbstraction >> typeCheckCall: aCallNode with: aTypeChecker [
 

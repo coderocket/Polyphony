@@ -117,11 +117,6 @@ ASTScope >> isScope [
 	^true
 ]
 
-{ #category : #generated }
-ASTScope >> locals [
-	^self subclassResponsibility 
-]
-
 { #category : #scope }
 ASTScope >> lookup: aString [
 	^self lookup: aString ifAbsent:[nil]

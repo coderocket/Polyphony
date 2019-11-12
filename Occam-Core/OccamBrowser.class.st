@@ -178,7 +178,7 @@ OccamBrowser >> displayError: aString at: position notifying: aPresentation [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> docIn: constructor [
 
 constructor text
@@ -224,7 +224,7 @@ OccamBrowser >> fileOut: aLibrary [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> graphIn: constructor [
 
 constructor roassal2 
@@ -245,7 +245,7 @@ constructor roassal2
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> importsIn: constructor [
 
 constructor fastList 
@@ -262,7 +262,7 @@ constructor fastList
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> librariesIn: constructor [
 
 constructor tree 
@@ -294,15 +294,15 @@ constructor tree
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> localAbbrevsIn: constructor [
 
-constructor table 
+constructor fastTable 
 	when:[ :proc | proc class canUnderstand: #localAbbrevs ] ;
 	title: 'Abbreviations' ;
 	display:[ :proc | proc localAbbrevs ]; 
 	column: 'name' evaluated: [ :each | each name value ] width:80 ;	
-	column: 'value' evaluated: [ :each | each expr asString ] ; 
+	column: 'value' evaluated: [ :each | each expr asString ] modified: [ :newValue :item :presentation | item replaceExpression: newValue inContext: presentation entity ] ;
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:table :proc | self addLocalAbbrevTo: proc ] entitled: 'Add' ;
 	selectionAct:[:tab :proc | proc removeLocal: tab selection] entitled: 'Remove' 
@@ -311,7 +311,7 @@ constructor table
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> localVariablesIn: constructor [
 
 constructor table 
@@ -339,7 +339,7 @@ OccamBrowser >> openOn: anOrderedCollection [
 	browser openOn: anOrderedCollection 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> parametersIn: constructor [
 
 constructor fastTable 
@@ -362,7 +362,7 @@ constructor fastTable
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> proceduresIn: constructor [
 
 constructor tree 
@@ -445,7 +445,7 @@ OccamBrowser >> sourceIn: constructor [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #panels }
 OccamBrowser >> violationsIn: constructor [
 
 constructor list 

@@ -42,11 +42,6 @@ ASTFunction >> tokenVariables [
 ]
 
 { #category : #generated }
-ASTFunction >> type [
-	^type
-]
-
-{ #category : #generated }
 ASTFunction >> type: anASTType [
 	self type notNil
 		ifTrue: [ self type parent: nil ].

@@ -22,6 +22,11 @@ ASTReplicatedAltGuardedCommand >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitReplicatedAltGuardedCommand: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTReplicatedAltGuardedCommand >> callsProcedureNamed: aString [ 
+	^self process callsProcedureNamed: aString
+]
+
 { #category : #generated }
 ASTReplicatedAltGuardedCommand >> tokenVariables [
 	^ #(#aLTToken #index #equalToken #fORToken #bEGINToken #eNDToken)
