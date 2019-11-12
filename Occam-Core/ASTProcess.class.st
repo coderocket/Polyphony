@@ -118,11 +118,11 @@ ASTProcess >> internalizeSource [
 
 	| source gap indentation s |
 				
+	source := self completeSource.
+	
 	gap := self attributeNamed:#startPosition. 
 	
 	indentation := 0.
-
-	source := self completeSource.
 	
 	[ (source at: gap - indentation) = Character cr ] 
 		whileFalse:[ indentation := indentation + 1].

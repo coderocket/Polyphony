@@ -29,6 +29,11 @@ ASTProcessAbstraction >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitProcessAbstraction: self
 ]
 
+{ #category : #converting }
+ASTProcessAbstraction >> asString [ 
+	^self name value
+]
+
 { #category : #generated }
 ASTProcessAbstraction >> bEGINToken [
 	^ bEGINToken
@@ -165,20 +170,6 @@ ASTProcessAbstraction >> lookupHere: aString ifFound: aBlock ifNone: exceptionBl
 	^locals detect: [:each | each name value = aString] ifFound: aBlock ifNone:[
 		params detect: [ :each | each name value = aString ] ifFound: aBlock ifNone:exceptionBlock ]
 			
-]
-
-{ #category : #removing }
-ASTProcessAbstraction >> moveLocal: anASTNode after: existingNode [ 
-
-	(anASTNode = existingNode) ifTrue:[^self].
-		
-	self locals remove: anASTNode.
-	self locals add: anASTNode after: existingNode.
-	
-	self check.
-	
-
-	
 ]
 
 { #category : #removing }

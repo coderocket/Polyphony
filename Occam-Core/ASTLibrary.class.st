@@ -114,20 +114,6 @@ ASTLibrary >> bEGINToken: aSmaCCToken [
 	bEGINToken := aSmaCCToken
 ]
 
-{ #category : #checking }
-ASTLibrary >> check [
-
- | p |
-
-	p := self.
-	
-	[p] whileNotNil: [ 
-		p announcer announce: GLMItemChanged. p := p parent 
-	]
-
-
-]
-
 { #category : #generated }
 ASTLibrary >> compositeNodeVariables [
 	^ #(#members)

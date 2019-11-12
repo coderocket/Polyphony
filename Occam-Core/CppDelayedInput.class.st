@@ -22,17 +22,8 @@ CppDelayedInput >> duration: aCppExpr [
 ]
 
 { #category : #'as yet unclassified' }
-CppDelayedInput >> negate [
-
-	^CppUnaryExpression new operator: '!' ; operand: (CppCall new name:'after'; addArgument: (CppCall new name: 'millis') ; addArgument: duration)
-	
-]
-
-{ #category : #'as yet unclassified' }
-CppDelayedInput >> promoteToInputGuard [
-
-	^CppInputGuard new test: (CppCall new name:'after'; addArgument: (CppCall new name: 'millis') ; addArgument: duration) ; input: nil
-	
+CppDelayedInput >> input [
+	^CppSequence new
 ]
 
 { #category : #accessing }
@@ -43,6 +34,12 @@ CppDelayedInput >> streamOn: aWriteStream [
 	duration streamOn: aWriteStream.
 	aWriteStream put:')'.
  
+]
+
+{ #category : #'as yet unclassified' }
+CppDelayedInput >> test [
+	^CppMemberFunctionCall new name:'is_after' ; expr: timer ; addArgument: duration.
+
 ]
 
 { #category : #accessing }

@@ -55,6 +55,20 @@ ASTScope >> announcer: anObject [
 	announcer := anObject
 ]
 
+{ #category : #checking }
+ASTScope >> check [
+
+ | p |
+
+	p := self.
+	
+	[p] whileNotNil: [ 
+		p announcer announce: GLMItemChanged. p := p parent 
+	]
+
+
+]
+
 { #category : #documentation }
 ASTScope >> documentation [
 	self doc ifNil:[
@@ -183,9 +197,25 @@ ASTScope >> makeProcedureNamed: aString [
 	
 	anAST attributeNamed:#source put: code.
 	
+	anAST source. "force the calculation of start and end positions"
+	
 	anAST internalizeSource.
 	 
 	^anAST.
+]
+
+{ #category : #removing }
+ASTScope >> moveLocal: anASTNode after: existingNode [ 
+
+	(anASTNode = existingNode) ifTrue:[^self].
+		
+	self locals remove: anASTNode.
+	self locals add: anASTNode after: existingNode.
+	
+	self check.
+	
+
+	
 ]
 
 { #category : #scope }
@@ -194,7 +224,7 @@ ASTScope >> nestedImports [
 	^self abstractionClosure inject: Set new into:[:acc :each | acc addAll: each key imports . acc addAll: each value imports. acc ]
 ]
 
-{ #category : #adding }
+{ #category : #removing }
 ASTScope >> removeDependency: anASTLibrary [
 	self imports remove: anASTLibrary.
 	self check.

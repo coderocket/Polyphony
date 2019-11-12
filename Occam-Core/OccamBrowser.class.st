@@ -370,6 +370,7 @@ constructor tree
 	display:[ :library | library allAbstractions ] ; 
 	children:[ :root :proc | root children select:[:each | each isKindOf: ASTAbstraction ] ]; 
 	format:[:proc | proc name value ] ;	
+	tags: [ :proc | proc isValid ifTrue:[OrderedCollection empty] ifFalse:['E'] ] ;
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	selectionAct:[:tree | 
 		self addProcedureTo: tree selection] entitled: 'Add Procedure ...' ;
