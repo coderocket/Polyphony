@@ -88,6 +88,23 @@ ASTScope >> documentation: aString [
  
 ]
 
+{ #category : #copying }
+ASTScope >> duplicateWithName: aString [
+
+	| aScope |
+	
+	aScope := self copyTree.
+	
+	aScope name: (SmaCCToken value: aString).
+	
+	self parent locals add: aScope.
+
+	aScope parent: self parent.
+	
+	aScope check
+	
+]
+
 { #category : #scope }
 ASTScope >> imports [
 	^self attributeNamed:#imports ifAbsent:[OrderedCollection new]
@@ -204,7 +221,7 @@ ASTScope >> moveLocal: anASTNode after: existingNode [
 
 	(anASTNode = existingNode) ifTrue:[^self].
 		
-	self locals remove: anASTNode.
+	anASTNode parent locals remove: anASTNode.
 	self locals add: anASTNode after: existingNode.
 	
 	self check.

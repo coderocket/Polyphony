@@ -114,6 +114,12 @@ ASTLibrary >> bEGINToken: aSmaCCToken [
 	bEGINToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTLibrary >> callsProcedureNamed: aString [ 
+	
+	^members anySatisfy: [ :each | each callsProcedureNamed: aString ]
+]
+
 { #category : #generated }
 ASTLibrary >> compositeNodeVariables [
 	^ #(#members)
@@ -182,6 +188,12 @@ ASTLibrary >> lIBRARYToken: aSmaCCToken [
 ASTLibrary >> localAbbrevs [ 
 
 	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
+]
+
+{ #category : #generated }
+ASTLibrary >> locals [
+	^members
+	
 ]
 
 { #category : #scope }

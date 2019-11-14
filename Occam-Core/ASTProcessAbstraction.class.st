@@ -208,7 +208,7 @@ ASTProcessAbstraction >> parseBody: aString [
 
 	| aParser anAST |
 
-	aParser := OccamCoreParser on: (ReadStream on: aString).
+	aParser := OccamCoreParser on: (ReadStream on: aString trimRight, String cr).
 	
 	aParser setStartingState: OccamCoreParser startingStateForProcess.
 		

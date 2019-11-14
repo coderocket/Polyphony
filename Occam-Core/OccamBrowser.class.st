@@ -194,6 +194,16 @@ constructor text
 	title:'Documentation' translated
 ]
 
+{ #category : #adding }
+OccamBrowser >> duplicateAbstraction: anAbstraction [
+
+	|aString|
+	
+	aString := UIManager default request: 'Enter the new abstraction''s name:'.
+	aString ifNotNil:[anAbstraction duplicateWithName: aString]
+
+]
+
 { #category : #ToDeprecate }
 OccamBrowser >> fileInto: aLibrary [
 
@@ -381,10 +391,12 @@ constructor tree
 	selectionAct:[:tree |
 		self renameAbstraction: tree selection] entitled: 'Rename ...' ;
 	selectionAct:[:tree |
+		self duplicateAbstraction: tree selection] entitled: 'Duplicate ...' ;
+	selectionAct:[:tree |
 		tree selection inspect ] entitled: 'Inspect' ;
 	allowItemDrag: [:item :tree | true ] ;
 	transformDraggedItem: [:item :tree | item ] ;
-	allowDropOnItem: [:draggedObject :targetItem | (draggedObject class canUnderstand: #isSiblingOf:) and:[  draggedObject isSiblingOf: targetItem ] ];
+	allowDropOnItem: [:draggedObject :targetItem | (draggedObject class canUnderstand: #locals) ];
 	dropOnItem: [:draggedObject :targetItem |  
 		draggedObject parent moveLocal: draggedObject after: targetItem. true ].
 	
@@ -435,7 +447,7 @@ OccamBrowser >> sourceIn: constructor [
 (constructor custom: GLMOccamPresentation new) 
 	when:[ :proc | proc class canUnderstand: #body ] ;
 	display:[ :proc | proc body ] ; 
-	format:[ :ast | ast localSource, String cr ] ; 
+	format:[ :ast | ast localSource ] ; 
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act: [:presentation :proc | 
 		[ proc parseBody: presentation text string ]
