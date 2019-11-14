@@ -35,7 +35,7 @@ PolyphonyArduinoUploader >> build [
 
 	uploader transmit to: #navigator; andShow:[ :a | self navigatorIn: a ].
 
-	uploader transmit from: #boards ; "from: #ports;" from: #memory port:#selected ; from: #navigator port:#selectedProc ; to:#diagnostics ; andShow:[:a | self diagnosticsIn: a ].
+	uploader transmit from: #boards ; from: #ports; from: #memory port:#selected ; from: #navigator port:#selectedProc ; to:#diagnostics ; andShow:[:a | self diagnosticsIn: a ].
 		
 	self detectBoards.
 	
@@ -68,16 +68,16 @@ PolyphonyArduinoUploader >> compile: aProc upload: aBoard layout: aMemoryLayout 
 
 	compileCommand := 'compile -b ', fqbn, ' ', sketchPath.
 	
-	"uploadCommand := 'upload -p ', aPort, ' --fqbn ', fqbn, ' ', sketchPath."
+	uploadCommand := 'upload -p ', aPort, ' --fqbn ', fqbn, ' ', sketchPath.
 
 	UIManager default defer: [ 
 		aPresentation announce: (GLMTextEditorRequest new 
 			action: [ :anEditor | 
-				anEditor backTo:1. 
-				anEditor replaceTextFrom:1 to:1 with: compileCommand, String cr.
+				anEditor textArea selectAll.
+				anEditor replaceSelectionWith: compileCommand, String cr.
 				anEditor unselect. 
 				[ ArduinoCommand execute:compileCommand appendOutputTo: anEditor.
-				  "ArduinoCommand execute:uploadCommand appendOutputTo: anEditor"] fork ]) ].
+				  aPort ifNotNil:[ArduinoCommand execute:uploadCommand appendOutputTo: anEditor] ] fork ]) ].
 
 ]
 
@@ -102,9 +102,9 @@ PolyphonyArduinoUploader >> detectPorts [
 PolyphonyArduinoUploader >> diagnosticsIn: constructor [
 
 	constructor text 
-		display: [ :board ":port" :memory :proc | 'Ready to upload ', proc name value ] ;
+		display: [ :board :port :memory :proc | 'Ready to upload ', proc name value ] ;
 		addAction: (GLMGenericAction new
-			action: [ :presentation :board ":port" :memory :proc | self compile: proc upload: board layout: memory through: "port" 'COM3' reportIn: presentation  ];
+			action: [ :presentation :board :port :memory :proc | self compile: proc upload: board layout: memory through: port reportIn: presentation  ];
 			icon: GLMUIThemeExtraIcons glamorousGo;
 			title: 'Upload').
 

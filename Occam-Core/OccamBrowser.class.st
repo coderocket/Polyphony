@@ -429,7 +429,7 @@ OccamBrowser >> renameAbstraction: anAbstraction [
 
 ]
 
-{ #category : #building }
+{ #category : #panels }
 OccamBrowser >> sourceIn: constructor [
 
 (constructor custom: GLMOccamPresentation new) 

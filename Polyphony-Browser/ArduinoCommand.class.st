@@ -27,5 +27,5 @@ ArduinoCommand class >> execute: aString appendOutputTo: anEditor [
 { #category : #initialization }
 ArduinoCommand class >> initialize [
 	"self initialize"
-	arduinoCommandLine := 'arduino-cli-0.3.3-alpha.preview-windows.exe'
+	arduinoCommandLine := 'arduino-cli.exe'
 ]

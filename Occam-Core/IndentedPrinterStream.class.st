@@ -30,6 +30,18 @@ IndentedPrinterStream >> contents [
 	^stream contents
 ]
 
+{ #category : #accessing }
+IndentedPrinterStream >> incrementIndentation [
+	indentation := indentation + 2
+
+]
+
+{ #category : #accessing }
+IndentedPrinterStream >> indent [
+	indentation timesRepeat:[ stream nextPut:Character space]
+
+]
+
 { #category : #initialization }
 IndentedPrinterStream >> initialize [
 	indentation := 0.
@@ -40,7 +52,7 @@ IndentedPrinterStream >> initialize [
 { #category : #writing }
 IndentedPrinterStream >> newLine [
 	stream nextPut: Character cr.
-	indentation timesRepeat:[ stream nextPut:Character space]
+	self indent.
 ]
 
 { #category : #writing }

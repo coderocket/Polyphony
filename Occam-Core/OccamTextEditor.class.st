@@ -44,14 +44,44 @@ OccamTextEditor >> crWithIndent: aKeyboardEvent [
 	"Replace the current text selection with CR followed by as many spaces
 	as on the current line."
 	
-	| cr s i spaceCount |
+	 "Now inject CR with spaceCount spaces"
+	self addString: (String streamContents: [ :strm | strm cr; space: self indentLevel ]).
+
+	^false
+]
+
+{ #category : #keymapping }
+OccamTextEditor >> defaultCommandKeymapping [
+	| cmdMap |
+		
+	cmdMap := super defaultCommandKeymapping.
 	
-	self closeTypeIn.
+	cmdMap at:Character tab asciiValue + 1 put:#occamIncreaseIndent:.
+	
+	^cmdMap.
+]
+
+{ #category : #keymapping }
+OccamTextEditor >> defaultShiftCommandKeymapping [
+
+	| cmdMap |
+	
+	cmdMap := super defaultShiftCommandKeymapping.
+
+	cmdMap at:Character tab asciiValue + 1 put:#occamDecreaseIndent:.
+	
+	^cmdMap.	
+]
+
+{ #category : #accessing }
+OccamTextEditor >> indentLevel [ 
+
+	| cr spaceCount s i |
 	
 	cr := Character cr.
 	
 	s := self string.
-	i := self stopIndex - 1.
+	i := self startIndex - 1.
 	
 	spaceCount := 0.
 	
@@ -68,21 +98,8 @@ OccamTextEditor >> crWithIndent: aKeyboardEvent [
 			spaceCount := spaceCount + 1
 			].
 		
-	 "Now inject CR with spaceCount spaces"
-	self addString: (String streamContents: [ :strm | strm cr; space: spaceCount ]).
+	^ spaceCount 
 
-	^false
-]
-
-{ #category : #keymapping }
-OccamTextEditor >> defaultCommandKeymapping [
-	| cmdMap |
-		
-	cmdMap := super defaultCommandKeymapping.
-	
-	cmdMap at:Character tab asciiValue + 1 put:#occamIncreaseIndent:.
-	
-	^cmdMap.
 ]
 
 { #category : #initialization }
@@ -91,27 +108,45 @@ OccamTextEditor >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
+OccamTextEditor >> occamDecreaseIndent: aKeyboardEvent [
+
+	| s |
+	
+	^(self selectionInterval extent > 0)
+		ifTrue:[ 
+			s := self selection asString copyWithRegex: '^  ' matchesReplacedWith:''. 
+			self replaceSelectionWith: s.
+			true ]
+		ifFalse: [ 
+			(self startIndex > 2)
+				ifTrue:[ self backTo: self startIndex - 2 ]. false ]
+
+]
+
+{ #category : #'as yet unclassified' }
 OccamTextEditor >> occamIncreaseIndent: aKeyboardEvent [
 
-"	| currentLine lines start |
-	
-	currentLine := self paragraph lineIndexOfCharacterIndex: self startIndex.
-
-	lines := self paragraph lines.
-	
-	start := (lines at: currentLine) first.
-
-	self halt.
-	
-	[(self string at: start) = ' ' and:[start < self startIndex] ] 
-		whileTrue:[start := start + 1].
-	
-	(start = self startIndex)
-		ifTrue:[indentation := indentation + 1].
-		"
+	| anIndentedPrinterStream start |
 		
-	self addString: '  '.
-	^false
+	anIndentedPrinterStream := IndentedPrinterStream new.
+	
+	anIndentedPrinterStream incrementIndentation ; indent.
+	
+	anIndentedPrinterStream putManyLines: self selection asString.
+	
+	^(self selectionInterval extent > 0)
+		ifTrue:[
+			anIndentedPrinterStream put: String cr.
+	
+			start := self selectionInterval first.
+	
+			self replaceSelectionWith: anIndentedPrinterStream contents.
+		
+			self selectInterval: (start to: start + anIndentedPrinterStream contents size - 1). true]
+		ifFalse:[
+			self addString: '  '. false.
+		]
+
 ]
 
 { #category : #'typing support' }
