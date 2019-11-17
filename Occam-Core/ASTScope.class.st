@@ -13,12 +13,6 @@ ASTScope >> acceptVisitor: aRootVisitor [
 ]
 
 { #category : #adding }
-ASTScope >> addDependency: anASTLibrary [
-	self imports add: anASTLibrary. 
-	self check.
-]
-
-{ #category : #adding }
 ASTScope >> addFunctionNamed: aString [
 
 	| aFunction |
@@ -215,20 +209,6 @@ ASTScope >> moveLocal: anASTNode after: existingNode [
 ASTScope >> nestedImports [
 
 	^self abstractionClosure inject: Set new into:[:acc :each | acc addAll: each key imports . acc addAll: each value imports. acc ]
-]
-
-{ #category : #removing }
-ASTScope >> removeDependency: anASTLibrary [
-	self imports remove: anASTLibrary.
-	self check.
-
-]
-
-{ #category : #scope }
-ASTScope >> resolveImports [
-
-	self attributeNamed:#imports put: (self uses collect:[:each | self resolveLibraryPath: (each names collect:[:token | token value]) ifAbsent:[each addViolation: 'Undefined library'] ])
-	 
 ]
 
 { #category : #scope }

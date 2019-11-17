@@ -6,7 +6,8 @@ Class {
 		'members',
 		'iSToken',
 		'bEGINToken',
-		'eNDToken'
+		'eNDToken',
+		'usings'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -32,6 +33,13 @@ ASTLibrary class >> fileIn [
 { #category : #generated }
 ASTLibrary >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitLibrary: self
+]
+
+{ #category : #adding }
+ASTLibrary >> addDependency: aUsing [
+	usings add: aUsing.
+	aUsing parent: self.
+	self check.
 ]
 
 { #category : #adding }
@@ -102,6 +110,24 @@ ASTLibrary >> allExternalAbbrevs [
 	 	inject:(self members select:[:each | each isKindOf:ASTExternalAbbreviation ]) into:[:acc :each | acc addAll: each allExternalAbbrevs . acc ]
 ]
 
+{ #category : #converting }
+ASTLibrary >> asUsing [
+
+	| names aLibrary |
+	
+	names := OrderedCollection new.
+	
+	aLibrary := self.
+	
+	[aLibrary parent isNil] 
+		whileFalse:[
+			names addFirst: aLibrary name.
+			aLibrary := aLibrary parent. 
+		].
+	
+	^ASTUsing new names: names
+]
+
 { #category : #generated }
 ASTLibrary >> bEGINToken [
 	^ bEGINToken
@@ -118,9 +144,17 @@ ASTLibrary >> callsProcedureNamed: aString [
 	^members anySatisfy: [ :each | each callsProcedureNamed: aString ]
 ]
 
+{ #category : #checking }
+ASTLibrary >> check [ 
+
+	members do:[:each | each check].
+	
+	super check
+]
+
 { #category : #generated }
 ASTLibrary >> compositeNodeVariables [
-	^ #(#members)
+	^ #(#usings #members)
 ]
 
 { #category : #generated }
@@ -164,6 +198,7 @@ ASTLibrary >> iSToken: aSmaCCToken [
 { #category : #'generated-initialize-release' }
 ASTLibrary >> initialize [
 	super initialize.
+	usings := OrderedCollection new: 2.
 	members := OrderedCollection new: 2.
 ]
 
@@ -188,10 +223,16 @@ ASTLibrary >> localAbbrevs [
 	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
 ]
 
-{ #category : #generated }
-ASTLibrary >> locals [
-	^members
-	
+{ #category : #scope }
+ASTLibrary >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
+	^self lookupHere: aString ifFound: aBlock ifNone:[
+		self usings detect:[:each | 
+			(self root resolve:each) lookup: aString ifPresent:[true] ifAbsent:[false] ]
+		ifFound:[:aPath | (self root resolve: aPath) lookup: aString ifPresent:aBlock ifAbsent:[] ] 
+		ifNone:[
+			parent 
+				ifNil:[exceptionBlock value] 
+				ifNotNil:[parent lookup: aString ifPresent:aBlock ifAbsent: exceptionBlock] ] ] 
 ]
 
 { #category : #scope }
@@ -228,6 +269,43 @@ ASTLibrary >> removeAbstraction: anASTAbstraction [
   
 ]
 
+{ #category : #removing }
+ASTLibrary >> removeDependency: aUsing [
+	self usings remove: aUsing.
+	self check.
+
+]
+
+{ #category : #scope }
+ASTLibrary >> resolve: aUsing [ 
+
+	| aLibrary aReadStream |
+	
+	aLibrary := self.
+	aReadStream := ReadStream on: aUsing names.
+	
+	[ aReadStream atEnd ] whileFalse:[
+		aLibrary := aLibrary lookup: aReadStream next value
+	].
+	
+	^aLibrary
+	
+]
+
+{ #category : #scope }
+ASTLibrary >> root [ 
+	| aLibrary |
+	
+	aLibrary := self.
+	
+	[ aLibrary parent isNil ] 
+		whileFalse:[
+			aLibrary := aLibrary parent
+		].
+	
+	^aLibrary
+]
+
 { #category : #streaming }
 ASTLibrary >> streamBodyOn: aWriteStream [
 
@@ -252,4 +330,16 @@ ASTLibrary >> streamParametersOn: aWriteStream [
 { #category : #generated }
 ASTLibrary >> tokenVariables [
 	^ #(#lIBRARYToken #iSToken #bEGINToken #eNDToken #name #periodToken)
+]
+
+{ #category : #generated }
+ASTLibrary >> usings [
+	^ usings
+]
+
+{ #category : #generated }
+ASTLibrary >> usings: anOrderedCollection [
+	self setParents: self usings to: nil.
+	usings := anOrderedCollection.
+	self setParents: self usings to: self
 ]

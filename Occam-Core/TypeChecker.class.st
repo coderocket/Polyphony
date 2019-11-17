@@ -196,8 +196,6 @@ TypeChecker >> visitFunction: aFunction [
 	  
 	aFunction locals do:[:each | TypeChecker check: each inContext: aFunction ].
 	
-	aFunction resolveImports.
-	
 	aResult := aFunction body resultIfAbsent:[
 		aFunction body addViolation:'Does not end with a result'. nil].
 
@@ -392,8 +390,6 @@ TypeChecker >> visitParenthesisExpression: aParenthesisExpression [
 TypeChecker >> visitProcedure: aProcedure [
 
 	aProcedure locals do:[:each | TypeChecker check: each inContext: aProcedure ].
-	
-	aProcedure resolveImports.
 	
 	^TypeChecker check: aProcedure body inContext: aProcedure.
 

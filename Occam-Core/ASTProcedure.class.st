@@ -45,7 +45,7 @@ ASTProcedure >> cppName [
 ASTProcedure >> diagramDepth [
 
 	diagramDepth ifNil:[
-		diagramDepth := 0
+		diagramDepth := 1
 	].
 
 	^diagramDepth

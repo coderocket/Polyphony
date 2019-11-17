@@ -141,7 +141,7 @@ OccamBrowser >> buildBrowser [
 	
 	browser transmit from:#libraries; to:#procs; andShow: [ :a | self proceduresIn: a ].
 
-	browser transmit from:#procs; to:#imports; andShow:[ :a | self importsIn: a ].
+	browser transmit from:#libraries; to:#imports; andShow:[ :a | self importsIn: a ].
 	
 	browser transmit from:#procs; to:#params; andShow:[ :a | self parametersIn: a ].
 	
@@ -259,17 +259,15 @@ constructor roassal2
 OccamBrowser >> importsIn: constructor [
 
 constructor fastList 
-	when: [ :proc | proc class canUnderstand: #uses  ];
 	title: 'Imports';
-	display:[ :proc | proc attributeNamed: #imports ifAbsentPut:[OrderedCollection new]  ]; 
-	format: [ :proc | proc name value ] ;
-	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
-	selectionAct:[:list :proc | proc removeDependency: list selection] entitled: 'Remove';
+	display:[ :lib | lib usings ]; 
+	format: [ :aUsing | aUsing names inject:'' into:[ :acc :each | acc, '/', each value] ] ;
+	updateOn: GLMItemChanged from: [ :lib | lib announcer ] ;
+	selectionAct:[:list :lib | lib removeDependency: list selection] entitled: 'Remove';
 	allowDropOnItem: [:draggedObject :targetItem :list | draggedObject isKindOf: ASTLibrary ];
 	dropOnItem: [:draggedObject :targetItem :list | 
-		list entity addDependency: draggedObject. list update. true ]
-	
-	
+		list entity addDependency: draggedObject asUsing. true ]
+
 ]
 
 { #category : #panels }
@@ -292,6 +290,8 @@ constructor tree
 		self addFunctionTo: tree selection ] entitled: 'Add Function...' ;
 	selectionAct:[:tree :root | 
 		self removeScope: tree selectionPath. root first check. ] entitled: 'Remove';
+	selectionAct:[:tree | 
+		tree selection inspect ] entitled: 'Inspect' ;
 	allowItemDrag: [:item :tree | true ];
 	transformDraggedItem: [:item :tree | OrderedCollection with: item ] ;
 	allowDropOnItem: [:draggedObject :targetItem :list | draggedObject isKindOf: ASTAbstraction ] ;

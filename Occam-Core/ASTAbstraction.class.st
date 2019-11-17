@@ -139,11 +139,6 @@ ASTAbstraction >> outputs [
 
 ]
 
-{ #category : #generated }
-ASTAbstraction >> params [ 
-	^OrderedCollection new
-]
-
 { #category : #parsing }
 ASTAbstraction >> parseParameter: aString [
 

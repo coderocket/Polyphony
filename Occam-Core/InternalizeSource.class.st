@@ -13,3 +13,11 @@ InternalizeSource >> visitAbstraction: anAbstraction [
 			
 	anAbstraction internalizeSource
 ]
+
+{ #category : #generated }
+InternalizeSource >> visitLibrary: aLibrary [
+
+	aLibrary members do:[:each | self acceptNode: each].
+			
+	aLibrary internalizeSource
+]

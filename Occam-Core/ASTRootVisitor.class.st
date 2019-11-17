@@ -360,6 +360,11 @@ ASTRootVisitor >> visitUse: anUse [
 ]
 
 { #category : #generated }
+ASTRootVisitor >> visitUsing: anUsing [
+	^ self visitRoot: anUsing
+]
+
+{ #category : #generated }
 ASTRootVisitor >> visitValueParameter: aValueParameter [
 	^ self visitParameter: aValueParameter
 ]

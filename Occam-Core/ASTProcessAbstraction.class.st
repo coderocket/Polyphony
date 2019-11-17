@@ -73,17 +73,11 @@ ASTProcessAbstraction >> callsProcedureNamed: aString [
 { #category : #checking }
 ASTProcessAbstraction >> check [ 
 	
-	| p |
-
 	TypeChecker check: self body inContext: self.
 
-	p := self.
-	
-	[p isKindOf: ASTLibrary] whileFalse: [ 
-		p announcer announce: GLMItemChanged. p := p parent.
-	].
-
-	p announcer announce: GLMItemChanged.
+	locals do:[:each | (each isKindOf: ASTProcessAbstraction) ifTrue:[each check ] ].
+		
+	self announcer announce: GLMItemChanged.
 
 ]
 
@@ -170,6 +164,14 @@ ASTProcessAbstraction >> locals: anOrderedCollection [
 	self setParents: self locals to: nil.
 	locals := anOrderedCollection.
 	self setParents: self locals to: self
+]
+
+{ #category : #scope }
+ASTProcessAbstraction >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
+	^self lookupHere: aString ifFound: aBlock ifNone:[
+		parent 
+			ifNil:[exceptionBlock value] 
+			ifNotNil:[parent lookup: aString ifPresent:aBlock ifAbsent: exceptionBlock] ] 
 ]
 
 { #category : #scope }
