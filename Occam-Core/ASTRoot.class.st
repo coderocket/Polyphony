@@ -106,15 +106,17 @@ ASTRoot >> localSource [
 
 ]
 
-{ #category : #streaming }
-ASTRoot >> streamOn: aWriteStream [
-	^self subclassResponsibility 
+{ #category : #'as yet unclassified' }
+ASTRoot >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^0
 	
 ]
 
 { #category : #streaming }
-ASTRoot >> streamParametersOn: aWriteStream [
-
+ASTRoot >> streamOn: aWriteStream [
+	^self subclassResponsibility 
+	
 ]
 
 { #category : #violations }

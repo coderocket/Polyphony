@@ -22,8 +22,6 @@ ASTLibrary class >> fileIn [
 
 	anASTLibraryNode := [ OccamCoreParser parse: aStream contents ] ensure:[aStream close].
 	
-	anASTLibraryNode source. "force the calculation of start and end positions"
-	
 	InternalizeSource new acceptNode: anASTLibraryNode.
 	
 	TypeChecker check: anASTLibraryNode inContext: anASTLibraryNode.
@@ -237,9 +235,18 @@ ASTLibrary >> streamBodyOn: aWriteStream [
 ]
 
 { #category : #streaming }
+ASTLibrary >> streamDocOn: aWriteStream [
+]
+
+{ #category : #streaming }
 ASTLibrary >> streamNameOn: aWriteStream [
 
-	aWriteStream put: 'LIBRARY ' ; put:name value 
+	aWriteStream put: 'LIBRARY ' ; put:name value ; put:' IS '
+]
+
+{ #category : #streaming }
+ASTLibrary >> streamParametersOn: aWriteStream [
+	
 ]
 
 { #category : #generated }

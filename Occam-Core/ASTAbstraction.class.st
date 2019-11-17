@@ -21,6 +21,14 @@ ASTAbstraction >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitAbstraction: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTAbstraction >> activationMemoryFootprintIn: aPlatform [ 
+
+	^self params inject:0 into:[:acc :each | acc + (each memoryFootprintIn: aPlatform inContext: self) ]
+	
+
+]
+
 { #category : #scope }
 ASTAbstraction >> allAbstractions [
 
@@ -39,6 +47,25 @@ ASTAbstraction >> doc: anASTDoc [
 	doc := anASTDoc.
 	self doc notNil
 		ifTrue: [ self doc parent: self ]
+]
+
+{ #category : #documentation }
+ASTAbstraction >> documentation [
+	self doc ifNil:[
+		self doc: (ASTDoc new text: (SmaCCToken value:'Nothing yet.'))
+	].
+	^self doc text value
+]
+
+{ #category : #documentation }
+ASTAbstraction >> documentation: aString [
+
+	self doc ifNil:[
+		self doc: (ASTDoc new text: (SmaCCToken value:'Nothing yet.'))
+	].
+
+	self doc text: (SmaCCToken value: aString)
+ 
 ]
 
 { #category : #accessing }
@@ -112,6 +139,11 @@ ASTAbstraction >> outputs [
 
 ]
 
+{ #category : #generated }
+ASTAbstraction >> params [ 
+	^OrderedCollection new
+]
+
 { #category : #parsing }
 ASTAbstraction >> parseParameter: aString [
 
@@ -168,7 +200,7 @@ ASTAbstraction >> streamBodyOn: aWriteStream [
 { #category : #streaming }
 ASTAbstraction >> streamDocOn: aWriteStream [
 
-	self doc streamOn: aWriteStream.
+	self doc ifNotNil:[ :v | v streamOn: aWriteStream].
 
 ]
 

@@ -33,6 +33,12 @@ ASTValueParameter >> direction [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ASTValueParameter >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^type memoryFootprintIn: aPlatform inContext: aContext
+]
+
 { #category : #streaming }
 ASTValueParameter >> streamOn: aWriteStream [
 	aWriteStream put:'VAL '.

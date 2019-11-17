@@ -127,6 +127,14 @@ ASTReplicatedProcess >> inputs: aContext [
 	^body inputs: aContext
 ]
 
+{ #category : #'as yet unclassified' }
+ASTReplicatedProcess >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^body memoryFootprintIn: aPlatform inContext: aContext
+	
+	
+]
+
 { #category : #generated }
 ASTReplicatedProcess >> nodeVariables [
 	^ #(#base #count #body)

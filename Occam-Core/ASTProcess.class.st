@@ -120,7 +120,7 @@ ASTProcess >> internalizeSource [
 				
 	source := self completeSource.
 	
-	gap := self attributeNamed:#startPosition. 
+	gap := self startPosition.
 	
 	indentation := 0.
 	
@@ -131,6 +131,13 @@ ASTProcess >> internalizeSource [
 	
 	self attributeNamed:#localSource put: (self source copyReplaceAll: s with: Character cr asString).
 
+]
+
+{ #category : #'as yet unclassified' }
+ASTProcess >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^self subProcesses inject: 0 into:[:acc :each | acc max: (each memoryFootprintIn: aPlatform inContext: aContext) ]
+	
 ]
 
 { #category : #'process graph' }

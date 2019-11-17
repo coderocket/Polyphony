@@ -74,6 +74,12 @@ ASTArrayType >> leftBracketToken: aSmaCCToken [
 	leftBracketToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTArrayType >> memoryFootprintIn: aPlatform inContext: aContext [
+	^index asInteger * (type memoryFootprintIn: aPlatform inContext: aContext) 
+
+]
+
 { #category : #generated }
 ASTArrayType >> nodeVariables [
 	^ #(#index #type)

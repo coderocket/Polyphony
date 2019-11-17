@@ -54,6 +54,12 @@ ASTReferenceParameter >> direction: anASTDirection [
 		ifTrue: [ self direction parent: self ]
 ]
 
+{ #category : #'as yet unclassified' }
+ASTReferenceParameter >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^ aPlatform sizeOfPointer 
+]
+
 { #category : #generated }
 ASTReferenceParameter >> nodeVariables [
 	^ #(#direction #type)

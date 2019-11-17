@@ -142,6 +142,12 @@ ASTBasicType >> leastUpperBound: anASTBasicType [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+ASTBasicType >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^aPlatform sizeOf: name value
+]
+
 { #category : #generated }
 ASTBasicType >> name [
 	^ name

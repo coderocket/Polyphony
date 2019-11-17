@@ -40,6 +40,12 @@ ASTArrayReferenceType >> leftBracketToken: aSmaCCToken [
 	leftBracketToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTArrayReferenceType >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	^aPlatform sizeOfPointer 
+]
+
 { #category : #generated }
 ASTArrayReferenceType >> nodeVariables [
 	^ #(#type)

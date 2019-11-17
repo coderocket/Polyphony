@@ -22,6 +22,12 @@ ASTEventType >> eVENTToken: aSmaCCToken [
 	eVENTToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTEventType >> memoryFootprintIn: aPlatform inContext: aContext [
+
+		^aPlatform sizeOf: 'EVENT'
+]
+
 { #category : #streaming }
 ASTEventType >> streamOn: aWriteStream [
 

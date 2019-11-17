@@ -12,6 +12,12 @@ ASTTimerType >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitTimerType: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTTimerType >> memoryFootprintIn: aPlatform inContext: aContext [
+
+		^aPlatform sizeOf: 'TIMER'
+]
+
 { #category : #streaming }
 ASTTimerType >> streamOn: aWriteStream [
 

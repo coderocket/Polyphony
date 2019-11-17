@@ -24,6 +24,12 @@ ASTChannelType >> cHANToken: aSmaCCToken [
 	cHANToken := aSmaCCToken
 ]
 
+{ #category : #'as yet unclassified' }
+ASTChannelType >> memoryFootprintIn: aPlatform inContext: aContext [
+
+		^(aPlatform sizeOf: 'CHANNEL') + (type memoryFootprintIn: aPlatform inContext: aContext) 
+]
+
 { #category : #generated }
 ASTChannelType >> nodeVariables [
 	^ #(#type)

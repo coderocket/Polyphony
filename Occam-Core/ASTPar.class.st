@@ -56,6 +56,15 @@ ASTPar >> initialize [
 	processes := OrderedCollection new: 2.
 ]
 
+{ #category : #'as yet unclassified' }
+ASTPar >> memoryFootprintIn: aPlatform inContext: aContext [
+
+	" this is wrong because it does not calculate the space required for keeping free variables. "
+	
+	^self subProcesses inject: (aPlatform sizeOf: 'PROCESS') into:[:acc :each | acc + (aPlatform sizeOf: 'PROCESS') ].
+
+]
+
 { #category : #generated }
 ASTPar >> pARToken [
 	^ pARToken

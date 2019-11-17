@@ -90,18 +90,6 @@ ASTExternalFunction >> leftParenToken: aSmaCCToken [
 	leftParenToken := aSmaCCToken
 ]
 
-{ #category : #'as yet unclassified' }
-ASTExternalFunction >> localAbbrevs [ 
-
-	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
-]
-
-{ #category : #'as yet unclassified' }
-ASTExternalFunction >> localVariables [
-
-	^self locals select:[:each | each isKindOf: ASTDataType ]
-]
-
 { #category : #generated }
 ASTExternalFunction >> nodeVariables [
 	^ #(#type #doc)

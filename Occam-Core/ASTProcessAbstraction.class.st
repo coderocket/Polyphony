@@ -29,6 +29,13 @@ ASTProcessAbstraction >> acceptVisitor: aRootVisitor [
 	^ aRootVisitor visitProcessAbstraction: self
 ]
 
+{ #category : #'as yet unclassified' }
+ASTProcessAbstraction >> activationMemoryFootprintIn: aPlatform [ 
+
+	^(super activationMemoryFootprintIn: aPlatform) + (body memoryFootprintIn: aPlatform inContext: self).
+
+]
+
 { #category : #converting }
 ASTProcessAbstraction >> asString [ 
 	^self name value
@@ -280,7 +287,7 @@ ASTProcessAbstraction >> rightParenToken: aSmaCCToken [
 { #category : #streaming }
 ASTProcessAbstraction >> streamBodyOn: aWriteStream [
 
-	aWriteStream putManyLines: self body localSource trimRight.
+	aWriteStream newLine; putManyLines: self body localSource trimRight.
 	aWriteStream close; put:':'.
 
 ]
