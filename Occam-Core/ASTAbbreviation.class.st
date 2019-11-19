@@ -95,7 +95,15 @@ ASTAbbreviation >> tokenVariables [
 
 { #category : #accessing }
 ASTAbbreviation >> type [
-	^self attributeNamed: #type ifAbsent:[ASTBasicType errorType]
+	
+	| aType |
+	
+	aType := TypeChecker check: expr inContext: parent.
+	
+	aType attributeNamed: #constant put: true.
+	
+	^aType
+	
 ]
 
 { #category : #generated }

@@ -57,6 +57,17 @@ ASTUsing >> periodToken: aSmaCCToken [
 	periodToken := aSmaCCToken
 ]
 
+{ #category : #streaming }
+ASTUsing >> streamOn: aWriteStream [
+
+	aWriteStream put:'USING '.
+	
+	names do:[:each | aWriteStream put:'/'; put: each value ].
+	
+	aWriteStream put: ' :'
+	
+]
+
 { #category : #generated }
 ASTUsing >> tokenVariables [
 	^ #(#uSINGToken #periodToken)

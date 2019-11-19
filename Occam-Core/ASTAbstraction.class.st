@@ -216,6 +216,7 @@ ASTAbstraction >> streamOn: aWriteStream [
 
 	self streamNameOn: aWriteStream.
 	self streamParametersOn: aWriteStream.
+	self streamUsingOn: aWriteStream.
 	self streamDocOn: aWriteStream.
 	self streamLocalsOn: aWriteStream.
 	self streamBodyOn: aWriteStream.
@@ -228,6 +229,11 @@ ASTAbstraction >> streamParametersOn: aWriteStream [
 	aWriteStream put: '('.
 	self params do: [ :each | each streamOn: aWriteStream ] separatedBy: [ aWriteStream put:', ' ].
 	aWriteStream put: ') '.
+
+]
+
+{ #category : #streaming }
+ASTAbstraction >> streamUsingOn: aWriteStream [
 
 ]
 

@@ -17,7 +17,7 @@ InternalizeSource >> visitAbstraction: anAbstraction [
 { #category : #generated }
 InternalizeSource >> visitLibrary: aLibrary [
 
-	aLibrary members do:[:each | self acceptNode: each].
+	aLibrary locals do:[:each | self acceptNode: each].
 			
 	aLibrary internalizeSource
 ]

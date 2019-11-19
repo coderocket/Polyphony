@@ -21,20 +21,6 @@ TypeChecker >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #'visiting abstractions' }
-TypeChecker >> visitAbbreviation: anAbbreviation [
-
-	| aType |
-	
-	aType := self acceptNode: anAbbreviation expr.
-	
-	aType attributeNamed:#constant put: true.
-	
-	anAbbreviation attributeNamed: #type put: aType.
-	
-	^aType
-]
-
 { #category : #'visiting expressions' }
 TypeChecker >> visitArrayComponent: anArrayComponent [
 
@@ -260,7 +246,7 @@ TypeChecker >> visitInputGuard: anInputGuardNode [
 { #category : #'visiting abstractions' }
 TypeChecker >> visitLibrary: aLibraryNode [
 
-	aLibraryNode members do:[:each | TypeChecker check: each inContext: aLibraryNode].
+	aLibraryNode locals do:[:each | TypeChecker check: each inContext: aLibraryNode].
 ]
 
 { #category : #'visiting expressions' }

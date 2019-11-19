@@ -6,11 +6,7 @@ Class {
 		'params',
 		'commaTokens',
 		'rightParenToken',
-		'uses',
-		'bEGINToken',
-		'locals',
-		'body',
-		'eNDToken'
+		'body'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -39,16 +35,6 @@ ASTProcessAbstraction >> activationMemoryFootprintIn: aPlatform [
 { #category : #converting }
 ASTProcessAbstraction >> asString [ 
 	^self name value
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> bEGINToken [
-	^ bEGINToken
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> bEGINToken: aSmaCCToken [
-	bEGINToken := aSmaCCToken
 ]
 
 { #category : #generated }
@@ -93,7 +79,7 @@ ASTProcessAbstraction >> commaTokens: anOrderedCollection [
 
 { #category : #generated }
 ASTProcessAbstraction >> compositeNodeVariables [
-	^ #(#params #uses #locals)
+	^ #(#params #locals)
 ]
 
 { #category : #generated }
@@ -101,23 +87,11 @@ ASTProcessAbstraction >> compositeTokenVariables [
 	^ #(#commaTokens)
 ]
 
-{ #category : #generated }
-ASTProcessAbstraction >> eNDToken [
-	^ eNDToken
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> eNDToken: aSmaCCToken [
-	eNDToken := aSmaCCToken
-]
-
 { #category : #'generated-initialize-release' }
 ASTProcessAbstraction >> initialize [
 	super initialize.
 	params := OrderedCollection new: 2.
 	commaTokens := OrderedCollection new: 2.
-	uses := OrderedCollection new: 2.
-	locals := OrderedCollection new: 2.
 ]
 
 { #category : #'source code' }
@@ -154,18 +128,6 @@ ASTProcessAbstraction >> localVariables [
 	^self locals select:[:each | each isKindOf: ASTDataType ]
 ]
 
-{ #category : #generated }
-ASTProcessAbstraction >> locals [
-	^ locals
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> locals: anOrderedCollection [
-	self setParents: self locals to: nil.
-	locals := anOrderedCollection.
-	self setParents: self locals to: self
-]
-
 { #category : #scope }
 ASTProcessAbstraction >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 	^self lookupHere: aString ifFound: aBlock ifNone:[
@@ -176,7 +138,7 @@ ASTProcessAbstraction >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBl
 
 { #category : #scope }
 ASTProcessAbstraction >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
-	^locals detect: [:each | each name value = aString] ifFound: aBlock ifNone:[
+	^super lookupHere: aString ifFound: aBlock ifNone:[
 		params detect: [ :each | each name value = aString ] ifFound: aBlock ifNone:exceptionBlock ]
 			
 ]
@@ -297,16 +259,4 @@ ASTProcessAbstraction >> streamBodyOn: aWriteStream [
 { #category : #generated }
 ASTProcessAbstraction >> tokenVariables [
 	^ #(#leftParenToken #rightParenToken #bEGINToken #eNDToken #name #periodToken)
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> uses [
-	^ uses
-]
-
-{ #category : #generated }
-ASTProcessAbstraction >> uses: anOrderedCollection [
-	self setParents: self uses to: nil.
-	uses := anOrderedCollection.
-	self setParents: self uses to: self
 ]

@@ -3,10 +3,7 @@ Class {
 	#superclass : #ASTScope,
 	#instVars : [
 		'lIBRARYToken',
-		'members',
 		'iSToken',
-		'bEGINToken',
-		'eNDToken',
 		'usings'
 	],
 	#category : #'Occam-Core-AST'
@@ -45,7 +42,7 @@ ASTLibrary >> addDependency: aUsing [
 { #category : #adding }
 ASTLibrary >> addExistingAbstraction: anASTAbstraction [
 
-	self members add: anASTAbstraction.
+	self locals add: anASTAbstraction.
 	
 	anASTAbstraction parent removeAbstraction: anASTAbstraction.
 	
@@ -61,7 +58,7 @@ ASTLibrary >> addFunctionNamed: aString [
 	| aFunction |
 	
 	aFunction := self makeFunctionNamed: aString.
-	self members add: aFunction.
+	self locals add: aFunction.
 	
 	aFunction parent: self.
 	
@@ -74,7 +71,7 @@ ASTLibrary >> addLibraryNamed: aString [
 	| aLibrary |
 	aLibrary := 	ASTLibrary new name: (SmaCCToken value: aString).
 		
-	self members add: aLibrary.
+	self locals add: aLibrary.
 	
 	aLibrary parent: self.
 	
@@ -89,7 +86,7 @@ ASTLibrary >> addProcedureNamed: aString [
 	
 	aProcedure := self makeProcedureNamed: aString.
 	
-	self members add: aProcedure. 
+	self locals add: aProcedure. 
 	
 	aProcedure parent: self.
 	
@@ -99,15 +96,15 @@ ASTLibrary >> addProcedureNamed: aString [
 { #category : #scope }
 ASTLibrary >> allAbstractions [
 
-	^(self members select:[:each | each isAbstraction ])
+	^(self locals select:[:each | each isAbstraction ])
 	 	inject:OrderedCollection new into:[:acc :each | acc addAll: each allAbstractions . acc ]
 ]
 
 { #category : #scope }
 ASTLibrary >> allExternalAbbrevs [
 
-	^(self members select:[:each | each isKindOf:ASTLibrary ])
-	 	inject:(self members select:[:each | each isKindOf:ASTExternalAbbreviation ]) into:[:acc :each | acc addAll: each allExternalAbbrevs . acc ]
+	^(self locals select:[:each | each isKindOf:ASTLibrary ])
+	 	inject:(self locals select:[:each | each isKindOf:ASTExternalAbbreviation ]) into:[:acc :each | acc addAll: each allExternalAbbrevs . acc ]
 ]
 
 { #category : #converting }
@@ -128,43 +125,23 @@ ASTLibrary >> asUsing [
 	^ASTUsing new names: names
 ]
 
-{ #category : #generated }
-ASTLibrary >> bEGINToken [
-	^ bEGINToken
-]
-
-{ #category : #generated }
-ASTLibrary >> bEGINToken: aSmaCCToken [
-	bEGINToken := aSmaCCToken
-]
-
 { #category : #'as yet unclassified' }
 ASTLibrary >> callsProcedureNamed: aString [ 
 	
-	^members anySatisfy: [ :each | each callsProcedureNamed: aString ]
+	^locals anySatisfy: [ :each | each callsProcedureNamed: aString ]
 ]
 
 { #category : #checking }
 ASTLibrary >> check [ 
 
-	members do:[:each | each check].
+	locals do:[:each | each check].
 	
 	super check
 ]
 
 { #category : #generated }
 ASTLibrary >> compositeNodeVariables [
-	^ #(#usings #members)
-]
-
-{ #category : #generated }
-ASTLibrary >> eNDToken [
-	^ eNDToken
-]
-
-{ #category : #generated }
-ASTLibrary >> eNDToken: aSmaCCToken [
-	eNDToken := aSmaCCToken
+	^ #(#usings #locals)
 ]
 
 { #category : #'file in/out' }
@@ -176,7 +153,7 @@ ASTLibrary >> fileIn: aStream [
 	
 	InternalizeSource new acceptNode: anASTLibraryNode.
 	
-	members add: anASTLibraryNode.
+	locals add: anASTLibraryNode.
 	anASTLibraryNode parent: self.
 	
 	TypeChecker check: anASTLibraryNode inContext: self.
@@ -199,7 +176,6 @@ ASTLibrary >> iSToken: aSmaCCToken [
 ASTLibrary >> initialize [
 	super initialize.
 	usings := OrderedCollection new: 2.
-	members := OrderedCollection new: 2.
 ]
 
 { #category : #testing }
@@ -223,6 +199,12 @@ ASTLibrary >> localAbbrevs [
 	^self locals select:[:each | each isKindOf: ASTAbbreviation  ]
 ]
 
+{ #category : #'as yet unclassified' }
+ASTLibrary >> locals [
+	^locals
+	
+]
+
 { #category : #scope }
 ASTLibrary >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 	^self lookupHere: aString ifFound: aBlock ifNone:[
@@ -235,25 +217,6 @@ ASTLibrary >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 				ifNotNil:[parent lookup: aString ifPresent:aBlock ifAbsent: exceptionBlock] ] ] 
 ]
 
-{ #category : #scope }
-ASTLibrary >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
-
-	^members detect: [:each | each name value = aString] ifFound: aBlock ifNone: exceptionBlock
-
-]
-
-{ #category : #generated }
-ASTLibrary >> members [
-	^ members
-]
-
-{ #category : #generated }
-ASTLibrary >> members: anOrderedCollection [
-	self setParents: self members to: nil.
-	members := anOrderedCollection.
-	self setParents: self members to: self
-]
-
 { #category : #printing }
 ASTLibrary >> printOn: aStream [
 		aStream nextPutAll: self name value 
@@ -263,7 +226,7 @@ ASTLibrary >> printOn: aStream [
 { #category : #removing }
 ASTLibrary >> removeAbstraction: anASTAbstraction [
 
-	members remove: anASTAbstraction.
+	locals remove: anASTAbstraction.
 		
 	self check
   
@@ -308,7 +271,7 @@ ASTLibrary >> root [
 
 { #category : #streaming }
 ASTLibrary >> streamBodyOn: aWriteStream [
-
+	
 	aWriteStream close; put:':'; newLine.
 ]
 
@@ -325,6 +288,14 @@ ASTLibrary >> streamNameOn: aWriteStream [
 { #category : #streaming }
 ASTLibrary >> streamParametersOn: aWriteStream [
 	
+]
+
+{ #category : #streaming }
+ASTLibrary >> streamUsingOn: aWriteStream [
+
+	aWriteStream open.
+	usings do: [ :each | each streamOn: aWriteStream ] separatedBy: [  aWriteStream newLine ].
+	aWriteStream close.
 ]
 
 { #category : #generated }

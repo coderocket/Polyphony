@@ -186,7 +186,7 @@ ASTRootVisitor >> visitLValue: aLValue [
 
 { #category : #generated }
 ASTRootVisitor >> visitLibrary: aLibrary [
-	^ self visitAbstraction: aLibrary
+	^ self visitScope: aLibrary
 ]
 
 { #category : #generated }
@@ -271,7 +271,7 @@ ASTRootVisitor >> visitProcess: aProcess [
 
 { #category : #generated }
 ASTRootVisitor >> visitProcessAbstraction: aProcessAbstraction [
-	^ self visitAbstraction: aProcessAbstraction
+	^ self visitScope: aProcessAbstraction
 ]
 
 { #category : #generated }
@@ -321,7 +321,7 @@ ASTRootVisitor >> visitRoot: aRoot [
 
 { #category : #generated }
 ASTRootVisitor >> visitScope: aScope [
-	^ self visitRoot: aScope
+	^ self visitAbstraction: aScope
 ]
 
 { #category : #generated }
@@ -352,11 +352,6 @@ ASTRootVisitor >> visitTimerType: aTimerType [
 { #category : #generated }
 ASTRootVisitor >> visitType: aType [
 	^ self visitRoot: aType
-]
-
-{ #category : #generated }
-ASTRootVisitor >> visitUse: anUse [
-	^ self visitRoot: anUse
 ]
 
 { #category : #generated }

@@ -4,6 +4,11 @@ Class {
 	#category : #'Occam-Core-AST'
 }
 
+{ #category : #'as yet unclassified' }
+ASTDefinition >> check [
+
+]
+
 { #category : #testing }
 ASTDefinition >> isAbstraction [
 	^false

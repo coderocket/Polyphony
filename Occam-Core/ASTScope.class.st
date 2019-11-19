@@ -2,7 +2,10 @@ Class {
 	#name : #ASTScope,
 	#superclass : #ASTAbstraction,
 	#instVars : [
-		'announcer'
+		'announcer',
+		'bEGINToken',
+		'locals',
+		'eNDToken'
 	],
 	#category : #'Occam-Core-AST'
 }
@@ -49,6 +52,16 @@ ASTScope >> announcer: anObject [
 	announcer := anObject
 ]
 
+{ #category : #generated }
+ASTScope >> bEGINToken [
+	^ bEGINToken
+]
+
+{ #category : #generated }
+ASTScope >> bEGINToken: aSmaCCToken [
+	bEGINToken := aSmaCCToken
+]
+
 { #category : #checking }
 ASTScope >> check [
 
@@ -61,6 +74,11 @@ ASTScope >> check [
 	]
 
 
+]
+
+{ #category : #generated }
+ASTScope >> compositeNodeVariables [
+	^ #(#locals)
 ]
 
 { #category : #copying }
@@ -80,15 +98,27 @@ ASTScope >> duplicateWithName: aString [
 	
 ]
 
+{ #category : #generated }
+ASTScope >> eNDToken [
+	^ eNDToken
+]
+
+{ #category : #generated }
+ASTScope >> eNDToken: aSmaCCToken [
+	eNDToken := aSmaCCToken
+]
+
 { #category : #scope }
 ASTScope >> imports [
 	^self attributeNamed:#imports ifAbsent:[OrderedCollection new]
 
 ]
 
-{ #category : #initialization }
+{ #category : #'generated-initialize-release' }
 ASTScope >> initialize [
-	announcer := GLMAnnouncer new
+	super initialize.
+	locals := OrderedCollection new: 2.
+	announcer := GLMAnnouncer new.
 ]
 
 { #category : #scope }
@@ -107,6 +137,18 @@ ASTScope >> isLibrary [
 { #category : #testing }
 ASTScope >> isScope [ 
 	^true
+]
+
+{ #category : #generated }
+ASTScope >> locals [
+	^ locals
+]
+
+{ #category : #generated }
+ASTScope >> locals: anOrderedCollection [
+	self setParents: self locals to: nil.
+	locals := anOrderedCollection.
+	self setParents: self locals to: self
 ]
 
 { #category : #scope }
@@ -136,7 +178,8 @@ ASTScope >> lookup: aString ifPresent: aBlock ifAbsent: exceptionBlock [
 { #category : #scope }
 ASTScope >> lookupHere: aString ifFound: aBlock ifNone: exceptionBlock [
 
-	^self subclassResponsibility 
+	^locals detect: [:each | each name value = aString] ifFound: aBlock ifNone: exceptionBlock
+
 ]
 
 { #category : #scope }
@@ -246,4 +289,9 @@ ASTScope >> streamLocalsOn: aWriteStream [
 	aWriteStream open.
 	self locals do: [ :each | each streamOn: aWriteStream ] separatedBy:[aWriteStream newLine].
 
+]
+
+{ #category : #generated }
+ASTScope >> tokenVariables [
+	^ #(#bEGINToken #eNDToken #name #periodToken)
 ]
