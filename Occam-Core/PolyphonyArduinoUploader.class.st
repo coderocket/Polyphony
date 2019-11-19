@@ -90,12 +90,16 @@ PolyphonyArduinoUploader >> detectBoards [
 
 { #category : #'as yet unclassified' }
 PolyphonyArduinoUploader >> detectPorts [
-
+	
 	ports removeAll. uploader update.
 	
-	[ ((ArduinoCommand execute: 'board list --format json')
-		at: 'serialBoards') do: [ :arg1 | ports add: (arg1 at: 'port') ] ]
-		fork
+	[ | aDictionary |
+		aDictionary := ArduinoCommand execute: 'board list --format json'.
+		aDictionary isEmpty ifFalse:[
+			(aDictionary at: 'serialBoards') do: [ :arg1 | ports add: (arg1 at: 'port') ] 
+		]
+	]
+	fork
 ]
 
 { #category : #'as yet unclassified' }
