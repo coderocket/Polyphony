@@ -88,7 +88,7 @@ ASTProcedure >> generateCppCodeOn: anIndentedPrinterStream [
 
 	anIndentedPrinterStream put:'namespace Polyphony {'; newLine.
 
-	self compileOn: anIndentedPrinterStream.
+	self unfold compileOn: anIndentedPrinterStream.
 	
 	anIndentedPrinterStream put: 'auto program(functor_process('; put: self cppName ; put: '));'; newLine.
 
@@ -137,6 +137,58 @@ ASTProcedure >> isClosed [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+ASTProcedure >> memoryFootprintMap [
+
+	| aPlatform aProcedure aMemoryFootprintCalculator |
+
+	aPlatform := Platform new.
+		
+	aProcedure := self unfold.
+
+	aMemoryFootprintCalculator := MemoryFootprintCalculator new.
+
+	aMemoryFootprintCalculator platform: aPlatform.
+
+	aMemoryFootprintCalculator context: self.
+
+	aMemoryFootprintCalculator acceptNode: aProcedure body.
+
+	aMemoryFootprintCalculator processes addFirst: aPlatform sizeOfContext + (aProcedure body memoryFootprintIn: aPlatform inContext: self).
+
+	^aMemoryFootprintCalculator processes 
+
+]
+
+{ #category : #'as yet unclassified' }
+ASTProcedure >> memoryFootprintMapDiagramIn: aView [
+
+| dataSet |
+dataSet := RTData new.
+"dataSet barShape width: 10."
+dataSet barShape.
+dataSet
+	points: self memoryFootprintMap ;
+	y: #yourself.
+aView add: dataSet.
+aView axisY.
+aView axisX.
+aView build
+
+]
+
+{ #category : #'as yet unclassified' }
+ASTProcedure >> memoryFootprintMapIn: aPlatform [
+
+	| aMemoryFootprintCalculator |
+	
+	aMemoryFootprintCalculator := MemoryFootprintCalculator acceptNode: self body inPlatform: aPlatform inContext: self. 
+	
+	^aMemoryFootprintCalculator processes
+	
+
+]
+
 { #category : #'process graph' }
 ASTProcedure >> outputs [
 
@@ -169,6 +221,23 @@ ASTProcedure >> streamNameOn: aWriteStream [
 { #category : #generated }
 ASTProcedure >> tokenVariables [
 	^ #(#pROCToken #leftParenToken #rightParenToken #bEGINToken #eNDToken #name #periodToken)
+]
+
+{ #category : #compiling }
+ASTProcedure >> unfold [
+
+	| nodeCopy |
+	
+	nodeCopy := self copyTree.
+		
+	TableOptimizer new acceptNode: nodeCopy.
+
+	ReplicatedParUnroller new acceptNode: nodeCopy.
+	
+	ParFlattener new acceptNode: nodeCopy.
+
+	^nodeCopy
+	
 ]
 
 { #category : #writing }

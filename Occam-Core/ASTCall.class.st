@@ -90,7 +90,7 @@ ASTCall >> leftParenToken: aSmaCCToken [
 { #category : #'as yet unclassified' }
 ASTCall >> memoryFootprintIn: aPlatform inContext: aContext [
 
-	^ (aContext lookup: name value) activationMemoryFootprintIn: aPlatform
+	^aContext lookup: name value ifPresent:[ :p | p activationMemoryFootprintIn: aPlatform ] ifAbsent:[0]
 	 	
 ]
 

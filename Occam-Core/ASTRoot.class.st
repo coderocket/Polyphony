@@ -136,3 +136,16 @@ ASTRoot >> violations [
 	
 	^aSet
 ]
+
+{ #category : #violations }
+ASTRoot >> violationsAsString [ 
+	
+	| aWriteStream |
+	
+	aWriteStream := WriteStream on:''.
+	
+	self violations do:[:each | aWriteStream nextPutAll: each reason ] separatedBy:[ aWriteStream nextPutAll:', '].
+	 
+	^aWriteStream contents
+
+]

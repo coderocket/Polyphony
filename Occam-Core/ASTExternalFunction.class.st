@@ -133,6 +133,11 @@ ASTExternalFunction >> tokenVariables [
 ]
 
 { #category : #generated }
+ASTExternalFunction >> type [
+	^type
+]
+
+{ #category : #generated }
 ASTExternalFunction >> type: anASTType [
 	self type notNil
 		ifTrue: [ self type parent: nil ].

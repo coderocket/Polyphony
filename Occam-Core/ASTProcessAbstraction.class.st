@@ -59,10 +59,8 @@ ASTProcessAbstraction >> callsProcedureNamed: aString [
 { #category : #checking }
 ASTProcessAbstraction >> check [ 
 	
-	TypeChecker check: self body inContext: self.
+	TypeChecker check: self inContext: self parent.
 
-	locals do:[:each | (each isKindOf: ASTProcessAbstraction) ifTrue:[each check ] ].
-		
 	self announcer announce: GLMItemChanged.
 
 ]

@@ -147,7 +147,7 @@ OccamBrowser >> buildBrowser [
 	
 	browser transmit from:#procs; to:#locals; andShow:[ :a | self localVariablesIn: a. self localAbbrevsIn: a. ].
 	 
-	browser transmit from:#procs; to:#source; andShow: [ :a | self sourceIn: a. self graphIn: a. self docIn: a].
+	browser transmit from:#procs; to:#source; andShow: [ :a | self sourceIn: a. self graphIn: a. self memoryMapIn: a. self docIn: a].
 	
 	browser transmit from:#procs; to:#violations; andShow:[:a | self violationsIn: a ].
 	
@@ -330,7 +330,7 @@ constructor table
 	display:[ :proc | proc localVariables ]; 
 	column: 'type' evaluated: [ :each | each type asString ] width:80 ;	
 	column: 'name' evaluated: [ :each | each name value ] ; 
-	column: 'violations' evaluated: [ :each | each violations ] ;
+	column: 'violations' evaluated: [ :each | each violationsAsString ] ;
 	updateOn: GLMItemChanged from: [ :proc | proc announcer ] ;
 	act:[:table :proc | self addLocalVariableTo: proc] entitled: 'Add' ;
 	selectionAct:[:tab :proc | proc removeLocal: tab selection ] entitled: 'Remove'; 
@@ -340,6 +340,18 @@ constructor table
 	dropOnItem: [:draggedObject :targetItem :table | 
 		table entity moveLocal: draggedObject after: targetItem. true ]
 
+
+]
+
+{ #category : #panels }
+OccamBrowser >> memoryMapIn: constructor [
+
+constructor roassal2 
+	when:[ :proc | proc isKindOf: ASTProcedure ] ;
+	initializeView: [ RTGrapher new ];
+	painting: [ :builder :proc | 
+		proc memoryFootprintMapDiagramIn: builder ] ; 
+	title: 'Memory Footprint' translated.
 
 ]
 

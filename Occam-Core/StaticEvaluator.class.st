@@ -87,7 +87,7 @@ StaticEvaluator >> visitMonadicExpression: aMonadicExpression [
 
 	| expr operator |
 	
-	expr := self acceptNode: aMonadicExpression expr.
+	expr := self acceptNode: aMonadicExpression operand.
 	
 	operator := aMonadicExpression operator value.
 	

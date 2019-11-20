@@ -118,6 +118,12 @@ ASTAbstraction >> isValid [
 	^self violations isEmpty
 ]
 
+{ #category : #'as yet unclassified' }
+ASTAbstraction >> memoryFootprintMapIn: aPlatform [
+
+	^OrderedCollection new
+]
+
 { #category : #generated }
 ASTAbstraction >> name [
 	^ name
