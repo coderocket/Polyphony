@@ -41,6 +41,11 @@ ASTFunction >> tokenVariables [
 	^ #(#fUNCTIONToken #leftParenToken #rightParenToken #bEGINToken #eNDToken #name #periodToken)
 ]
 
+{ #category : #accessing }
+ASTFunction >> type [
+	^type 
+]
+
 { #category : #generated }
 ASTFunction >> type: anASTType [
 	self type notNil

@@ -93,7 +93,7 @@ TypeChecker >> visitCall: aCallNode [
 	
 	anAbstraction := context lookup: aCallNode name value.
 	
-	anAbstraction ifNil:[self halt. aCallNode addViolation:'Undefined abstraction'. ^ASTBasicType errorType].
+	anAbstraction ifNil:[aCallNode addViolation:'Undefined abstraction'. ^ASTBasicType errorType].
 	
 	(anAbstraction params size = aCallNode exprs size)
 		ifFalse:[aCallNode addViolation: 'Invalid number of arguments'. ^ASTBasicType errorType].
