@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'memorySize'
 	],
-	#category : #'Occam-Core-Browser'
+	#category : #'Occam-Core-Uploader'
 }
 
 { #category : #public }

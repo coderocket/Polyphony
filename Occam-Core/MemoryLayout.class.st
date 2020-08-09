@@ -13,7 +13,7 @@ Class {
 		'memoryLayoutForBoard',
 		'sramForBoard'
 	],
-	#category : #'Occam-Core-Browser'
+	#category : #'Occam-Core-Uploader'
 }
 
 { #category : #'as yet unclassified' }

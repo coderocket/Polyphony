@@ -1,5 +1,5 @@
 Class {
-	#name : #PolyphonyArduinoUploader,
+	#name : #ArduinoUploaderBrowser,
 	#superclass : #Object,
 	#instVars : [
 		'uploader',
@@ -11,14 +11,14 @@ Class {
 }
 
 { #category : #'instance creation' }
-PolyphonyArduinoUploader class >> openOn: aLibrary [
+ArduinoUploaderBrowser class >> openOn: aLibrary [
 
 	self new openOn: (OrderedCollection with: aLibrary).
 
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> build [
+ArduinoUploaderBrowser >> build [
 
 	uploader := GLMTabulator new.
 	
@@ -44,7 +44,7 @@ PolyphonyArduinoUploader >> build [
 ]
 
 { #category : #compiling }
-PolyphonyArduinoUploader >> compile: aProc upload: aBoard layout: aMemoryLayout through: aPort reportIn: aPresentation [
+ArduinoUploaderBrowser >> compile: aProc upload: aBoard layout: aMemoryLayout through: aPort reportIn: aPresentation [
 
 	| fqbn sketchCppName sketchPath compileCommand uploadCommand machineFile |
 	
@@ -82,14 +82,14 @@ PolyphonyArduinoUploader >> compile: aProc upload: aBoard layout: aMemoryLayout 
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> detectBoards [
+ArduinoUploaderBrowser >> detectBoards [
 
 	[((ArduinoCommand execute: 'board listall --format json') at:'boards') do:[:each | boards add:each] ]fork
 
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> detectPorts [
+ArduinoUploaderBrowser >> detectPorts [
 	
 	ports removeAll. uploader update.
 	
@@ -103,7 +103,7 @@ PolyphonyArduinoUploader >> detectPorts [
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> diagnosticsIn: constructor [
+ArduinoUploaderBrowser >> diagnosticsIn: constructor [
 
 	constructor text 
 		display: [ :board :port :memory :proc | 'Ready to upload ', proc name value ] ;
@@ -115,7 +115,7 @@ PolyphonyArduinoUploader >> diagnosticsIn: constructor [
 ]
 
 { #category : #initialization }
-PolyphonyArduinoUploader >> initialize [
+ArduinoUploaderBrowser >> initialize [
 
 	sketchbookPath := 'C:\Users\davidf.MGMT\Documents\Arduino' "Hard coded for now until arduino-cli fix the wrong output from this command. (ArduinoCommand execute:'config dump --format json')".
 	
@@ -125,7 +125,7 @@ PolyphonyArduinoUploader >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> memoryIn: constructor [
+ArduinoUploaderBrowser >> memoryIn: constructor [
 
 	| aMemoryLayoutBrowser |
 	
@@ -135,7 +135,7 @@ PolyphonyArduinoUploader >> memoryIn: constructor [
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> navigatorIn: constructor [
+ArduinoUploaderBrowser >> navigatorIn: constructor [
 
 	| aNavigator |
 	
@@ -148,14 +148,14 @@ PolyphonyArduinoUploader >> navigatorIn: constructor [
 ]
 
 { #category : #'instance creation' }
-PolyphonyArduinoUploader >> openOn: anOrderedCollection [
+ArduinoUploaderBrowser >> openOn: anOrderedCollection [
 
 	self build.
 	uploader openOn: anOrderedCollection 
 ]
 
 { #category : #'as yet unclassified' }
-PolyphonyArduinoUploader >> portsIn: constructor [
+ArduinoUploaderBrowser >> portsIn: constructor [
 
 	constructor list display: ports ; 
 		updateOn: GLMItemAdded 

@@ -203,7 +203,7 @@ aParser := OccamCoreParser on: (ReadStream on:
     RESULT k(a)
   :
   SEQ
-    x := q(1) 
+    x := q(1) + h(1)
 :').
 
 aParser setStartingState: OccamCoreParser startingStateForProcedure.
